@@ -22,6 +22,7 @@ import androidx.navigation.navArgument
 import cl.duoc.tacticaldev.model.Rol
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
+import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
 import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
 import cl.duoc.tacticaldev.viewmodel.AppViewModelProvider
 import cl.duoc.tacticaldev.viewmodel.EstadoSesion
@@ -94,7 +95,12 @@ fun AppNavigation(
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
                 onCerrarSesion = cerrarSesion
             ) { padding ->
-                PantallaEnConstruccion("Inicio del operario", Modifier.padding(padding))
+                InicioOperarioScreen(
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    onRegistrarVisita = { navigationViewModel.navegarA(Screen.FormularioVisita.crear(it)) },
+                    onVerHistorial = { navigationViewModel.navegarA(Screen.HistorialActivo.crear(it)) },
+                    modifier = Modifier.padding(padding)
+                )
             }
         }
 
