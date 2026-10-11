@@ -4,18 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.CompositionLocalProvider
+import cl.duoc.tacticaldev.navigation.AppNavigation
 import cl.duoc.tacticaldev.ui.theme.TacticalDEVTheme
+import cl.duoc.tacticaldev.ui.utils.LocalTipoPantalla
+import cl.duoc.tacticaldev.ui.utils.calcularTipoPantalla
 
 /**
- * Punto de entrada de la app. Por ahora solo muestra un texto de bienvenida;
- * la navegación se incorpora en T-04.
+ * Actividad única: calcula el tamaño de pantalla y delega todo al grafo de navegación.
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,15 +19,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TacticalDEVTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("TacticalDEV · Proyecto base MVVM")
-                    }
+                CompositionLocalProvider(LocalTipoPantalla provides calcularTipoPantalla()) {
+                    AppNavigation()
                 }
             }
         }

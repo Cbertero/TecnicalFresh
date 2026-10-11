@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo TacticalDEV (recurso de imagen de la Guía 8, en formato vectorial) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <path
+        android:fillColor="#0B4F8A"
+        android:pathData="M60,4a56,56 0,1 1,0 112a56,56 0,1 1,0 -112z" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M60,28L60,92M32,44L88,76M32,76L88,44" />
+    <path
+        android:strokeColor="#7FD3F7"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M50,28L60,37L70,28M50,92L60,83L70,92" />
+</vector>
