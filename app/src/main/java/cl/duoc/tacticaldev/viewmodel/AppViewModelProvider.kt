@@ -12,6 +12,10 @@ import cl.duoc.tacticaldev.TacticalApp
  */
 object AppViewModelProvider {
     val Factory = viewModelFactory {
+        initializer { SesionViewModel(app().container.sesionPreferences) }
+        initializer {
+            LoginViewModel(app().container.usuarioRepository, app().container.sesionPreferences)
+        }
         initializer { ActivosViewModel(app().container.activoRepository) }
     }
 }

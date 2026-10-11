@@ -1,24 +1,16 @@
 package cl.duoc.tacticaldev.navigation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -27,19 +19,47 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import cl.duoc.tacticaldev.R
+import cl.duoc.tacticaldev.model.Rol
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
+import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
+import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
+import cl.duoc.tacticaldev.viewmodel.AppViewModelProvider
+import cl.duoc.tacticaldev.viewmodel.EstadoSesion
 import cl.duoc.tacticaldev.viewmodel.NavigationViewModel
+import cl.duoc.tacticaldev.viewmodel.SesionViewModel
+
+/** Ruta de inicio según el rol del usuario conectado. */
+fun Rol.rutaInicio(): String = when (this) {
+    Rol.OPERARIO -> Screen.InicioOperario.route
+    Rol.SUPERVISOR -> Screen.Supervisor.route
+}
 
 /**
  * Grafo de navegación de la app (NavHost + NavController).
+ * Mientras se lee la sesión guardada se muestra un indicador de carga.
  */
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController(),
-    navigationViewModel: NavigationViewModel = viewModel()
+    navigationViewModel: NavigationViewModel = viewModel(),
+    sesionViewModel: SesionViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val estadoSesion by sesionViewModel.estado.collectAsState()
+
+    if (estadoSesion is EstadoSesion.Cargando) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    // La ruta inicial se calcula una sola vez: con sesión guardada se entra directo
+    val rutaInicial = remember {
+        (estadoSesion as? EstadoSesion.Activa)?.sesion?.rol?.rutaInicio() ?: Screen.Login.route
+    }
+    val sesion = (estadoSesion as? EstadoSesion.Activa)?.sesion
+
     // Escucha los eventos del ViewModel y los traduce a acciones del NavController
     LaunchedEffect(Unit) {
         navigationViewModel.eventos.collect { evento ->
@@ -50,29 +70,37 @@ fun AppNavigation(
     val entradaActual by navController.currentBackStackEntryAsState()
     val rutaActual = entradaActual?.destination?.route
 
-    NavHost(navController = navController, startDestination = Screen.Login.route) {
+    val cerrarSesion: () -> Unit = {
+        sesionViewModel.cerrarSesion {
+            navigationViewModel.navegarA(Screen.Login.route, limpiarPila = true)
+        }
+    }
+
+    NavHost(navController = navController, startDestination = rutaInicial) {
 
         composable(Screen.Login.route) {
-            // Temporal: el login real con validaciones se implementa en T-07
-            LoginTemporal(
-                onOperario = {
-                    navigationViewModel.navegarA(Screen.InicioOperario.route, limpiarPila = true)
-                },
-                onSupervisor = {
-                    navigationViewModel.navegarA(Screen.Supervisor.route, limpiarPila = true)
+            LoginScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onLoginExitoso = { rol ->
+                    navigationViewModel.navegarA(rol.rutaInicio(), limpiarPila = true)
                 }
             )
         }
 
         composable(Screen.InicioOperario.route) {
             TacticalScaffold(
-                titulo = "Activos",
+                titulo = "Hola, ${sesion?.nombre.orEmpty()}",
                 itemsNavegacion = ItemsNavegacion.operario,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
-                onCerrarSesion = { navigationViewModel.navegarA(Screen.Login.route, limpiarPila = true) }
+                onCerrarSesion = cerrarSesion
             ) { padding ->
-                PantallaEnConstruccion("Inicio del operario", Modifier.padding(padding))
+                InicioOperarioScreen(
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    onRegistrarVisita = { navigationViewModel.navegarA(Screen.FormularioVisita.crear(it)) },
+                    onVerHistorial = { navigationViewModel.navegarA(Screen.HistorialActivo.crear(it)) },
+                    modifier = Modifier.padding(padding)
+                )
             }
         }
 
@@ -82,7 +110,7 @@ fun AppNavigation(
                 itemsNavegacion = ItemsNavegacion.operario,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
-                onCerrarSesion = { navigationViewModel.navegarA(Screen.Login.route, limpiarPila = true) }
+                onCerrarSesion = cerrarSesion
             ) { padding ->
                 PantallaEnConstruccion("Mis visitas", Modifier.padding(padding))
             }
@@ -121,7 +149,7 @@ fun AppNavigation(
                 itemsNavegacion = ItemsNavegacion.supervisor,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                onCerrarSesion = { navigationViewModel.navegarA(Screen.Login.route, limpiarPila = true) }
+                onCerrarSesion = cerrarSesion
             ) { padding ->
                 PantallaEnConstruccion("Vista del supervisor", Modifier.padding(padding))
             }
@@ -133,7 +161,7 @@ fun AppNavigation(
                 itemsNavegacion = ItemsNavegacion.supervisor,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                onCerrarSesion = { navigationViewModel.navegarA(Screen.Login.route, limpiarPila = true) }
+                onCerrarSesion = cerrarSesion
             ) { padding ->
                 PantallaEnConstruccion("Administración", Modifier.padding(padding))
             }
@@ -159,29 +187,5 @@ private fun manejarEvento(navController: NavHostController, evento: NavigationEv
         }
 
         NavigationEvent.PopBackStack -> navController.popBackStack()
-    }
-}
-
-@Composable
-private fun LoginTemporal(onOperario: () -> Unit, onSupervisor: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(R.drawable.ic_logo),
-            contentDescription = "Logo TacticalDEV",
-            modifier = Modifier.size(96.dp)
-        )
-        Text("TacticalDEV Visitas", style = MaterialTheme.typography.headlineMedium)
-        Button(onClick = onOperario, modifier = Modifier.widthIn(max = 360.dp).fillMaxWidth()) {
-            Text("Entrar como operario")
-        }
-        OutlinedButton(onClick = onSupervisor, modifier = Modifier.widthIn(max = 360.dp).fillMaxWidth()) {
-            Text("Entrar como supervisor")
-        }
     }
 }
