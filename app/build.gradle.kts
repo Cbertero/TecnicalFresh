@@ -60,6 +60,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // DataStore Preferences: sesión del usuario (Guía 12)
+    implementation(libs.androidx.datastore.preferences)
+
     // Pruebas
     testImplementation(libs.junit)
 
