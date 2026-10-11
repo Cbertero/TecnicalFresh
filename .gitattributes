@@ -1,0 +1,8 @@
+# Fin de línea LF para todos los archivos de texto (evita conflictos entre Windows, macOS y Linux)
+* text=auto eol=lf
+
+# Archivos que no se deben convertir
+*.bat -text
+*.jar binary
+*.png binary
+*.jpg binary
