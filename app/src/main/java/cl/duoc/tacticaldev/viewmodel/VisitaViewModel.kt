@@ -142,7 +142,9 @@ class VisitaViewModel(
      */
     fun guardar(onGuardada: (Long) -> Unit) {
         if (!validarFormulario()) {
-            _uiState.update { it.copy(mensaje = "Revisa los campos marcados en rojo") }
+            _uiState.update {
+                it.copy(mensaje = "Revisa los campos marcados en rojo", intentosFallidos = it.intentosFallidos + 1)
+            }
             return
         }
         val s = _uiState.value

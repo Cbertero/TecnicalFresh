@@ -17,6 +17,7 @@ data class VisitaFormUiState(
     val confirmado: Boolean = false,
     val guardando: Boolean = false,
     val mensaje: String? = null,
+    val intentosFallidos: Int = 0,
     val errores: VisitaErrores = VisitaErrores()
 )
 
