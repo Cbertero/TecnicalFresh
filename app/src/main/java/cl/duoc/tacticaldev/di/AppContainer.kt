@@ -2,6 +2,7 @@ package cl.duoc.tacticaldev.di
 
 import android.content.Context
 import cl.duoc.tacticaldev.data.local.AppDatabase
+import cl.duoc.tacticaldev.data.location.UbicacionService
 import cl.duoc.tacticaldev.data.preferences.SesionPreferences
 import cl.duoc.tacticaldev.data.repository.ActivoRepository
 import cl.duoc.tacticaldev.data.repository.UsuarioRepository
@@ -19,4 +20,6 @@ class AppContainer(context: Context) {
     val visitaRepository by lazy { VisitaRepository(database.visitaDao()) }
 
     val sesionPreferences by lazy { SesionPreferences(context.applicationContext) }
+
+    val ubicacionService by lazy { UbicacionService(context.applicationContext) }
 }

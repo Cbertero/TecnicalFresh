@@ -19,7 +19,11 @@ object AppViewModelProvider {
         }
         initializer { ActivosViewModel(app().container.activoRepository) }
         initializer {
-            VisitaViewModel(createSavedStateHandle(), app().container.activoRepository)
+            VisitaViewModel(
+                savedStateHandle = createSavedStateHandle(),
+                activoRepository = app().container.activoRepository,
+                ubicacionService = app().container.ubicacionService
+            )
         }
     }
 }
