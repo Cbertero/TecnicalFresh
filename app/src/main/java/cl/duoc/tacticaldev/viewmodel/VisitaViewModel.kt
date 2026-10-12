@@ -62,6 +62,11 @@ class VisitaViewModel(
         )
     }
 
+    /** Recibe el URI de la foto tomada con la cámara. */
+    fun onFotoCapturada(uri: String) = _uiState.update {
+        it.copy(fotoUri = uri, errores = it.errores.copy(foto = null))
+    }
+
     fun onConfirmacionChange(valor: Boolean) = _uiState.update {
         it.copy(confirmado = valor, errores = it.errores.copy(confirmacion = Validadores.confirmacion(valor)))
     }
