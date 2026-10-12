@@ -39,7 +39,9 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.EstadoValidacion
 import cl.duoc.tacticaldev.model.RechazoUiState
 import cl.duoc.tacticaldev.ui.components.CampoTexto
+import cl.duoc.tacticaldev.ui.components.EstadoVacio
 import cl.duoc.tacticaldev.ui.components.TarjetaVisita
+import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.ui.utils.LocalTipoPantalla
 import cl.duoc.tacticaldev.ui.utils.columnas
 import cl.duoc.tacticaldev.viewmodel.SupervisorViewModel
@@ -56,10 +58,10 @@ fun SupervisorScreen(
 
     Column(modifier.fillMaxSize()) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(Espaciado.s),
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = Espaciado.l, vertical = Espaciado.s)
         ) {
             EstadoValidacion.entries.forEach { opcion ->
                 FilterChip(
@@ -74,15 +76,21 @@ fun SupervisorScreen(
         Box(Modifier.fillMaxSize()) {
             when {
                 estado.cargando -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                estado.visitas.isEmpty() -> Text(
-                    "No hay visitas en este estado.",
+                estado.visitas.isEmpty() -> EstadoVacio(
+                    icono = iconoFiltro(estado.filtro),
+                    titulo = "No hay visitas ${estado.filtro.etiqueta.lowercase()}s",
+                    mensaje = if (estado.filtro == EstadoValidacion.PENDIENTE) {
+                        "Todas las visitas de terreno ya fueron revisadas."
+                    } else {
+                        "Las visitas aparecerán aquí cuando cambien a este estado."
+                    },
                     modifier = Modifier.align(Alignment.Center)
                 )
                 else -> LazyVerticalGrid(
                     columns = GridCells.Fixed(columnas),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(Espaciado.l),
+                    horizontalArrangement = Arrangement.spacedBy(Espaciado.m),
+                    verticalArrangement = Arrangement.spacedBy(Espaciado.m),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(estado.visitas, key = { it.id }) { visita ->
