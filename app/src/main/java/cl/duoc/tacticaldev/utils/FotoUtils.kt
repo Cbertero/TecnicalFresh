@@ -21,4 +21,9 @@ object FotoUtils {
         val archivo = File(carpeta, "visita_$marca.jpg")
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", archivo)
     }
+
+    /** Borra la foto asociada al URI (por ejemplo, cuando el usuario cancela la cámara). */
+    fun eliminar(context: Context, uri: Uri) {
+        runCatching { context.contentResolver.delete(uri, null, null) }
+    }
 }
