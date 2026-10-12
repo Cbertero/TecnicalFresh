@@ -23,7 +23,7 @@ import androidx.navigation.navArgument
 import cl.duoc.tacticaldev.model.Rol
 import cl.duoc.tacticaldev.ui.animaciones.TransicionesNavegacion
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
-import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
+import cl.duoc.tacticaldev.ui.screens.admin.AdminScreen
 import cl.duoc.tacticaldev.ui.screens.historial.HistorialActivoScreen
 import cl.duoc.tacticaldev.ui.screens.historial.MisVisitasScreen
 import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
@@ -31,6 +31,7 @@ import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
 import cl.duoc.tacticaldev.ui.screens.supervisor.SupervisorScreen
 import cl.duoc.tacticaldev.ui.screens.visita.ConfirmacionScreen
 import cl.duoc.tacticaldev.ui.screens.visita.VisitaFormScreen
+import cl.duoc.tacticaldev.viewmodel.AdminViewModel
 import cl.duoc.tacticaldev.viewmodel.AppViewModelProvider
 import cl.duoc.tacticaldev.viewmodel.EstadoSesion
 import cl.duoc.tacticaldev.viewmodel.NavigationViewModel
@@ -192,14 +193,20 @@ fun AppNavigation(
         }
 
         composable(Screen.Administracion.route) {
+            val adminViewModel: AdminViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            val snackbarHostState = remember { SnackbarHostState() }
+            LaunchedEffect(Unit) {
+                adminViewModel.mensajes.collect { snackbarHostState.showSnackbar(it) }
+            }
             TacticalScaffold(
                 titulo = "Administración",
                 itemsNavegacion = ItemsNavegacion.supervisor,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                onCerrarSesion = cerrarSesion
+                onCerrarSesion = cerrarSesion,
+                snackbarHostState = snackbarHostState
             ) { padding ->
-                PantallaEnConstruccion("Administración", Modifier.padding(padding))
+                AdminScreen(viewModel = adminViewModel, modifier = Modifier.padding(padding))
             }
         }
     }
