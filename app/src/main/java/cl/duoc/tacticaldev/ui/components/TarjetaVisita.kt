@@ -24,6 +24,7 @@ import cl.duoc.tacticaldev.model.estado
 import cl.duoc.tacticaldev.model.tipo
 import cl.duoc.tacticaldev.model.validacion
 import cl.duoc.tacticaldev.ui.theme.AmbarAlerta
+import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.ui.theme.VerdeExito
 import cl.duoc.tacticaldev.utils.Formatos
 
@@ -40,7 +41,7 @@ fun TarjetaVisita(
     acciones: (@Composable RowScope.() -> Unit)? = null
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.padding(Espaciado.l), verticalArrangement = Arrangement.spacedBy(Espaciado.s)) {
             Row(verticalAlignment = Alignment.Top) {
                 FotoEvidencia(uri = visita.fotoUri, modifier = Modifier.size(72.dp))
                 Column(
@@ -68,7 +69,7 @@ fun TarjetaVisita(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     if (visita.ubicacionVerificada) Icons.Filled.VerifiedUser else Icons.Filled.WrongLocation,
-                    contentDescription = null,
+                    contentDescription = if (visita.ubicacionVerificada) "Ubicación verificada" else "Ubicación fuera de rango",
                     tint = if (visita.ubicacionVerificada) VerdeExito else AmbarAlerta,
                     modifier = Modifier.size(18.dp)
                 )

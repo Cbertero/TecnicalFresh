@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.ActivoConPunto
 import cl.duoc.tacticaldev.model.TipoActivo
 import cl.duoc.tacticaldev.model.tipoActivo
+import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.utils.Formatos
 
 /** Tarjeta de un activo con su punto de venta y acciones principales. */
@@ -39,7 +40,7 @@ fun TarjetaActivo(
     modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(Modifier.padding(Espaciado.l), verticalArrangement = Arrangement.spacedBy(Espaciado.s)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Surface(
                     shape = CircleShape,
@@ -67,7 +68,7 @@ fun TarjetaActivo(
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Place, contentDescription = null, modifier = Modifier.size(18.dp))
+                Icon(Icons.Filled.Place, contentDescription = "Punto de venta", modifier = Modifier.size(18.dp))
                 Text(
                     "${activo.puntoVentaNombre} · ${activo.direccion}, ${activo.comuna}",
                     style = MaterialTheme.typography.bodyMedium,
