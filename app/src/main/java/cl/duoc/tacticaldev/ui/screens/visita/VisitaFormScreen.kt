@@ -62,6 +62,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -320,19 +321,25 @@ private fun colorEstado(estado: EstadoEquipo) = when (estado) {
 @Composable
 private fun SeccionEvidencia(estado: VisitaFormUiState, onFotoCapturada: (String) -> Unit) {
     val context = LocalContext.current
-    var uriPendiente by remember { mutableStateOf<Uri?>(null) }
-    var permisoDenegado by remember { mutableStateOf(false) }
+    // rememberSaveable: si Android destruye la actividad mientras la cámara está abierta
+    // (poca memoria o rotación), el URI pendiente no se pierde al volver.
+    var uriPendiente by rememberSaveable { mutableStateOf<String?>(null) }
+    var permisoDenegado by rememberSaveable { mutableStateOf(false) }
 
     val lanzadorCamara = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { exito ->
         val uri = uriPendiente
-        // Si el usuario cancela, exito es false y simplemente no se hace nada
-        if (exito && uri != null) onFotoCapturada(uri.toString())
+        if (exito && uri != null) {
+            onFotoCapturada(uri)
+        } else if (uri != null) {
+            // Cancelado: se elimina el archivo vacío para no acumular basura
+            FotoUtils.eliminar(context, Uri.parse(uri))
+        }
         uriPendiente = null
     }
 
     fun abrirCamara() {
         val uri = FotoUtils.crearUriFoto(context)
-        uriPendiente = uri
+        uriPendiente = uri.toString()
         lanzadorCamara.launch(uri)
     }
 
