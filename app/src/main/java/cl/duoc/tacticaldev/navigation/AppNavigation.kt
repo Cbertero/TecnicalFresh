@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,12 +27,14 @@ import cl.duoc.tacticaldev.ui.screens.historial.HistorialActivoScreen
 import cl.duoc.tacticaldev.ui.screens.historial.MisVisitasScreen
 import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
 import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
+import cl.duoc.tacticaldev.ui.screens.supervisor.SupervisorScreen
 import cl.duoc.tacticaldev.ui.screens.visita.ConfirmacionScreen
 import cl.duoc.tacticaldev.ui.screens.visita.VisitaFormScreen
 import cl.duoc.tacticaldev.viewmodel.AppViewModelProvider
 import cl.duoc.tacticaldev.viewmodel.EstadoSesion
 import cl.duoc.tacticaldev.viewmodel.NavigationViewModel
 import cl.duoc.tacticaldev.viewmodel.SesionViewModel
+import cl.duoc.tacticaldev.viewmodel.SupervisorViewModel
 
 /** Ruta de inicio según el rol del usuario conectado. */
 fun Rol.rutaInicio(): String = when (this) {
@@ -167,14 +170,20 @@ fun AppNavigation(
         }
 
         composable(Screen.Supervisor.route) {
+            val supervisorViewModel: SupervisorViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            val snackbarHostState = remember { SnackbarHostState() }
+            LaunchedEffect(Unit) {
+                supervisorViewModel.mensajes.collect { snackbarHostState.showSnackbar(it) }
+            }
             TacticalScaffold(
-                titulo = "Visitas por validar",
+                titulo = "Visitas de terreno",
                 itemsNavegacion = ItemsNavegacion.supervisor,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                onCerrarSesion = cerrarSesion
+                onCerrarSesion = cerrarSesion,
+                snackbarHostState = snackbarHostState
             ) { padding ->
-                PantallaEnConstruccion("Vista del supervisor", Modifier.padding(padding))
+                SupervisorScreen(viewModel = supervisorViewModel, modifier = Modifier.padding(padding))
             }
         }
 
