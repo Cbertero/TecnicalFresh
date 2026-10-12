@@ -5,6 +5,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +47,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
@@ -50,6 +58,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +77,7 @@ import cl.duoc.tacticaldev.model.EstadoEquipo
 import cl.duoc.tacticaldev.model.TipoVisita
 import cl.duoc.tacticaldev.model.VisitaFormUiState
 import cl.duoc.tacticaldev.model.tipoActivo
+import cl.duoc.tacticaldev.ui.animaciones.sacudir
 import cl.duoc.tacticaldev.ui.components.CampoTexto
 import cl.duoc.tacticaldev.ui.components.FotoEvidencia
 import cl.duoc.tacticaldev.ui.components.Selector
@@ -90,6 +100,22 @@ fun VisitaFormScreen(
 ) {
     val estado by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // Estado derivado: cuántos de los 6 requisitos están completos (Guía 12)
+    val progreso by remember {
+        derivedStateOf {
+            val s = estado
+            listOf(
+                s.tipoVisita != null,
+                s.estadoEquipo != null,
+                s.temperatura.isNotBlank(),
+                s.fotoUri != null,
+                s.latitud != null,
+                s.confirmado
+            ).count { it } / 6f
+        }
+    }
+    val progresoAnimado by animateFloatAsState(targetValue = progreso, label = "progreso_formulario")
 
     LaunchedEffect(estado.mensaje) {
         estado.mensaje?.let {
@@ -128,6 +154,11 @@ fun VisitaFormScreen(
             ) {
                 estado.activo?.let { ResumenActivo(it) }
 
+                LinearProgressIndicator(
+                    progress = { progresoAnimado },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
                 Selector(
                     etiqueta = "Tipo de visita",
                     opciones = TipoVisita.entries,
@@ -154,6 +185,19 @@ fun VisitaFormScreen(
                     sufijo = "°C",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
+
+                // Aviso animado: con falla u observaciones, describir el problema es obligatorio
+                AnimatedVisibility(
+                    visible = estado.estadoEquipo != null && estado.estadoEquipo != EstadoEquipo.OPERATIVO,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    Text(
+                        "Describe en las observaciones el problema detectado",
+                        color = AmbarAlerta,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
 
                 CampoTexto(
                     valor = estado.observaciones,
@@ -186,6 +230,7 @@ fun VisitaFormScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp)
+                        .sacudir(estado.intentosFallidos)
                 ) {
                     if (estado.guardando) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
@@ -388,8 +433,9 @@ private fun SeccionUbicacion(
 /** Muestra si la ubicación está dentro del radio permitido del punto de venta. */
 @Composable
 private fun InsigniaVerificacion(verificada: Boolean, distancia: Double) {
-    val fondo = if (verificada) VerdeExitoContenedor else AmbarAlertaContenedor
-    val texto = if (verificada) VerdeExito else AmbarAlerta
+    // El color cambia de forma animada al pasar de "fuera de rango" a "verificada"
+    val fondo by animateColorAsState(if (verificada) VerdeExitoContenedor else AmbarAlertaContenedor, label = "fondo_gps")
+    val texto by animateColorAsState(if (verificada) VerdeExito else AmbarAlerta, label = "texto_gps")
     Surface(color = fondo, shape = MaterialTheme.shapes.small) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

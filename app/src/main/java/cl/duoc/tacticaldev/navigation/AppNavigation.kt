@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import cl.duoc.tacticaldev.model.Rol
+import cl.duoc.tacticaldev.ui.animaciones.TransicionesNavegacion
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
 import cl.duoc.tacticaldev.ui.screens.historial.HistorialActivoScreen
@@ -83,7 +84,14 @@ fun AppNavigation(
         }
     }
 
-    NavHost(navController = navController, startDestination = rutaInicial) {
+    NavHost(
+        navController = navController,
+        startDestination = rutaInicial,
+        enterTransition = TransicionesNavegacion.entrada,
+        exitTransition = TransicionesNavegacion.salida,
+        popEnterTransition = TransicionesNavegacion.entradaAlVolver,
+        popExitTransition = TransicionesNavegacion.salidaAlVolver
+    ) {
 
         composable(Screen.Login.route) {
             LoginScreen(

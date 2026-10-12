@@ -7,6 +7,7 @@ data class LoginUiState(
     val claveVisible: Boolean = false,
     val cargando: Boolean = false,
     val errorGeneral: String? = null,
+    val intentosFallidos: Int = 0,
     val errores: LoginErrores = LoginErrores()
 )
 

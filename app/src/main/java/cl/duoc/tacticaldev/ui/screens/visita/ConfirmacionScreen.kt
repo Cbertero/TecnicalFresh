@@ -1,5 +1,11 @@
 package cl.duoc.tacticaldev.ui.screens.visita
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,10 +27,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.VisitaDetalle
 import cl.duoc.tacticaldev.model.estado
@@ -67,6 +78,14 @@ private fun ContenidoConfirmacion(
     onVolverInicio: () -> Unit,
     onVerHistorial: (Long) -> Unit
 ) {
+    // Escala del ícono: aparece con efecto "rebote"
+    val escala = remember { Animatable(0f) }
+    var mostrarDetalle by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        escala.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow))
+        mostrarDetalle = true
+    }
+
     Column(
         modifier = Modifier
             .widthIn(max = 560.dp)
@@ -79,7 +98,9 @@ private fun ContenidoConfirmacion(
             Icons.Filled.CheckCircle,
             contentDescription = null,
             tint = VerdeExito,
-            modifier = Modifier.size(88.dp)
+            modifier = Modifier
+                .size(88.dp)
+                .scale(escala.value)
         )
         Text("¡Visita guardada!", style = MaterialTheme.typography.headlineMedium)
         Text(
@@ -87,25 +108,30 @@ private fun ContenidoConfirmacion(
             style = MaterialTheme.typography.bodyMedium
         )
 
-        Card(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("${visita.activoCodigo} · ${visita.puntoVentaNombre}", style = MaterialTheme.typography.titleMedium)
-                Text("Fecha y hora: ${Formatos.fechaHora(visita.fechaHora)}")
-                Text("Tipo: ${visita.tipo.etiqueta}")
-                Text("Estado del equipo: ${visita.estado.etiqueta} · ${visita.temperatura} °C")
-                Text(
-                    if (visita.ubicacionVerificada) {
-                        "Ubicación verificada (${Formatos.distancia(visita.distanciaMetros)})"
-                    } else {
-                        "Ubicación fuera de rango (${Formatos.distancia(visita.distanciaMetros)})"
-                    }
-                )
-                FotoEvidencia(
-                    uri = visita.fotoUri,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(4f / 3f)
-                )
+        AnimatedVisibility(
+            visible = mostrarDetalle,
+            enter = fadeIn() + slideInVertically { it / 3 }
+        ) {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text("${visita.activoCodigo} · ${visita.puntoVentaNombre}", style = MaterialTheme.typography.titleMedium)
+                    Text("Fecha y hora: ${Formatos.fechaHora(visita.fechaHora)}")
+                    Text("Tipo: ${visita.tipo.etiqueta}")
+                    Text("Estado del equipo: ${visita.estado.etiqueta} · ${visita.temperatura} °C")
+                    Text(
+                        if (visita.ubicacionVerificada) {
+                            "Ubicación verificada (${Formatos.distancia(visita.distanciaMetros)})"
+                        } else {
+                            "Ubicación fuera de rango (${Formatos.distancia(visita.distanciaMetros)})"
+                        }
+                    )
+                    FotoEvidencia(
+                        uri = visita.fotoUri,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(4f / 3f)
+                    )
+                }
             }
         }
 

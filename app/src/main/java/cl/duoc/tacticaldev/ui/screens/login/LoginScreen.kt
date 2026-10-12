@@ -1,5 +1,11 @@
 package cl.duoc.tacticaldev.ui.screens.login
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.R
 import cl.duoc.tacticaldev.data.local.DatosFicticios
 import cl.duoc.tacticaldev.model.Rol
+import cl.duoc.tacticaldev.ui.animaciones.sacudir
 import cl.duoc.tacticaldev.ui.components.CampoTexto
 import cl.duoc.tacticaldev.viewmodel.LoginViewModel
 
@@ -74,7 +81,9 @@ fun LoginScreen(
             )
 
             Column(
-                modifier = Modifier.widthIn(max = 420.dp),
+                modifier = Modifier
+                    .widthIn(max = 420.dp)
+                    .sacudir(estado.intentosFallidos),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 CampoTexto(
@@ -103,7 +112,12 @@ fun LoginScreen(
                     }
                 )
 
-                if (estado.errorGeneral != null) {
+                // El mensaje de error aparece y desaparece con animación
+                AnimatedVisibility(
+                    visible = estado.errorGeneral != null,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
                     Card(
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
                         modifier = Modifier.fillMaxWidth()
@@ -123,10 +137,13 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .height(52.dp)
                 ) {
-                    if (estado.cargando) {
-                        CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
-                    } else {
-                        Text("Ingresar")
+                    // Transición animada entre el texto y el indicador de carga
+                    AnimatedContent(targetState = estado.cargando, label = "boton_login") { cargando ->
+                        if (cargando) {
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                        } else {
+                            Text("Ingresar")
+                        }
                     }
                 }
 

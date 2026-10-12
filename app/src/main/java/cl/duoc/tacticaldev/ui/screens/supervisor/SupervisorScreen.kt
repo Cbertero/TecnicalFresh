@@ -88,6 +88,8 @@ fun SupervisorScreen(
                     items(estado.visitas, key = { it.id }) { visita ->
                         TarjetaVisita(
                             visita = visita,
+                            // La tarjeta sale de la lista con animación al validarla o rechazarla
+                            modifier = Modifier.animateItem(),
                             mostrarOperario = true,
                             acciones = if (visita.estadoValidacion == EstadoValidacion.PENDIENTE.name) {
                                 {
