@@ -24,6 +24,7 @@ import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
 import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
 import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
+import cl.duoc.tacticaldev.ui.screens.visita.VisitaFormScreen
 import cl.duoc.tacticaldev.viewmodel.AppViewModelProvider
 import cl.duoc.tacticaldev.viewmodel.EstadoSesion
 import cl.duoc.tacticaldev.viewmodel.NavigationViewModel
@@ -120,9 +121,10 @@ fun AppNavigation(
             Screen.FormularioVisita.route,
             arguments = listOf(navArgument(Screen.ARG_ACTIVO_ID) { type = NavType.LongType })
         ) {
-            TacticalScaffold(titulo = "Registrar visita", onVolver = { navigationViewModel.volver() }) { padding ->
-                PantallaEnConstruccion("Formulario de visita", Modifier.padding(padding))
-            }
+            VisitaFormScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onVolver = { navigationViewModel.volver() }
+            )
         }
 
         composable(
