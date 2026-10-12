@@ -1,10 +1,16 @@
 package cl.duoc.tacticaldev.ui.screens.visita
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +38,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
@@ -40,13 +47,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import cl.duoc.tacticaldev.domain.validacion.Validadores
 import cl.duoc.tacticaldev.model.ActivoConPunto
 import cl.duoc.tacticaldev.model.EstadoEquipo
@@ -54,10 +65,12 @@ import cl.duoc.tacticaldev.model.TipoVisita
 import cl.duoc.tacticaldev.model.VisitaFormUiState
 import cl.duoc.tacticaldev.model.tipoActivo
 import cl.duoc.tacticaldev.ui.components.CampoTexto
+import cl.duoc.tacticaldev.ui.components.FotoEvidencia
 import cl.duoc.tacticaldev.ui.components.Selector
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.theme.AmbarAlerta
 import cl.duoc.tacticaldev.ui.theme.VerdeExito
+import cl.duoc.tacticaldev.utils.FotoUtils
 import cl.duoc.tacticaldev.viewmodel.VisitaViewModel
 
 /** Formulario de registro de una visita al activo seleccionado. */
@@ -144,7 +157,7 @@ fun VisitaFormScreen(
                     minLines = 3
                 )
 
-                SeccionEvidencia(estado)
+                SeccionEvidencia(estado, onFotoCapturada = viewModel::onFotoCapturada)
 
                 SeccionUbicacion(estado)
 
@@ -236,15 +249,68 @@ private fun colorEstado(estado: EstadoEquipo) = when (estado) {
     EstadoEquipo.CON_FALLA -> MaterialTheme.colorScheme.error
 }
 
-/** Evidencia fotográfica de la revisión. */
+/**
+ * Evidencia fotográfica de la revisión: pide el permiso de cámara y usa
+ * TakePicture con un URI de FileProvider (Guía 13). Solo se permite la cámara,
+ * no la galería, para que la foto sea tomada en el momento de la visita.
+ */
 @Composable
-private fun SeccionEvidencia(estado: VisitaFormUiState) {
+private fun SeccionEvidencia(estado: VisitaFormUiState, onFotoCapturada: (String) -> Unit) {
+    val context = LocalContext.current
+    var uriPendiente by remember { mutableStateOf<Uri?>(null) }
+    var permisoDenegado by remember { mutableStateOf(false) }
+
+    val lanzadorCamara = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { exito ->
+        val uri = uriPendiente
+        // Si el usuario cancela, exito es false y simplemente no se hace nada
+        if (exito && uri != null) onFotoCapturada(uri.toString())
+        uriPendiente = null
+    }
+
+    fun abrirCamara() {
+        val uri = FotoUtils.crearUriFoto(context)
+        uriPendiente = uri
+        lanzadorCamara.launch(uri)
+    }
+
+    val lanzadorPermiso = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { concedido ->
+        permisoDenegado = !concedido
+        if (concedido) abrirCamara()
+    }
+
     SeccionConIcono(
         titulo = "Evidencia fotográfica",
         icono = Icons.Filled.PhotoCamera,
         error = estado.errores.foto
     ) {
-        Text(if (estado.fotoUri == null) "Sin foto" else "Foto capturada")
+        FotoEvidencia(
+            uri = estado.fotoUri,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(4f / 3f)
+        )
+        if (permisoDenegado) {
+            Text(
+                "Sin permiso de cámara no se puede registrar la evidencia",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        OutlinedButton(
+            onClick = {
+                val tienePermiso = ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+                if (tienePermiso) abrirCamara() else lanzadorPermiso.launch(Manifest.permission.CAMERA)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(Icons.Filled.PhotoCamera, contentDescription = null)
+            Text(
+                if (estado.fotoUri == null) "Tomar foto" else "Tomar otra foto",
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
     }
 }
 
