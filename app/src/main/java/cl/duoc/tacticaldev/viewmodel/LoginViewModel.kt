@@ -44,8 +44,11 @@ class LoginViewModel(
             correo = Validadores.correo(estado.correo),
             clave = Validadores.clave(estado.clave)
         )
-        _uiState.update { it.copy(errores = errores) }
-        return errores.correo == null && errores.clave == null
+        val valido = errores.correo == null && errores.clave == null
+        _uiState.update {
+            it.copy(errores = errores, intentosFallidos = if (valido) it.intentosFallidos else it.intentosFallidos + 1)
+        }
+        return valido
     }
 
     fun iniciarSesion(onExito: (Rol) -> Unit) {
@@ -55,7 +58,13 @@ class LoginViewModel(
             _uiState.update { it.copy(cargando = true, errorGeneral = null) }
             val usuario = usuarioRepository.autenticar(estado.correo, estado.clave)
             if (usuario == null) {
-                _uiState.update { it.copy(cargando = false, errorGeneral = "Correo o clave incorrectos") }
+                _uiState.update {
+                    it.copy(
+                        cargando = false,
+                        errorGeneral = "Correo o clave incorrectos",
+                        intentosFallidos = it.intentosFallidos + 1
+                    )
+                }
                 return@launch
             }
             val rol = usuario.rol.aEnum(Rol.OPERARIO)
