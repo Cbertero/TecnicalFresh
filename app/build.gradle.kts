@@ -63,6 +63,9 @@ dependencies {
     // DataStore Preferences: sesión del usuario (Guía 12)
     implementation(libs.androidx.datastore.preferences)
 
+    // Coil: carga de la foto de evidencia en Compose
+    implementation(libs.coil.compose)
+
     // Pruebas
     testImplementation(libs.junit)
 
