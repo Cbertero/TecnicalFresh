@@ -24,6 +24,7 @@ import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
 import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
 import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
+import cl.duoc.tacticaldev.ui.screens.visita.ConfirmacionScreen
 import cl.duoc.tacticaldev.ui.screens.visita.VisitaFormScreen
 import cl.duoc.tacticaldev.viewmodel.AppViewModelProvider
 import cl.duoc.tacticaldev.viewmodel.EstadoSesion
@@ -123,7 +124,14 @@ fun AppNavigation(
         ) {
             VisitaFormScreen(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
-                onVolver = { navigationViewModel.volver() }
+                onVolver = { navigationViewModel.volver() },
+                onVisitaGuardada = { id ->
+                    navigationViewModel.navegarA(
+                        Screen.Confirmacion.crear(id),
+                        popUpToRoute = Screen.FormularioVisita.route,
+                        inclusive = true
+                    )
+                }
             )
         }
 
@@ -131,9 +139,16 @@ fun AppNavigation(
             Screen.Confirmacion.route,
             arguments = listOf(navArgument(Screen.ARG_VISITA_ID) { type = NavType.LongType })
         ) {
-            TacticalScaffold(titulo = "Visita registrada") { padding ->
-                PantallaEnConstruccion("Confirmación", Modifier.padding(padding))
-            }
+            ConfirmacionScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onVolverInicio = { navigationViewModel.volver() },
+                onVerHistorial = { activoId ->
+                    navigationViewModel.navegarA(
+                        Screen.HistorialActivo.crear(activoId),
+                        popUpToRoute = Screen.InicioOperario.route
+                    )
+                }
+            )
         }
 
         composable(
