@@ -28,9 +28,12 @@ import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.WrongLocation
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,6 +45,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,8 +73,12 @@ import cl.duoc.tacticaldev.ui.components.FotoEvidencia
 import cl.duoc.tacticaldev.ui.components.Selector
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.theme.AmbarAlerta
+import cl.duoc.tacticaldev.ui.theme.AmbarAlertaContenedor
 import cl.duoc.tacticaldev.ui.theme.VerdeExito
+import cl.duoc.tacticaldev.ui.theme.VerdeExitoContenedor
+import cl.duoc.tacticaldev.utils.Formatos
 import cl.duoc.tacticaldev.utils.FotoUtils
+import cl.duoc.tacticaldev.utils.GeoUtils
 import cl.duoc.tacticaldev.viewmodel.VisitaViewModel
 
 /** Formulario de registro de una visita al activo seleccionado. */
@@ -159,7 +167,11 @@ fun VisitaFormScreen(
 
                 SeccionEvidencia(estado, onFotoCapturada = viewModel::onFotoCapturada)
 
-                SeccionUbicacion(estado)
+                SeccionUbicacion(
+                    estado = estado,
+                    onObtenerUbicacion = viewModel::obtenerUbicacion,
+                    onPermisoDenegado = viewModel::onPermisoUbicacionDenegado
+                )
 
                 FilaConfirmacion(
                     confirmado = estado.confirmado,
@@ -314,15 +326,86 @@ private fun SeccionEvidencia(estado: VisitaFormUiState, onFotoCapturada: (String
     }
 }
 
-/** Ubicación donde se realiza la visita. */
+/**
+ * Ubicación donde se realiza la visita: pide el permiso de ubicación,
+ * obtiene las coordenadas y muestra la distancia al punto de venta.
+ */
 @Composable
-private fun SeccionUbicacion(estado: VisitaFormUiState) {
+private fun SeccionUbicacion(
+    estado: VisitaFormUiState,
+    onObtenerUbicacion: () -> Unit,
+    onPermisoDenegado: () -> Unit
+) {
+    val lanzadorPermisos = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { resultado ->
+        if (resultado.values.any { it }) onObtenerUbicacion() else onPermisoDenegado()
+    }
+
     SeccionConIcono(
         titulo = "Ubicación de la visita",
         icono = Icons.Filled.LocationOn,
         error = estado.errores.ubicacion
     ) {
-        Text(if (estado.latitud == null) "Sin ubicación" else "Ubicación registrada")
+        val distancia = estado.distanciaMetros
+        if (estado.latitud != null && estado.longitud != null && distancia != null) {
+            Text(
+                "Lat ${"%.5f".format(estado.latitud)} · Lon ${"%.5f".format(estado.longitud)}",
+                style = MaterialTheme.typography.bodySmall
+            )
+            InsigniaVerificacion(verificada = estado.ubicacionVerificada, distancia = distancia)
+        } else {
+            Text("Registra tu ubicación para verificar que estás en el punto de venta")
+        }
+        OutlinedButton(
+            onClick = {
+                lanzadorPermisos.launch(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                )
+            },
+            enabled = !estado.obteniendoUbicacion,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (estado.obteniendoUbicacion) {
+                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                Text("Obteniendo ubicación...", modifier = Modifier.padding(start = 8.dp))
+            } else {
+                Icon(Icons.Filled.MyLocation, contentDescription = null)
+                Text(
+                    if (estado.latitud == null) "Obtener ubicación" else "Actualizar ubicación",
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+/** Muestra si la ubicación está dentro del radio permitido del punto de venta. */
+@Composable
+private fun InsigniaVerificacion(verificada: Boolean, distancia: Double) {
+    val fondo = if (verificada) VerdeExitoContenedor else AmbarAlertaContenedor
+    val texto = if (verificada) VerdeExito else AmbarAlerta
+    Surface(color = fondo, shape = MaterialTheme.shapes.small) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            Icon(
+                if (verificada) Icons.Filled.VerifiedUser else Icons.Filled.WrongLocation,
+                contentDescription = null,
+                tint = texto
+            )
+            Text(
+                if (verificada) {
+                    "Ubicación verificada · a ${Formatos.distancia(distancia)} del punto"
+                } else {
+                    "Fuera de rango · a ${Formatos.distancia(distancia)} (máx. ${GeoUtils.RADIO_VERIFICACION_METROS.toInt()} m)"
+                },
+                color = texto,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
     }
 }
 

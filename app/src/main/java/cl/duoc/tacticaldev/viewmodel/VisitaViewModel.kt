@@ -3,12 +3,14 @@ package cl.duoc.tacticaldev.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cl.duoc.tacticaldev.data.location.UbicacionService
 import cl.duoc.tacticaldev.data.repository.ActivoRepository
 import cl.duoc.tacticaldev.domain.validacion.Validadores
 import cl.duoc.tacticaldev.model.EstadoEquipo
 import cl.duoc.tacticaldev.model.TipoVisita
 import cl.duoc.tacticaldev.model.VisitaFormUiState
 import cl.duoc.tacticaldev.navigation.Screen
+import cl.duoc.tacticaldev.utils.GeoUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +23,8 @@ import kotlinx.coroutines.launch
  */
 class VisitaViewModel(
     savedStateHandle: SavedStateHandle,
-    private val activoRepository: ActivoRepository
+    private val activoRepository: ActivoRepository,
+    private val ubicacionService: UbicacionService
 ) : ViewModel() {
 
     private val activoId: Long = checkNotNull(savedStateHandle[Screen.ARG_ACTIVO_ID])
@@ -65,6 +68,44 @@ class VisitaViewModel(
     /** Recibe el URI de la foto tomada con la cámara. */
     fun onFotoCapturada(uri: String) = _uiState.update {
         it.copy(fotoUri = uri, errores = it.errores.copy(foto = null))
+    }
+
+    /**
+     * Obtiene la ubicación GPS y calcula la distancia al punto de venta.
+     * Si está dentro del radio, la visita queda como "ubicación verificada".
+     */
+    fun obtenerUbicacion() {
+        val activo = _uiState.value.activo ?: return
+        viewModelScope.launch {
+            _uiState.update { it.copy(obteniendoUbicacion = true) }
+            val ubicacion = ubicacionService.obtenerUbicacionActual()
+            if (ubicacion == null) {
+                _uiState.update {
+                    it.copy(
+                        obteniendoUbicacion = false,
+                        errores = it.errores.copy(ubicacion = "No se pudo obtener la ubicación. Activa el GPS e intenta de nuevo")
+                    )
+                }
+                return@launch
+            }
+            val distancia = GeoUtils.distanciaMetros(
+                ubicacion.latitude, ubicacion.longitude, activo.latitud, activo.longitud
+            )
+            _uiState.update {
+                it.copy(
+                    obteniendoUbicacion = false,
+                    latitud = ubicacion.latitude,
+                    longitud = ubicacion.longitude,
+                    distanciaMetros = distancia,
+                    ubicacionVerificada = GeoUtils.estaDentroDelRadio(distancia),
+                    errores = it.errores.copy(ubicacion = null)
+                )
+            }
+        }
+    }
+
+    fun onPermisoUbicacionDenegado() = _uiState.update {
+        it.copy(errores = it.errores.copy(ubicacion = "Se necesita el permiso de ubicación para verificar la visita"))
     }
 
     fun onConfirmacionChange(valor: Boolean) = _uiState.update {
