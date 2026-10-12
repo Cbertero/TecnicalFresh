@@ -40,6 +40,9 @@ object AppViewModelProvider {
         initializer {
             MisVisitasViewModel(app().container.sesionPreferences, app().container.visitaRepository)
         }
+        initializer {
+            SupervisorViewModel(app().container.visitaRepository, app().container.sesionPreferences)
+        }
     }
 }
 
