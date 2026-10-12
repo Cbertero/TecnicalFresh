@@ -66,6 +66,9 @@ dependencies {
     // Coil: carga de la foto de evidencia en Compose
     implementation(libs.coil.compose)
 
+    // Ubicación GPS (Fused Location Provider)
+    implementation(libs.play.services.location)
+
     // Pruebas
     testImplementation(libs.junit)
 
