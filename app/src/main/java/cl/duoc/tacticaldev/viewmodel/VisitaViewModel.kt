@@ -3,8 +3,11 @@ package cl.duoc.tacticaldev.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
 import cl.duoc.tacticaldev.data.location.UbicacionService
+import cl.duoc.tacticaldev.data.preferences.SesionPreferences
 import cl.duoc.tacticaldev.data.repository.ActivoRepository
+import cl.duoc.tacticaldev.data.repository.VisitaRepository
 import cl.duoc.tacticaldev.domain.validacion.Validadores
 import cl.duoc.tacticaldev.model.EstadoEquipo
 import cl.duoc.tacticaldev.model.TipoVisita
@@ -14,6 +17,7 @@ import cl.duoc.tacticaldev.utils.GeoUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,6 +28,8 @@ import kotlinx.coroutines.launch
 class VisitaViewModel(
     savedStateHandle: SavedStateHandle,
     private val activoRepository: ActivoRepository,
+    private val visitaRepository: VisitaRepository,
+    private val sesionPreferences: SesionPreferences,
     private val ubicacionService: UbicacionService
 ) : ViewModel() {
 
@@ -130,11 +136,40 @@ class VisitaViewModel(
         return !errores.hayErrores
     }
 
-    fun enviar() {
-        if (validarFormulario()) {
-            _uiState.update { it.copy(mensaje = "Formulario válido") }
-        } else {
+    /**
+     * Valida y guarda la visita en Room con la fecha y hora actuales.
+     * Al terminar entrega el id de la visita para mostrar la confirmación.
+     */
+    fun guardar(onGuardada: (Long) -> Unit) {
+        if (!validarFormulario()) {
             _uiState.update { it.copy(mensaje = "Revisa los campos marcados en rojo") }
+            return
+        }
+        val s = _uiState.value
+        viewModelScope.launch {
+            _uiState.update { it.copy(guardando = true) }
+            val sesion = sesionPreferences.sesion.first()
+            if (sesion == null) {
+                _uiState.update { it.copy(guardando = false, mensaje = "La sesión expiró, vuelve a ingresar") }
+                return@launch
+            }
+            val visita = VisitaEntity(
+                activoId = activoId,
+                usuarioId = sesion.usuarioId,
+                fechaHora = System.currentTimeMillis(),
+                tipoVisita = checkNotNull(s.tipoVisita).name,
+                estadoEquipo = checkNotNull(s.estadoEquipo).name,
+                temperatura = s.temperatura.replace(',', '.').toDouble(),
+                observaciones = s.observaciones.trim(),
+                fotoUri = s.fotoUri.orEmpty(),
+                latitud = checkNotNull(s.latitud),
+                longitud = checkNotNull(s.longitud),
+                distanciaMetros = s.distanciaMetros ?: 0.0,
+                ubicacionVerificada = s.ubicacionVerificada
+            )
+            val id = visitaRepository.registrar(visita)
+            _uiState.update { it.copy(guardando = false) }
+            onGuardada(id)
         }
     }
 }

@@ -85,7 +85,8 @@ import cl.duoc.tacticaldev.viewmodel.VisitaViewModel
 @Composable
 fun VisitaFormScreen(
     viewModel: VisitaViewModel,
-    onVolver: () -> Unit
+    onVolver: () -> Unit,
+    onVisitaGuardada: (Long) -> Unit
 ) {
     val estado by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -180,13 +181,17 @@ fun VisitaFormScreen(
                 )
 
                 Button(
-                    onClick = viewModel::enviar,
+                    onClick = { viewModel.guardar(onVisitaGuardada) },
                     enabled = !estado.guardando,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp)
                 ) {
-                    Text("Guardar visita")
+                    if (estado.guardando) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                    } else {
+                        Text("Guardar visita")
+                    }
                 }
             }
         }
