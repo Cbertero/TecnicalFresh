@@ -11,11 +11,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -32,8 +35,10 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.data.scanner.EscanerQr
 import cl.duoc.tacticaldev.data.scanner.ResultadoEscaneo
 import cl.duoc.tacticaldev.navigation.ItemNavegacion
+import cl.duoc.tacticaldev.ui.components.EstadoVacio
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.components.TarjetaActivo
+import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.ui.utils.LocalTipoPantalla
 import cl.duoc.tacticaldev.ui.utils.columnas
 import cl.duoc.tacticaldev.viewmodel.ActivosViewModel
@@ -99,22 +104,36 @@ fun InicioOperarioScreen(
                 onValueChange = viewModel::onBusquedaChange,
                 label = { Text("Buscar por código, local o comuna") },
                 leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+                trailingIcon = {
+                    if (busqueda.isNotEmpty()) {
+                        IconButton(onClick = { viewModel.onBusquedaChange("") }) {
+                            Icon(Icons.Filled.Clear, contentDescription = "Limpiar búsqueda")
+                        }
+                    }
+                },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = Espaciado.l, vertical = Espaciado.s)
             )
 
             if (estado.cargando) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
+            } else if (estado.activos.isEmpty()) {
+                EstadoVacio(
+                    icono = Icons.Filled.SearchOff,
+                    titulo = "Sin resultados",
+                    mensaje = "No hay activos que coincidan con \"$busqueda\". Prueba con otro código o comuna."
+                )
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(columnas),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 88.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    // Margen inferior extra para que el botón flotante no tape la última tarjeta
+                    contentPadding = PaddingValues(start = Espaciado.l, end = Espaciado.l, top = Espaciado.s, bottom = 88.dp),
+                    horizontalArrangement = Arrangement.spacedBy(Espaciado.m),
+                    verticalArrangement = Arrangement.spacedBy(Espaciado.m),
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(estado.activos, key = { it.id }) { activo ->

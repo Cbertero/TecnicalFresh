@@ -84,6 +84,7 @@ import cl.duoc.tacticaldev.ui.components.Selector
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.theme.AmbarAlerta
 import cl.duoc.tacticaldev.ui.theme.AmbarAlertaContenedor
+import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.ui.theme.VerdeExito
 import cl.duoc.tacticaldev.ui.theme.VerdeExitoContenedor
 import cl.duoc.tacticaldev.utils.Formatos
@@ -147,10 +148,10 @@ fun VisitaFormScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .widthIn(max = 640.dp)
+                    .widthIn(max = Espaciado.anchoMaximoFormulario)
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(Espaciado.l),
+                verticalArrangement = Arrangement.spacedBy(Espaciado.m)
             ) {
                 estado.activo?.let { ResumenActivo(it) }
 

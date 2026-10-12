@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,10 +19,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.tipoActivo
+import cl.duoc.tacticaldev.ui.components.EstadoVacio
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.components.TarjetaVisita
+import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.viewmodel.HistorialViewModel
 
 /** Historial de visitas de un activo, de la más reciente a la más antigua. */
@@ -42,8 +45,8 @@ fun HistorialActivoScreen(
                 return@Box
             }
             LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(Espaciado.l),
+                verticalArrangement = Arrangement.spacedBy(Espaciado.m),
                 modifier = Modifier.fillMaxSize()
             ) {
                 estado.activo?.let { activo ->
@@ -60,7 +63,13 @@ fun HistorialActivoScreen(
                     }
                 }
                 if (estado.visitas.isEmpty()) {
-                    item { Text("Este activo aún no tiene visitas.") }
+                    item {
+                        EstadoVacio(
+                            icono = Icons.Filled.History,
+                            titulo = "Sin visitas registradas",
+                            mensaje = "Cuando alguien registre una visita a este activo aparecerá aquí con su evidencia."
+                        )
+                    }
                 }
                 items(estado.visitas, key = { it.id }) { visita ->
                     TarjetaVisita(visita = visita, mostrarActivo = false, mostrarOperario = true)
