@@ -43,6 +43,9 @@ object AppViewModelProvider {
         initializer {
             SupervisorViewModel(app().container.visitaRepository, app().container.sesionPreferences)
         }
+        initializer {
+            AdminViewModel(app().container.activoRepository, app().container.ubicacionService)
+        }
     }
 }
 
