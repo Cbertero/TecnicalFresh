@@ -29,6 +29,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Descarga anticipada del módulo de escaneo de códigos de Google Play services -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui" />
+
         <!-- FileProvider: entrega a la cámara un URI seguro donde guardar la foto -->
         <provider
             android:name="androidx.core.content.FileProvider"

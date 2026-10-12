@@ -69,6 +69,9 @@ dependencies {
     // Ubicación GPS (Fused Location Provider)
     implementation(libs.play.services.location)
 
+    // Escáner de códigos QR (Google code scanner, no requiere permiso de cámara propio)
+    implementation(libs.play.services.code.scanner)
+
     // Pruebas
     testImplementation(libs.junit)
 
