@@ -22,8 +22,13 @@ object AppViewModelProvider {
             VisitaViewModel(
                 savedStateHandle = createSavedStateHandle(),
                 activoRepository = app().container.activoRepository,
+                visitaRepository = app().container.visitaRepository,
+                sesionPreferences = app().container.sesionPreferences,
                 ubicacionService = app().container.ubicacionService
             )
+        }
+        initializer {
+            ConfirmacionViewModel(createSavedStateHandle(), app().container.visitaRepository)
         }
     }
 }
