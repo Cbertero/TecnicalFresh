@@ -103,20 +103,16 @@ fun AppNavigation(
         }
 
         composable(Screen.InicioOperario.route) {
-            TacticalScaffold(
-                titulo = "Hola, ${sesion?.nombre.orEmpty()}",
+            InicioOperarioScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                nombreUsuario = sesion?.nombre.orEmpty(),
                 itemsNavegacion = ItemsNavegacion.operario,
                 rutaActual = rutaActual,
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
-                onCerrarSesion = cerrarSesion
-            ) { padding ->
-                InicioOperarioScreen(
-                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
-                    onRegistrarVisita = { navigationViewModel.navegarA(Screen.FormularioVisita.crear(it)) },
-                    onVerHistorial = { navigationViewModel.navegarA(Screen.HistorialActivo.crear(it)) },
-                    modifier = Modifier.padding(padding)
-                )
-            }
+                onCerrarSesion = cerrarSesion,
+                onRegistrarVisita = { navigationViewModel.navegarA(Screen.FormularioVisita.crear(it)) },
+                onVerHistorial = { navigationViewModel.navegarA(Screen.HistorialActivo.crear(it)) }
+            )
         }
 
         composable(Screen.MisVisitas.route) {
