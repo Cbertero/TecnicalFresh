@@ -22,6 +22,8 @@ import androidx.navigation.navArgument
 import cl.duoc.tacticaldev.model.Rol
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
+import cl.duoc.tacticaldev.ui.screens.historial.HistorialActivoScreen
+import cl.duoc.tacticaldev.ui.screens.historial.MisVisitasScreen
 import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
 import cl.duoc.tacticaldev.ui.screens.login.LoginScreen
 import cl.duoc.tacticaldev.ui.screens.visita.ConfirmacionScreen
@@ -114,7 +116,10 @@ fun AppNavigation(
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
                 onCerrarSesion = cerrarSesion
             ) { padding ->
-                PantallaEnConstruccion("Mis visitas", Modifier.padding(padding))
+                MisVisitasScreen(
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    modifier = Modifier.padding(padding)
+                )
             }
         }
 
@@ -155,9 +160,10 @@ fun AppNavigation(
             Screen.HistorialActivo.route,
             arguments = listOf(navArgument(Screen.ARG_ACTIVO_ID) { type = NavType.LongType })
         ) {
-            TacticalScaffold(titulo = "Historial del activo", onVolver = { navigationViewModel.volver() }) { padding ->
-                PantallaEnConstruccion("Historial del activo", Modifier.padding(padding))
-            }
+            HistorialActivoScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onVolver = { navigationViewModel.volver() }
+            )
         }
 
         composable(Screen.Supervisor.route) {

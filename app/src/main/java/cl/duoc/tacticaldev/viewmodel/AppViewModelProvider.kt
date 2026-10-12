@@ -30,6 +30,16 @@ object AppViewModelProvider {
         initializer {
             ConfirmacionViewModel(createSavedStateHandle(), app().container.visitaRepository)
         }
+        initializer {
+            HistorialViewModel(
+                createSavedStateHandle(),
+                app().container.activoRepository,
+                app().container.visitaRepository
+            )
+        }
+        initializer {
+            MisVisitasViewModel(app().container.sesionPreferences, app().container.visitaRepository)
+        }
     }
 }
 
