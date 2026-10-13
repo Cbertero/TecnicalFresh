@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -75,7 +76,7 @@ fun AdminScreen(
             )
         }
 
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Box(Modifier.weight(1f), contentAlignment = Alignment.TopCenter) {
             Column(
                 modifier = Modifier
                     .widthIn(max = Espaciado.anchoMaximoFormulario)
@@ -90,6 +91,15 @@ fun AdminScreen(
                 }
             }
         }
+        Text(
+            text = "TecnicalFresh • Gestión de Mantenimiento",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
     }
 }
 

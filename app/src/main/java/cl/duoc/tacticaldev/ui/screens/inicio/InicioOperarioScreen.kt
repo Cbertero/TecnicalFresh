@@ -19,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -53,10 +54,7 @@ import kotlinx.coroutines.launch
 fun InicioOperarioScreen(
     viewModel: ActivosViewModel,
     nombreUsuario: String,
-    itemsNavegacion: List<ItemNavegacion>,
-    rutaActual: String?,
-    onNavegar: (String) -> Unit,
-    onCerrarSesion: () -> Unit,
+    onVolver :() -> Unit,
     onRegistrarVisita: (Long) -> Unit,
     onVerHistorial: (Long) -> Unit
 ) {
@@ -73,26 +71,10 @@ fun InicioOperarioScreen(
 
     TacticalScaffold(
         titulo = "Hola, $nombreUsuario",
-        itemsNavegacion = itemsNavegacion,
-        rutaActual = rutaActual,
-        onNavegar = onNavegar,
-        onCerrarSesion = onCerrarSesion,
+        itemsNavegacion = emptyList(),
+        onVolver = onVolver,
         snackbarHostState = snackbarHostState,
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Escanear QR") },
-                icon = { Icon(Icons.Filled.QrCodeScanner, contentDescription = null) },
-                onClick = {
-                    scope.launch {
-                        when (val resultado = EscanerQr.escanear(context)) {
-                            is ResultadoEscaneo.Exito -> viewModel.onCodigoEscaneado(resultado.codigo, onRegistrarVisita)
-                            is ResultadoEscaneo.Error -> viewModel.mostrarMensaje(resultado.mensaje)
-                            ResultadoEscaneo.Cancelado -> Unit
-                        }
-                    }
-                }
-            )
-        }
+
     ) { padding ->
         Column(
             Modifier
@@ -134,7 +116,7 @@ fun InicioOperarioScreen(
                     contentPadding = PaddingValues(start = Espaciado.l, end = Espaciado.l, top = Espaciado.s, bottom = 88.dp),
                     horizontalArrangement = Arrangement.spacedBy(Espaciado.m),
                     verticalArrangement = Arrangement.spacedBy(Espaciado.m),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.weight(1f)
                 ) {
                     items(estado.activos, key = { it.id }) { activo ->
                         TarjetaActivo(
@@ -143,8 +125,20 @@ fun InicioOperarioScreen(
                             onVerHistorial = { onVerHistorial(activo.id) }
                         )
                     }
+
                 }
             }
+            Text(
+                text = "TecnicalFresh • Gestión de Mantenimiento",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
         }
     }
+
+
 }

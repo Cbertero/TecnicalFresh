@@ -1,4 +1,4 @@
-package cl.duoc.tacticaldev.viewmodel
+ package cl.duoc.tacticaldev.viewmodel
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle

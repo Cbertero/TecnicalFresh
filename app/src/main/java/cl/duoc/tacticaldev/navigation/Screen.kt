@@ -7,6 +7,7 @@ package cl.duoc.tacticaldev.navigation
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
 
+    data object Dashboard : Screen("dashboard")
     // Operario (técnico, vendedor o transportista)
     data object InicioOperario : Screen("inicio_operario")
     data object MisVisitas : Screen("mis_visitas")
@@ -21,8 +22,10 @@ sealed class Screen(val route: String) {
     }
 
     // Supervisor
+    data object DashboardSupervisor : Screen("dashboard_supervisor")
     data object Supervisor : Screen("supervisor")
     data object Administracion : Screen("administracion")
+    data object Equipo : Screen("equipo")
 
     companion object {
         const val ARG_ACTIVO_ID = "activoId"

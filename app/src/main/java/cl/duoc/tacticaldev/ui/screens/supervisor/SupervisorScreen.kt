@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -73,7 +74,7 @@ fun SupervisorScreen(
             }
         }
 
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.weight(1f)) {
             when {
                 estado.cargando -> CircularProgressIndicator(Modifier.align(Alignment.Center))
                 estado.visitas.isEmpty() -> EstadoVacio(
@@ -93,6 +94,7 @@ fun SupervisorScreen(
                     verticalArrangement = Arrangement.spacedBy(Espaciado.m),
                     modifier = Modifier.fillMaxSize()
                 ) {
+
                     items(estado.visitas, key = { it.id }) { visita ->
                         TarjetaVisita(
                             visita = visita,
@@ -123,6 +125,15 @@ fun SupervisorScreen(
                 }
             }
         }
+        Text(
+            text = "TecnicalFresh • Gestión de Mantenimiento",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
     }
 
     if (rechazo.visita != null) {
