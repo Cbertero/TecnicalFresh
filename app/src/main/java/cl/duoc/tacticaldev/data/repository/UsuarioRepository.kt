@@ -11,4 +11,26 @@ class UsuarioRepository(private val usuarioDao: UsuarioDao) {
         val usuario = usuarioDao.buscarPorCorreo(correo.trim().lowercase()) ?: return null
         return usuario.takeIf { it.claveHash == Seguridad.sha256(clave) }
     }
+    suspend fun registrar(
+        nombre: String,
+        correo: String,
+        clave: String,
+        rol: String,
+        cargo: String
+    ): Result<Long> {
+        val correoLimpio = correo.trim().lowercase()
+        val existente = usuarioDao.buscarPorCorreo(correoLimpio)
+        if (existente != null) {
+            return Result.failure(Exception("Ya existe una cuenta con este correo"))
+        }
+        val nuevo = UsuarioEntity(
+            nombre = nombre.trim(),
+            correo = correoLimpio,
+            claveHash = Seguridad.sha256(clave),
+            rol = rol,
+            cargo = cargo.trim()
+        )
+        val id = usuarioDao.insertar(nuevo)
+        return Result.success(id)
+    }
 }

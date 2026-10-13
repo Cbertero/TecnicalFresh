@@ -15,4 +15,6 @@ interface UsuarioDao {
 
     @Insert
     suspend fun insertarTodos(usuarios: List<UsuarioEntity>): List<Long>
+    @Insert
+    suspend fun insertar(usuario: UsuarioEntity): Long
 }

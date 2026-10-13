@@ -44,6 +44,7 @@ import cl.duoc.tacticaldev.data.scanner.EscanerQr
 import cl.duoc.tacticaldev.data.scanner.ResultadoEscaneo
 import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
 import cl.duoc.tacticaldev.ui.screens.dashboard.DashboardSupervisorScreen
+import cl.duoc.tacticaldev.ui.screens.login.RegistroScreen
 import cl.duoc.tacticaldev.viewmodel.ActivosViewModel
 import kotlinx.coroutines.launch
 
@@ -111,6 +112,18 @@ fun AppNavigation(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 onLoginExitoso = { rol ->
                     navigationViewModel.navegarA(rol.rutaInicio(), limpiarPila = true)
+                },
+                onIrARegistro = {
+                    navigationViewModel.navegarA(Screen.Registro.route)
+                }
+            )
+        }
+        composable(Screen.Registro.route) {
+            RegistroScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onVolver = { navigationViewModel.volver() },
+                onRegistroExitoso = {
+                    navigationViewModel.volver() // Vuelve al login para iniciar sesión con su nueva cuenta
                 }
             )
         }

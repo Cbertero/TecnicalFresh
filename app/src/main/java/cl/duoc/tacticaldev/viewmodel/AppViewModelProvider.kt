@@ -17,6 +17,9 @@ object AppViewModelProvider {
         initializer {
             LoginViewModel(app().container.usuarioRepository, app().container.sesionPreferences)
         }
+        initializer {
+            RegistroViewModel(app().container.usuarioRepository)
+        }
         initializer { ActivosViewModel(app().container.activoRepository) }
         initializer {
             VisitaViewModel(
