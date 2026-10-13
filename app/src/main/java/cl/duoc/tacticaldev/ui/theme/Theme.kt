@@ -1,49 +1,41 @@
 package cl.duoc.tacticaldev.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val LightColorScheme = lightColorScheme(
-    primary = AzulFrio,
-    onPrimary = Color.White,
-    primaryContainer = AzulContenedor,
-    onPrimaryContainer = Color(0xFF001C3A),
-    secondary = CelesteHielo,
-    onSecondary = Color.White,
-    secondaryContainer = CelesteContenedor,
-    onSecondaryContainer = Color(0xFF001F28),
-    background = GrisFondo,
-    surface = GrisFondo,
+private val ArcticDarkColorScheme = darkColorScheme(
+    primary = CianFrio,
+    onPrimary = Color(0xFF082F49),
+    primaryContainer = CianContenedor,
+    onPrimaryContainer = TextoBlancoPuro,
+    secondary = BordeCianGlacial,
+    onSecondary = Color(0xFF082F49),
+    secondaryContainer = Color(0xFF164E63),
+    onSecondaryContainer = Color(0xFFCFFAFE),
+    background = FondoNocheGlacial,
+    onBackground = TextoBlancoPuro,
+    surface = SuperficieTarjeta,
+    onSurface = TextoBlancoPuro,
+    surfaceVariant = SuperficieTarjeta,
+    onSurfaceVariant = TextoSecundarioGris,
+    outline = TextoSecundarioGris,
     error = RojoError,
-    errorContainer = RojoErrorContenedor
-)
-
-private val DarkColorScheme = darkColorScheme(
-    primary = AzulFrioClaro,
-    onPrimary = Color(0xFF003063),
-    primaryContainer = AzulContenedorOscuro,
-    onPrimaryContainer = AzulContenedor,
-    secondary = CelesteHieloClaro,
-    onSecondary = Color(0xFF003543),
-    background = GrisSuperficieOscura,
-    surface = GrisSuperficieOscura
+    errorContainer = RojoErrorContenedor,
+    onErrorContainer = TextoBlancoPuro
 )
 
 /**
- * Tema Material 3 de la app. Se desactiva el color dinámico para mantener
- * la identidad visual de TacticalDEV en todos los dispositivos.
+ * Tema Material 3 Arctic Cyan de TecnicalFresh.
  */
 @Composable
 fun TacticalDEVTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true, // Activado en modo oscuro glacial
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
+        colorScheme = ArcticDarkColorScheme,
         typography = Typography,
         content = content
     )

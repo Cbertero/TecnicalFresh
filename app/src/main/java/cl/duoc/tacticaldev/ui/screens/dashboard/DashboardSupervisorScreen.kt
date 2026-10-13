@@ -1,5 +1,7 @@
 package cl.duoc.tacticaldev.ui.screens.dashboard
 
+
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,9 +17,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cl.duoc.tacticaldev.ui.theme.SuperficieTarjeta
+import cl.duoc.tacticaldev.ui.theme.TextoBlancoPuro
+import cl.duoc.tacticaldev.ui.theme.TextoSecundarioGris
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +66,7 @@ fun DashboardSupervisorScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
                         text = "TecnicalFresh",
@@ -132,6 +138,7 @@ fun DashboardSupervisorScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
+                // Fila 1
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -140,6 +147,7 @@ fun DashboardSupervisorScreen(
                         titulo = "Validar Visitas",
                         subtitulo = "Revisar terreno",
                         icono = Icons.Default.FactCheck,
+                        colorBorde = Color(0xFF10B981), // Verde esmeralda
                         onClick = onIrAVisitas,
                         modifier = Modifier.weight(1f)
                     )
@@ -147,26 +155,29 @@ fun DashboardSupervisorScreen(
                         titulo = "Administración",
                         subtitulo = "Activos y locales",
                         icono = Icons.Default.AdminPanelSettings,
+                        colorBorde = Color(0xFF22D3EE), // Cian hielo
                         onClick = onIrAAdministracion,
                         modifier = Modifier.weight(1f)
                     )
                 }
-
+                // Fila 2
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     BotonSupervisorHub(
                         titulo = "Equipo",
-                        subtitulo = "Proximamente",
+                        subtitulo = "Próximamente",
                         icono = Icons.Default.SupervisorAccount,
-                        onClick = onIrAEquipo, // O vista de equipo
+                        colorBorde = Color(0xFF818CF8), // Índigo hielo
+                        onClick = onIrAEquipo,
                         modifier = Modifier.weight(1f)
                     )
                     BotonSupervisorHub(
                         titulo = "Mi Perfil",
                         subtitulo = "Cerrar sesión",
                         icono = Icons.Default.Person,
+                        colorBorde = Color(0xFFFB7185), // Coral rosado
                         onClick = { mostrarDialogoSalir = true },
                         modifier = Modifier.weight(1f)
                     )
@@ -182,17 +193,20 @@ private fun BotonSupervisorHub(
     titulo: String,
     subtitulo: String,
     icono: ImageVector,
+    colorBorde: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ElevatedCard(
+    Card(
         modifier = modifier
             .aspectRatio(1f)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = SuperficieTarjeta
+        ),
+        border = BorderStroke(1.dp, colorBorde.copy(alpha = 0.35f)), // Borde luminoso
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier
@@ -201,24 +215,31 @@ private fun BotonSupervisorHub(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = icono,
-                contentDescription = null,
-                modifier = Modifier.size(36.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
+            Surface(
+                shape = CircleShape,
+                color = colorBorde.copy(alpha = 0.12f),
+                modifier = Modifier.size(52.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icono,
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp),
+                        tint = colorBorde
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = titulo,
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = TextoBlancoPuro
             )
             Text(
                 text = subtitulo,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
+                color = TextoSecundarioGris
             )
         }
     }
-
 }

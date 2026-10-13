@@ -2,21 +2,22 @@ package cl.duoc.tacticaldev.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Paleta TacticalDEV: azules "cadena de frío" con acentos de estado.
-val AzulFrio = Color(0xFF0B4F8A)
-val AzulFrioClaro = Color(0xFFA6C8FF)
-val AzulContenedor = Color(0xFFD5E3FF)
-val AzulContenedorOscuro = Color(0xFF00468A)
-val CelesteHielo = Color(0xFF00677F)
-val CelesteHieloClaro = Color(0xFF7FD3F7)
-val CelesteContenedor = Color(0xFFB8EAFF)
-val GrisFondo = Color(0xFFF8F9FF)
-val GrisSuperficieOscura = Color(0xFF111418)
+// Paleta Arctic Cyan (Cadena de Frío & Dark Tech)
+val FondoNocheGlacial = Color(0xFF060D17)       // Fondo oscuro profundo
+val SuperficieTarjeta = Color(0xFF0B1726)       // Tarjetas elevadas
+val BordeTarjetaSutil = Color(0xFF1E3A5F)       // Borde tenue de contraste
+val BordeCianGlacial = Color(0xFF22D3EE)        // Cian brillante para acentos de frío
 
-// Colores semánticos de estado (visita verificada, pendiente, rechazada)
-val VerdeExito = Color(0xFF1E7D32)
-val VerdeExitoContenedor = Color(0xFFC8E6C9)
-val AmbarAlerta = Color(0xFF8A5300)
-val AmbarAlertaContenedor = Color(0xFFFFDDB3)
-val RojoError = Color(0xFFBA1A1A)
-val RojoErrorContenedor = Color(0xFFFFDAD6)
+val CianFrio = Color(0xFF38BDF8)               // Primario en botones y destacados
+val CianFrioOscuro = Color(0xFF0369A1)
+val CianContenedor = Color(0xFF0C4A6E)
+val TextoBlancoPuro = Color(0xFFF8FAFC)
+val TextoSecundarioGris = Color(0xFF94A3B8)
+
+// Colores semánticos con buen contraste sobre fondo oscuro
+val VerdeExito = Color(0xFF10B981)
+val VerdeExitoContenedor = Color(0xFF064E3B)
+val AmbarAlerta = Color(0xFFF59E0B)
+val AmbarAlertaContenedor = Color(0xFF78350F)
+val RojoError = Color(0xFFF43F5E)
+val RojoErrorContenedor = Color(0xFF881337)
