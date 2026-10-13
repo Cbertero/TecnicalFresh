@@ -17,12 +17,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -118,7 +120,15 @@ fun VisitaFormScreen(
         }
     }
     val progresoAnimado by animateFloatAsState(targetValue = progreso, label = "progreso_formulario")
-
+    val tempValor = estado.temperatura.replace(',', '.').toDoubleOrNull()
+    val tipoActivo = estado.activo?.tipoActivo
+    val temperaturaCritica = remember(tempValor, tipoActivo) {
+        if (tempValor == null || tipoActivo == null) false
+        else when (tipoActivo) {
+            cl.duoc.tacticaldev.model.TipoActivo.VITRINA_FREEZER -> tempValor > -12.0
+            cl.duoc.tacticaldev.model.TipoActivo.CONSERVADORA -> tempValor > 7.0 || tempValor < -2.0
+        }
+    }
     LaunchedEffect(estado.mensaje) {
         estado.mensaje?.let {
             snackbarHostState.showSnackbar(it)
@@ -130,6 +140,7 @@ fun VisitaFormScreen(
         titulo = "Registrar visita",
         onVolver = onVolver,
         snackbarHostState = snackbarHostState
+
     ) { padding ->
         if (estado.cargando) {
             Box(
@@ -159,6 +170,7 @@ fun VisitaFormScreen(
                 LinearProgressIndicator(
                     progress = { progresoAnimado },
                     modifier = Modifier.fillMaxWidth()
+
                 )
 
                 Selector(
@@ -188,17 +200,41 @@ fun VisitaFormScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
 
-                // Aviso animado: con falla u observaciones, describir el problema es obligatorio
+                // Alerta de detección temprana de falla en frío
                 AnimatedVisibility(
-                    visible = estado.estadoEquipo != null && estado.estadoEquipo != EstadoEquipo.OPERATIVO,
+                    visible = temperaturaCritica,
                     enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically()
                 ) {
-                    Text(
-                        "Describe en las observaciones el problema detectado",
-                        color = AmbarAlerta,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = AmbarAlertaContenedor),
+                        border = BorderStroke(1.dp, AmbarAlerta),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Warning,
+                                contentDescription = null,
+                                tint = AmbarAlerta,
+                                modifier = Modifier.size(28.dp)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = "Alerta de Temperatura Crítica",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = AmbarAlerta
+                                )
+                                Text(
+                                    text = "Rango anormal para este equipo. Posible falla no detectada en compresor o pérdida de gas.",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                        }
+                    }
                 }
 
                 CampoTexto(
