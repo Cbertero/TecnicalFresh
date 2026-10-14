@@ -1,4 +1,4 @@
-package cl.duoc.tacticaldev.viewmodel
+ package cl.duoc.tacticaldev.viewmodel
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
@@ -16,6 +16,9 @@ object AppViewModelProvider {
         initializer { SesionViewModel(app().container.sesionPreferences) }
         initializer {
             LoginViewModel(app().container.usuarioRepository, app().container.sesionPreferences)
+        }
+        initializer {
+            RegistroViewModel(app().container.usuarioRepository)
         }
         initializer { ActivosViewModel(app().container.activoRepository) }
         initializer {

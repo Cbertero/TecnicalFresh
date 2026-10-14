@@ -68,7 +68,7 @@ class LoginViewModel(
                 return@launch
             }
             val rol = usuario.rol.aEnum(Rol.OPERARIO)
-            sesionPreferences.guardar(Sesion(usuario.id, usuario.nombre, rol))
+            sesionPreferences.guardar(Sesion(usuario.id, usuario.nombre, rol,usuario.cargo))
             _uiState.update { LoginUiState() }
             onExito(rol)
         }

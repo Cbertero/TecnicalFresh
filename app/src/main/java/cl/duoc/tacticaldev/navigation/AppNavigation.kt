@@ -24,6 +24,7 @@ import cl.duoc.tacticaldev.model.Rol
 import cl.duoc.tacticaldev.ui.animaciones.TransicionesNavegacion
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.screens.admin.AdminScreen
+import cl.duoc.tacticaldev.ui.screens.dashboard.DashboardScreen
 import cl.duoc.tacticaldev.ui.screens.historial.HistorialActivoScreen
 import cl.duoc.tacticaldev.ui.screens.historial.MisVisitasScreen
 import cl.duoc.tacticaldev.ui.screens.inicio.InicioOperarioScreen
@@ -37,17 +38,29 @@ import cl.duoc.tacticaldev.viewmodel.EstadoSesion
 import cl.duoc.tacticaldev.viewmodel.NavigationViewModel
 import cl.duoc.tacticaldev.viewmodel.SesionViewModel
 import cl.duoc.tacticaldev.viewmodel.SupervisorViewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.rememberCoroutineScope
+import cl.duoc.tacticaldev.data.scanner.EscanerQr
+import cl.duoc.tacticaldev.data.scanner.ResultadoEscaneo
+import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
+import cl.duoc.tacticaldev.ui.screens.dashboard.DashboardSupervisorScreen
+import cl.duoc.tacticaldev.ui.screens.login.RegistroScreen
+import cl.duoc.tacticaldev.viewmodel.ActivosViewModel
+import kotlinx.coroutines.launch
 
 /** Ruta de inicio según el rol del usuario conectado. */
 fun Rol.rutaInicio(): String = when (this) {
-    Rol.OPERARIO -> Screen.InicioOperario.route
-    Rol.SUPERVISOR -> Screen.Supervisor.route
+    Rol.OPERARIO -> Screen.Dashboard.route
+    Rol.SUPERVISOR -> Screen.DashboardSupervisor.route
 }
 
 /**
  * Grafo de navegación de la app (NavHost + NavController).
  * Mientras se lee la sesión guardada se muestra un indicador de carga.
  */
+
+
+
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController(),
@@ -99,30 +112,72 @@ fun AppNavigation(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 onLoginExitoso = { rol ->
                     navigationViewModel.navegarA(rol.rutaInicio(), limpiarPila = true)
+                },
+                onIrARegistro = {
+                    navigationViewModel.navegarA(Screen.Registro.route)
                 }
             )
         }
+        composable(Screen.Registro.route) {
+            RegistroScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onVolver = { navigationViewModel.volver() },
+                onRegistroExitoso = {
+                    navigationViewModel.volver() // Vuelve al login para iniciar sesión con su nueva cuenta
+                }
+            )
+        }
+        composable(Screen.Dashboard.route) {
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            val activosViewModel: ActivosViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            val snackbarHostState = remember { SnackbarHostState() }
 
+            // Escuchar mensajes de error del escáner (ej: si el QR no existe)
+            LaunchedEffect(Unit) {
+                activosViewModel.mensajes.collect { mensaje ->
+                    snackbarHostState.showSnackbar(mensaje)
+                }
+            }
+
+            DashboardScreen(
+                nombreUsuario = sesion?.nombre.orEmpty(),
+                rolUsuario = sesion?.cargo?.ifBlank { sesion.rol.etiqueta }.orEmpty(),
+                snackbarHostState = snackbarHostState,
+                onIrAActivos = { navigationViewModel.navegarA(Screen.InicioOperario.route) },
+                onIrAMisVisitas = { navigationViewModel.navegarA(Screen.MisVisitas.route) },
+                onEscanearQr = {
+                    scope.launch {
+                        when (val resultado = EscanerQr.escanear(context)) {
+                            is ResultadoEscaneo.Exito -> {
+                                activosViewModel.onCodigoEscaneado(resultado.codigo) { activoId ->
+                                    navigationViewModel.navegarA(Screen.FormularioVisita.crear(activoId))
+                                }
+                            }
+                            is ResultadoEscaneo.Error -> {
+                                activosViewModel.mostrarMensaje(resultado.mensaje)
+                            }
+                            ResultadoEscaneo.Cancelado -> Unit
+                        }
+                    }
+                },
+                onCerrarSesion = cerrarSesion
+            )
+        }
         composable(Screen.InicioOperario.route) {
             InicioOperarioScreen(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 nombreUsuario = sesion?.nombre.orEmpty(),
-                itemsNavegacion = ItemsNavegacion.operario,
-                rutaActual = rutaActual,
-                onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
-                onCerrarSesion = cerrarSesion,
+                onVolver = { navigationViewModel.volver() }, // <-- Vuelve al Dashboard
                 onRegistrarVisita = { navigationViewModel.navegarA(Screen.FormularioVisita.crear(it)) },
                 onVerHistorial = { navigationViewModel.navegarA(Screen.HistorialActivo.crear(it)) }
             )
         }
-
         composable(Screen.MisVisitas.route) {
             TacticalScaffold(
                 titulo = "Mis visitas",
-                itemsNavegacion = ItemsNavegacion.operario,
-                rutaActual = rutaActual,
-                onNavegar = { navigationViewModel.cambiarPestana(it, Screen.InicioOperario.route) },
-                onCerrarSesion = cerrarSesion
+                itemsNavegacion = emptyList(), // <-- Sin barra inferior
+                onVolver = { navigationViewModel.volver() } // <-- Flecha para volver al Dashboard
             ) { padding ->
                 MisVisitasScreen(
                     viewModel = viewModel(factory = AppViewModelProvider.Factory),
@@ -173,20 +228,35 @@ fun AppNavigation(
                 onVolver = { navigationViewModel.volver() }
             )
         }
-
+        composable(Screen.DashboardSupervisor.route) {
+            DashboardSupervisorScreen(
+                nombreUsuario = sesion?.nombre.orEmpty(),
+                cargoUsuario = sesion?.cargo?.ifBlank { "Supervisora de operaciones" }.orEmpty(),
+                onIrAVisitas = { navigationViewModel.navegarA(Screen.Supervisor.route) },
+                onIrAAdministracion = { navigationViewModel.navegarA(Screen.Administracion.route) },
+                onIrAEquipo = { navigationViewModel.navegarA(Screen.Equipo.route) }, // <-- Agregas esta línea
+                onCerrarSesion = cerrarSesion
+            )
+        }
+        composable(Screen.Equipo.route) {
+            PantallaEnConstruccion(
+                titulo = "Gestión de Equipo",
+                subtitulo = "Monitoreo en tiempo real de operarios y rutas en terreno.",
+                onVolver = { navigationViewModel.volver() }
+            )
+        }
         composable(Screen.Supervisor.route) {
             val supervisorViewModel: SupervisorViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            val snackbarHostState = remember { SnackbarHostState() }
-            LaunchedEffect(Unit) {
-                supervisorViewModel.mensajes.collect { snackbarHostState.showSnackbar(it) }
-            }
+
+
+
             TacticalScaffold(
                 titulo = "Visitas de terreno",
-                itemsNavegacion = ItemsNavegacion.supervisor,
+                itemsNavegacion = emptyList(),
                 rutaActual = rutaActual,
+                onVolver = { navigationViewModel.volver() },
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                onCerrarSesion = cerrarSesion,
-                snackbarHostState = snackbarHostState
+
             ) { padding ->
                 SupervisorScreen(viewModel = supervisorViewModel, modifier = Modifier.padding(padding))
             }
@@ -194,17 +264,14 @@ fun AppNavigation(
 
         composable(Screen.Administracion.route) {
             val adminViewModel: AdminViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            val snackbarHostState = remember { SnackbarHostState() }
-            LaunchedEffect(Unit) {
-                adminViewModel.mensajes.collect { snackbarHostState.showSnackbar(it) }
-            }
+
             TacticalScaffold(
                 titulo = "Administración",
-                itemsNavegacion = ItemsNavegacion.supervisor,
+                itemsNavegacion = emptyList(),
                 rutaActual = rutaActual,
+                onVolver = { navigationViewModel.volver() },
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                onCerrarSesion = cerrarSesion,
-                snackbarHostState = snackbarHostState
+
             ) { padding ->
                 AdminScreen(viewModel = adminViewModel, modifier = Modifier.padding(padding))
             }

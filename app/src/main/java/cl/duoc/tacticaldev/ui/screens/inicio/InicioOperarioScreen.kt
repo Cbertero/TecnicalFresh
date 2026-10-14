@@ -12,13 +12,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -27,14 +26,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import cl.duoc.tacticaldev.data.scanner.EscanerQr
-import cl.duoc.tacticaldev.data.scanner.ResultadoEscaneo
-import cl.duoc.tacticaldev.navigation.ItemNavegacion
 import cl.duoc.tacticaldev.ui.components.EstadoVacio
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.components.TarjetaActivo
@@ -42,29 +36,22 @@ import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.ui.utils.LocalTipoPantalla
 import cl.duoc.tacticaldev.ui.utils.columnas
 import cl.duoc.tacticaldev.viewmodel.ActivosViewModel
-import kotlinx.coroutines.launch
 
 /**
- * Inicio del operario: lista de activos (vitrinas y conservadoras) con búsqueda
- * y botón para escanear el QR del activo. La grilla usa 1, 2 o 3 columnas
- * según el tamaño de pantalla (Guía 9).
+ * Inicio del operario: lista de activos (vitrinas y conservadoras) con búsqueda.
+ * La grilla usa 1, 2 o 3 columnas según el tamaño de pantalla.
  */
 @Composable
 fun InicioOperarioScreen(
     viewModel: ActivosViewModel,
     nombreUsuario: String,
-    itemsNavegacion: List<ItemNavegacion>,
-    rutaActual: String?,
-    onNavegar: (String) -> Unit,
-    onCerrarSesion: () -> Unit,
+    onVolver :() -> Unit,
     onRegistrarVisita: (Long) -> Unit,
     onVerHistorial: (Long) -> Unit
 ) {
     val estado by viewModel.uiState.collectAsState()
     val busqueda by viewModel.busqueda.collectAsState()
     val columnas = LocalTipoPantalla.current.columnas()
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
@@ -73,26 +60,10 @@ fun InicioOperarioScreen(
 
     TacticalScaffold(
         titulo = "Hola, $nombreUsuario",
-        itemsNavegacion = itemsNavegacion,
-        rutaActual = rutaActual,
-        onNavegar = onNavegar,
-        onCerrarSesion = onCerrarSesion,
+        itemsNavegacion = emptyList(),
+        onVolver = onVolver,
         snackbarHostState = snackbarHostState,
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Escanear QR") },
-                icon = { Icon(Icons.Filled.QrCodeScanner, contentDescription = null) },
-                onClick = {
-                    scope.launch {
-                        when (val resultado = EscanerQr.escanear(context)) {
-                            is ResultadoEscaneo.Exito -> viewModel.onCodigoEscaneado(resultado.codigo, onRegistrarVisita)
-                            is ResultadoEscaneo.Error -> viewModel.mostrarMensaje(resultado.mensaje)
-                            ResultadoEscaneo.Cancelado -> Unit
-                        }
-                    }
-                }
-            )
-        }
+
     ) { padding ->
         Column(
             Modifier
@@ -134,7 +105,7 @@ fun InicioOperarioScreen(
                     contentPadding = PaddingValues(start = Espaciado.l, end = Espaciado.l, top = Espaciado.s, bottom = 88.dp),
                     horizontalArrangement = Arrangement.spacedBy(Espaciado.m),
                     verticalArrangement = Arrangement.spacedBy(Espaciado.m),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.weight(1f)
                 ) {
                     items(estado.activos, key = { it.id }) { activo ->
                         TarjetaActivo(
@@ -143,8 +114,20 @@ fun InicioOperarioScreen(
                             onVerHistorial = { onVerHistorial(activo.id) }
                         )
                     }
+
                 }
             }
+            Text(
+                text = "TecnicalFresh • Gestión de Mantenimiento",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
         }
     }
+
+
 }

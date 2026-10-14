@@ -13,8 +13,8 @@ object Validadores {
     private val REGEX_CODIGO_ACTIVO = Regex("^TDV-(VF|CS)-\\d{3}$")
 
     const val CLAVE_MIN = 6
-    const val TEMPERATURA_MIN = -30.0
-    const val TEMPERATURA_MAX = 15.0
+    const val TEMPERATURA_MIN = -35.0
+    const val TEMPERATURA_MAX = 50.0
     const val OBSERVACIONES_MIN = 10
     const val OBSERVACIONES_MAX = 500
     const val MOTIVO_MIN = 10
