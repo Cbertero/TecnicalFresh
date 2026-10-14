@@ -75,9 +75,9 @@ fun LoginScreen(
                 contentDescription = "Logo Technical Fresh",
                 modifier = Modifier.size(96.dp)
             )
-            Text("TechnicalFresh Visitas", style = MaterialTheme.typography.headlineMedium)
+            Text("TechnicalFresh", style = MaterialTheme.typography.headlineMedium)
             Text(
-                "Registro verificable de visitas en terreno",
+                "Registro de visitas en terreno",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -9,9 +9,9 @@ import androidx.compose.ui.graphics.Color
 val LocalTemaOscuro = staticCompositionLocalOf { true }
 
 // Paleta Arctic Cyan — modo oscuro (Cadena de Frío & Dark Tech)
-val FondoNocheGlacial = Color(0xFF060D17)       // Fondo oscuro profundo
-val SuperficieTarjeta = Color(0xFF0B1726)       // Tarjetas elevadas
-val BordeTarjetaSutil = Color(0xFF1E3A5F)       // Borde tenue de contraste
+val FondoNocheGlacial = Color(0xFF131D2E)       // Fondo azul marino templado
+val SuperficieTarjeta = Color(0xFF1D2B42)       // Tarjetas elevadas azul acero
+val BordeTarjetaSutil = Color(0xFF2E4366)       // Borde tenue de contraste
 val BordeCianGlacial = Color(0xFF22D3EE)        // Cian brillante para acentos de frío
 
 val CianFrio = Color(0xFF38BDF8)               // Primario en botones y destacados
@@ -30,17 +30,17 @@ val TextoPizarraOscuro = Color(0xFF0F172A)
 val TextoSecundarioPizarra = Color(0xFF475569)
 
 // Colores semánticos (variantes para cada modo, con buen contraste sobre su fondo)
-private val VerdeExitoOscuro = Color(0xFF10B981)
-private val VerdeExitoContenedorOscuro = Color(0xFF064E3B)
-private val AmbarAlertaOscuro = Color(0xFFF59E0B)
-private val AmbarAlertaContenedorOscuro = Color(0xFF78350F)
+internal val VerdeExitoOscuro = Color(0xFF10B981)
+internal val VerdeExitoContenedorOscuro = Color(0xFF064E3B)
+internal val AmbarAlertaOscuro = Color(0xFFF59E0B)
+internal val AmbarAlertaContenedorOscuro = Color(0xFF78350F)
 internal val RojoErrorOscuro = Color(0xFFF43F5E)
 internal val RojoErrorContenedorOscuro = Color(0xFF881337)
 
-private val VerdeExitoClaro = Color(0xFF047857)
-private val VerdeExitoContenedorClaro = Color(0xFFD1FAE5)
-private val AmbarAlertaClaro = Color(0xFFB45309)
-private val AmbarAlertaContenedorClaro = Color(0xFFFEF3C7)
+internal val VerdeExitoClaro = Color(0xFF047857)
+internal val VerdeExitoContenedorClaro = Color(0xFFD1FAE5)
+internal val AmbarAlertaClaro = Color(0xFFB45309)
+internal val AmbarAlertaContenedorClaro = Color(0xFFFEF3C7)
 internal val RojoErrorClaro = Color(0xFFE11D48)
 internal val RojoErrorContenedorClaro = Color(0xFFFFE4E6)
 
