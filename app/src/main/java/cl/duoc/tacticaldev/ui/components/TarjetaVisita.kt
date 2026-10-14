@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.EstadoValidacion
 import cl.duoc.tacticaldev.model.VisitaDetalle
@@ -40,69 +41,129 @@ fun TarjetaVisita(
     mostrarOperario: Boolean = false,
     acciones: (@Composable RowScope.() -> Unit)? = null
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
-        Column(Modifier.padding(Espaciado.l), verticalArrangement = Arrangement.spacedBy(Espaciado.s)) {
-            Row(verticalAlignment = Alignment.Top) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Espaciado.l),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Fila superior: Foto + Textos + Chip
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
                 FotoEvidencia(uri = visita.fotoUri, modifier = Modifier.size(72.dp))
+
                 Column(
-                    Modifier
+                    modifier = Modifier
                         .weight(1f)
-                        .padding(start = 12.dp),
+                        .padding(horizontal = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    Text(Formatos.fechaHora(visita.fechaHora), style = MaterialTheme.typography.titleMedium)
-                    if (mostrarActivo) {
-                        Text("${visita.activoCodigo} · ${visita.puntoVentaNombre}", style = MaterialTheme.typography.bodyMedium)
-                    }
-                    if (mostrarOperario) {
-                        Text("Operario: ${visita.usuarioNombre}", style = MaterialTheme.typography.bodyMedium)
-                    }
+                    val esFreezer = visita.activoTipo == cl.duoc.tacticaldev.model.TipoActivo.VITRINA_FREEZER.name
+                    val tempCritica = if (esFreezer) visita.temperatura > -12.0 else (visita.temperatura > 7.0 || visita.temperatura < -2.0)
+
                     Text(
-                        "${visita.tipo.etiqueta} · ${visita.estado.etiqueta} · ${visita.temperatura} °C",
+                        text = Formatos.fechaHora(visita.fechaHora),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    if (mostrarActivo) {
+                        Text(
+                            text = "${visita.activoCodigo} · ${visita.puntoVentaNombre}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                    if (mostrarOperario) {
+                        Text(
+                            text = "Operario: ${visita.usuarioNombre}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                    // Tipo de visita, estado y temperatura
+                    val textoTemp = if (tempCritica) "⚠️ ${visita.temperatura} °C" else "${visita.temperatura} °C"
+                    Text(
+                        text = "${visita.tipo.etiqueta} · ${visita.estado.etiqueta} · $textoTemp",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = if (tempCritica) AmbarAlerta else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = if (tempCritica) FontWeight.Bold else FontWeight.Normal
                     )
                 }
+
                 ChipEstado(visita.validacion)
             }
 
+            // Fila de Ubicación GPS
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    if (visita.ubicacionVerificada) Icons.Filled.VerifiedUser else Icons.Filled.WrongLocation,
-                    contentDescription = if (visita.ubicacionVerificada) "Ubicación verificada" else "Ubicación fuera de rango",
+                    imageVector = if (visita.ubicacionVerificada) Icons.Filled.VerifiedUser else Icons.Filled.WrongLocation,
+                    contentDescription = null,
                     tint = if (visita.ubicacionVerificada) VerdeExito else AmbarAlerta,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
-                    if (visita.ubicacionVerificada) {
+                    text = if (visita.ubicacionVerificada) {
                         "Ubicación verificada · ${Formatos.distancia(visita.distanciaMetros)}"
                     } else {
                         "Fuera de rango · ${Formatos.distancia(visita.distanciaMetros)} del punto"
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 4.dp)
+                    modifier = Modifier.padding(start = 6.dp)
                 )
             }
 
+            // Observaciones
             if (visita.observaciones.isNotBlank()) {
-                Text(visita.observaciones, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = visita.observaciones,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
 
+            // Motivo de rechazo (si aplica)
             if (visita.validacion == EstadoValidacion.RECHAZADA && !visita.motivoRechazo.isNullOrBlank()) {
                 Text(
-                    "Motivo del rechazo: ${visita.motivoRechazo}",
+                    text = "Motivo del rechazo: ${visita.motivoRechazo}",
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
 
+            // Botones de acción del supervisor (Validar / Rechazar)
             if (acciones != null) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
                     modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Espaciado.s, Alignment.End),
                     content = acciones
                 )
             }
         }
+    }
+}
+
+
+@Composable
+private fun ChipEstado(estado: EstadoValidacion) {
+    val (colorFondo, colorTexto) = when (estado) {
+        EstadoValidacion.PENDIENTE -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
+        EstadoValidacion.VALIDADA -> VerdeExito.copy(alpha = 0.2f) to VerdeExito
+        EstadoValidacion.RECHAZADA -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
+    }
+    androidx.compose.material3.Surface(
+        color = colorFondo,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+    ) {
+        Text(
+            text = estado.etiqueta,
+            color = colorTexto,
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+        )
     }
 }
