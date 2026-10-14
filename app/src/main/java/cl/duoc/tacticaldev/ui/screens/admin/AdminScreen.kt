@@ -37,8 +37,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,11 +49,12 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
 import cl.duoc.tacticaldev.model.AdminUiState
 import cl.duoc.tacticaldev.model.TipoActivo
+import cl.duoc.tacticaldev.ui.components.AlertaFlotanteAnimada
 import cl.duoc.tacticaldev.ui.components.CampoTexto
 import cl.duoc.tacticaldev.ui.components.Selector
 import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.viewmodel.AdminViewModel
-
+import androidx.compose.runtime.setValue
 /** Formularios de administración: registrar puntos de venta y activos. */
 @Composable
 fun AdminScreen(
@@ -59,7 +63,14 @@ fun AdminScreen(
 ) {
     val estado by viewModel.uiState.collectAsState()
     val puntosVenta by viewModel.puntosVenta.collectAsState()
-
+    var mensajeAnimado by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(Unit) {
+        viewModel.mensajes.collect { mensaje ->
+            mensajeAnimado = mensaje
+            kotlinx.coroutines.delay(2500)
+            mensajeAnimado = null
+        }
+    }
     Column(modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = estado.pestana) {
             Tab(
@@ -90,6 +101,11 @@ fun AdminScreen(
                     FormularioActivo(estado, puntosVenta, viewModel)
                 }
             }
+            AlertaFlotanteAnimada(
+                mensaje = mensajeAnimado,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+
         }
         Text(
             text = "TecnicalFresh • Gestión de Mantenimiento",

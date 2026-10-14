@@ -31,14 +31,20 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.EstadoValidacion
 import cl.duoc.tacticaldev.model.RechazoUiState
+import cl.duoc.tacticaldev.ui.components.AlertaFlotanteAnimada
 import cl.duoc.tacticaldev.ui.components.CampoTexto
 import cl.duoc.tacticaldev.ui.components.EstadoVacio
 import cl.duoc.tacticaldev.ui.components.TarjetaVisita
@@ -46,6 +52,7 @@ import cl.duoc.tacticaldev.ui.theme.Espaciado
 import cl.duoc.tacticaldev.ui.utils.LocalTipoPantalla
 import cl.duoc.tacticaldev.ui.utils.columnas
 import cl.duoc.tacticaldev.viewmodel.SupervisorViewModel
+import kotlinx.coroutines.delay
 
 /** Vista del supervisor: revisa la evidencia de cada visita y la valida o rechaza. */
 @Composable
@@ -56,83 +63,98 @@ fun SupervisorScreen(
     val estado by viewModel.uiState.collectAsState()
     val rechazo by viewModel.rechazo.collectAsState()
     val columnas = LocalTipoPantalla.current.columnas()
+    var mensajeAnimado by remember { mutableStateOf<String?>(null) }
 
-    Column(modifier.fillMaxSize()) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(Espaciado.s),
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = Espaciado.l, vertical = Espaciado.s)
-        ) {
-            EstadoValidacion.entries.forEach { opcion ->
-                FilterChip(
-                    selected = estado.filtro == opcion,
-                    onClick = { viewModel.onFiltroChange(opcion) },
-                    label = { Text(opcion.etiqueta) },
-                    leadingIcon = { Icon(iconoFiltro(opcion), contentDescription = null, modifier = Modifier.size(18.dp)) }
-                )
-            }
+    LaunchedEffect(Unit) {
+        viewModel.mensajes.collect { mensaje ->
+            mensajeAnimado = mensaje
+            delay(2500)
+            mensajeAnimado = null
         }
+    }
 
-        Box(Modifier.weight(1f)) {
-            when {
-                estado.cargando -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                estado.visitas.isEmpty() -> EstadoVacio(
-                    icono = iconoFiltro(estado.filtro),
-                    titulo = "No hay visitas ${estado.filtro.etiqueta.lowercase()}s",
-                    mensaje = if (estado.filtro == EstadoValidacion.PENDIENTE) {
-                        "Todas las visitas de terreno ya fueron revisadas."
-                    } else {
-                        "Las visitas aparecerán aquí cuando cambien a este estado."
-                    },
-                    modifier = Modifier.align(Alignment.Center)
-                )
-                else -> LazyVerticalGrid(
-                    columns = GridCells.Fixed(columnas),
-                    contentPadding = PaddingValues(Espaciado.l),
-                    horizontalArrangement = Arrangement.spacedBy(Espaciado.m),
-                    verticalArrangement = Arrangement.spacedBy(Espaciado.m),
-                    modifier = Modifier.fillMaxSize()
-                ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Espaciado.s),
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = Espaciado.l, vertical = Espaciado.s)
+            ) {
+                EstadoValidacion.entries.forEach { opcion ->
+                    FilterChip(
+                        selected = estado.filtro == opcion,
+                        onClick = { viewModel.onFiltroChange(opcion) },
+                        label = { Text(opcion.etiqueta) },
+                        leadingIcon = { Icon(iconoFiltro(opcion), contentDescription = null, modifier = Modifier.size(18.dp)) }
+                    )
+                }
+            }
 
-                    items(estado.visitas, key = { it.id }) { visita ->
-                        TarjetaVisita(
-                            visita = visita,
-                            // La tarjeta sale de la lista con animación al validarla o rechazarla
-                            modifier = Modifier.animateItem(),
-                            mostrarOperario = true,
-                            acciones = if (visita.estadoValidacion == EstadoValidacion.PENDIENTE.name) {
-                                {
-                                    OutlinedButton(
-                                        onClick = { viewModel.abrirRechazo(visita) },
-                                        colors = ButtonDefaults.outlinedButtonColors(
-                                            contentColor = MaterialTheme.colorScheme.error
-                                        )
-                                    ) {
-                                        Icon(Icons.Filled.Close, contentDescription = null)
-                                        Text("Rechazar", modifier = Modifier.padding(start = 4.dp))
+            Box(Modifier.weight(1f)) {
+                when {
+                    estado.cargando -> CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    estado.visitas.isEmpty() -> EstadoVacio(
+                        icono = iconoFiltro(estado.filtro),
+                        titulo = "No hay visitas ${estado.filtro.etiqueta.lowercase()}s",
+                        mensaje = if (estado.filtro == EstadoValidacion.PENDIENTE) {
+                            "Todas las visitas de terreno ya fueron revisadas."
+                        } else {
+                            "Las visitas aparecerán aquí cuando cambien a este estado."
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    else -> LazyVerticalGrid(
+                        columns = GridCells.Fixed(columnas),
+                        contentPadding = PaddingValues(Espaciado.l),
+                        horizontalArrangement = Arrangement.spacedBy(Espaciado.m),
+                        verticalArrangement = Arrangement.spacedBy(Espaciado.m),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(estado.visitas, key = { it.id }) { visita ->
+                            TarjetaVisita(
+                                visita = visita,
+                                modifier = Modifier.animateItem(),
+                                mostrarOperario = true,
+                                acciones = if (visita.estadoValidacion == EstadoValidacion.PENDIENTE.name) {
+                                    {
+                                        OutlinedButton(
+                                            onClick = { viewModel.abrirRechazo(visita) },
+                                            colors = ButtonDefaults.outlinedButtonColors(
+                                                contentColor = MaterialTheme.colorScheme.error
+                                            )
+                                        ) {
+                                            Icon(Icons.Filled.Close, contentDescription = null)
+                                            Text("Rechazar", modifier = Modifier.padding(start = 4.dp))
+                                        }
+                                        Button(onClick = { viewModel.validar(visita) }) {
+                                            Icon(Icons.Filled.CheckCircle, contentDescription = null)
+                                            Text("Validar", modifier = Modifier.padding(start = 4.dp))
+                                        }
                                     }
-                                    Button(onClick = { viewModel.validar(visita) }) {
-                                        Icon(Icons.Filled.CheckCircle, contentDescription = null)
-                                        Text("Validar", modifier = Modifier.padding(start = 4.dp))
-                                    }
+                                } else {
+                                    null
                                 }
-                            } else {
-                                null
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }
+
+            Text(
+                text = "TecnicalFresh • Gestión de Mantenimiento",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                textAlign = TextAlign.Center
+            )
         }
-        Text(
-            text = "TecnicalFresh • Gestión de Mantenimiento",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+
+        AlertaFlotanteAnimada(
+            mensaje = mensajeAnimado,
+            modifier = Modifier.align(Alignment.TopCenter)
         )
     }
 

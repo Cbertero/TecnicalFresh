@@ -40,11 +40,13 @@ import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.VisitaDetalle
 import cl.duoc.tacticaldev.model.estado
 import cl.duoc.tacticaldev.model.tipo
+import cl.duoc.tacticaldev.ui.components.AlertaFlotanteAnimada
 import cl.duoc.tacticaldev.ui.components.FotoEvidencia
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
 import cl.duoc.tacticaldev.ui.theme.VerdeExito
 import cl.duoc.tacticaldev.utils.Formatos
 import cl.duoc.tacticaldev.viewmodel.ConfirmacionViewModel
+import kotlinx.coroutines.delay
 
 /** Comprobante de la visita guardada en el dispositivo. */
 @Composable
@@ -54,20 +56,35 @@ fun ConfirmacionScreen(
     onVerHistorial: (Long) -> Unit
 ) {
     val visita by viewModel.visita.collectAsState()
+    var mensajeAnimado by remember { mutableStateOf<String?>("¡Visita registrada exitosamente!") }
+
+    LaunchedEffect(Unit) {
+        delay(3500)
+        mensajeAnimado = null
+    }
 
     TacticalScaffold(titulo = "Visita registrada") { padding ->
         Box(
             Modifier
                 .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.TopCenter
+                .padding(padding)
         ) {
             val detalle = visita
             if (detalle == null) {
-                CircularProgressIndicator(Modifier.padding(32.dp))
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
             } else {
-                ContenidoConfirmacion(detalle, onVolverInicio, onVerHistorial)
+                ContenidoConfirmacion(
+                    visita = detalle,
+                    onVolverInicio = onVolverInicio,
+                    onVerHistorial = onVerHistorial,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
             }
+
+            AlertaFlotanteAnimada(
+                mensaje = mensajeAnimado,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
@@ -76,7 +93,8 @@ fun ConfirmacionScreen(
 private fun ContenidoConfirmacion(
     visita: VisitaDetalle,
     onVolverInicio: () -> Unit,
-    onVerHistorial: (Long) -> Unit
+    onVerHistorial: (Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     // Escala del ícono: aparece con efecto "rebote"
     val escala = remember { Animatable(0f) }
@@ -87,7 +105,7 @@ private fun ContenidoConfirmacion(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(max = 560.dp)
             .verticalScroll(rememberScrollState())
             .padding(24.dp),

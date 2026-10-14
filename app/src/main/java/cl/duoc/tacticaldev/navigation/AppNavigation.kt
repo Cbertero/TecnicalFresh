@@ -247,17 +247,16 @@ fun AppNavigation(
         }
         composable(Screen.Supervisor.route) {
             val supervisorViewModel: SupervisorViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            val snackbarHostState = remember { SnackbarHostState() }
-            LaunchedEffect(Unit) {
-                supervisorViewModel.mensajes.collect { snackbarHostState.showSnackbar(it) }
-            }
+
+
+
             TacticalScaffold(
                 titulo = "Visitas de terreno",
                 itemsNavegacion = emptyList(),
                 rutaActual = rutaActual,
                 onVolver = { navigationViewModel.volver() },
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                snackbarHostState = snackbarHostState
+
             ) { padding ->
                 SupervisorScreen(viewModel = supervisorViewModel, modifier = Modifier.padding(padding))
             }
@@ -265,17 +264,14 @@ fun AppNavigation(
 
         composable(Screen.Administracion.route) {
             val adminViewModel: AdminViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            val snackbarHostState = remember { SnackbarHostState() }
-            LaunchedEffect(Unit) {
-                adminViewModel.mensajes.collect { snackbarHostState.showSnackbar(it) }
-            }
+
             TacticalScaffold(
                 titulo = "Administración",
                 itemsNavegacion = emptyList(),
                 rutaActual = rutaActual,
                 onVolver = { navigationViewModel.volver() },
                 onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) },
-                snackbarHostState = snackbarHostState
+
             ) { padding ->
                 AdminScreen(viewModel = adminViewModel, modifier = Modifier.padding(padding))
             }

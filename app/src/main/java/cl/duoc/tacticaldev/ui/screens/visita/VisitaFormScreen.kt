@@ -54,7 +54,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,6 +80,7 @@ import cl.duoc.tacticaldev.model.TipoVisita
 import cl.duoc.tacticaldev.model.VisitaFormUiState
 import cl.duoc.tacticaldev.model.tipoActivo
 import cl.duoc.tacticaldev.ui.animaciones.sacudir
+import cl.duoc.tacticaldev.ui.components.AlertaFlotanteAnimada
 import cl.duoc.tacticaldev.ui.components.CampoTexto
 import cl.duoc.tacticaldev.ui.components.FotoEvidencia
 import cl.duoc.tacticaldev.ui.components.Selector
@@ -94,6 +94,7 @@ import cl.duoc.tacticaldev.utils.Formatos
 import cl.duoc.tacticaldev.utils.FotoUtils
 import cl.duoc.tacticaldev.utils.GeoUtils
 import cl.duoc.tacticaldev.viewmodel.VisitaViewModel
+import kotlinx.coroutines.delay
 
 /** Formulario de registro de una visita al activo seleccionado. */
 @Composable
@@ -103,7 +104,7 @@ fun VisitaFormScreen(
     onVisitaGuardada: (Long) -> Unit
 ) {
     val estado by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    var mensajeAnimado by remember { mutableStateOf<String?>(null) }
 
     // Estado derivado: cuántos de los 6 requisitos están completos (Guía 12)
     val progreso by remember {
@@ -131,16 +132,16 @@ fun VisitaFormScreen(
     }
     LaunchedEffect(estado.mensaje) {
         estado.mensaje?.let {
-            snackbarHostState.showSnackbar(it)
+            mensajeAnimado = it
+            delay(3000)
+            mensajeAnimado = null
             viewModel.onMensajeMostrado()
         }
     }
 
     TacticalScaffold(
         titulo = "Registrar visita",
-        onVolver = onVolver,
-        snackbarHostState = snackbarHostState
-
+        onVolver = onVolver
     ) { padding ->
         if (estado.cargando) {
             Box(
@@ -277,6 +278,11 @@ fun VisitaFormScreen(
                     }
                 }
             }
+
+            AlertaFlotanteAnimada(
+                mensaje = mensajeAnimado,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
