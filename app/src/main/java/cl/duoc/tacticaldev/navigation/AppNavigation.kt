@@ -142,7 +142,7 @@ fun AppNavigation(
 
             DashboardScreen(
                 nombreUsuario = sesion?.nombre.orEmpty(),
-                rolUsuario = sesion?.cargo?.ifBlank { sesion?.rol?.etiqueta }.orEmpty(),
+                rolUsuario = sesion?.cargo?.ifBlank { sesion.rol.etiqueta }.orEmpty(),
                 snackbarHostState = snackbarHostState,
                 onIrAActivos = { navigationViewModel.navegarA(Screen.InicioOperario.route) },
                 onIrAMisVisitas = { navigationViewModel.navegarA(Screen.MisVisitas.route) },
