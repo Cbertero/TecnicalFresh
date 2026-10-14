@@ -21,9 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import cl.duoc.tacticaldev.ui.theme.SuperficieTarjeta
-import cl.duoc.tacticaldev.ui.theme.TextoBlancoPuro
-import cl.duoc.tacticaldev.ui.theme.TextoSecundarioGris
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -203,7 +200,7 @@ private fun BotonSupervisorHub(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = SuperficieTarjeta
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         border = BorderStroke(1.dp, colorBorde.copy(alpha = 0.35f)), // Borde luminoso
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -233,12 +230,12 @@ private fun BotonSupervisorHub(
             Text(
                 text = titulo,
                 style = MaterialTheme.typography.titleSmall,
-                color = TextoBlancoPuro
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = subtitulo,
                 style = MaterialTheme.typography.bodySmall,
-                color = TextoSecundarioGris
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

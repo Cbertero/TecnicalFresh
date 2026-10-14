@@ -72,10 +72,10 @@ fun LoginScreen(
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_logo),
-                contentDescription = "Logo TacticalDEV",
+                contentDescription = "Logo Technical Fresh",
                 modifier = Modifier.size(96.dp)
             )
-            Text("TacticalDEV Visitas", style = MaterialTheme.typography.headlineMedium)
+            Text("TechnicalFresh Visitas", style = MaterialTheme.typography.headlineMedium)
             Text(
                 "Registro verificable de visitas en terreno",
                 style = MaterialTheme.typography.bodyMedium,

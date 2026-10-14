@@ -1,4 +1,4 @@
-# TacticalDEV · Trazabilidad de visitas en terreno
+# Technical Fresh · Trazabilidad de visitas en terreno
 
 Proyecto semestral de **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc UC · Evaluación Parcial 2).
 

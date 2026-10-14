@@ -1,8 +1,11 @@
 package cl.duoc.tacticaldev.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 private val ArcticDarkColorScheme = darkColorScheme(
@@ -21,22 +24,46 @@ private val ArcticDarkColorScheme = darkColorScheme(
     surfaceVariant = SuperficieTarjeta,
     onSurfaceVariant = TextoSecundarioGris,
     outline = TextoSecundarioGris,
-    error = RojoError,
-    errorContainer = RojoErrorContenedor,
+    error = RojoErrorOscuro,
+    errorContainer = RojoErrorContenedorOscuro,
     onErrorContainer = TextoBlancoPuro
+)
+
+private val ArcticLightColorScheme = lightColorScheme(
+    primary = CianFrioOscuro,
+    onPrimary = Color.White,
+    primaryContainer = CianContenedorClaro,
+    onPrimaryContainer = CianContenedor,
+    secondary = CianSecundarioClaro,
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFFCFFAFE),
+    onSecondaryContainer = Color(0xFF164E63),
+    background = FondoHieloClaro,
+    onBackground = TextoPizarraOscuro,
+    surface = SuperficieClara,
+    onSurface = TextoPizarraOscuro,
+    surfaceVariant = SuperficieVarianteClara,
+    onSurfaceVariant = TextoSecundarioPizarra,
+    outline = Color(0xFF64748B),
+    error = RojoErrorClaro,
+    errorContainer = RojoErrorContenedorClaro,
+    onErrorContainer = Color(0xFF881337)
 )
 
 /**
  * Tema Material 3 Arctic Cyan de TecnicalFresh.
+ * Sigue la configuración del dispositivo: modo claro u oscuro.
  */
 @Composable
 fun TacticalDEVTheme(
-    darkTheme: Boolean = true, // Activado en modo oscuro glacial
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    MaterialTheme(
-        colorScheme = ArcticDarkColorScheme,
-        typography = Typography,
-        content = content
-    )
+    CompositionLocalProvider(LocalTemaOscuro provides darkTheme) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) ArcticDarkColorScheme else ArcticLightColorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }

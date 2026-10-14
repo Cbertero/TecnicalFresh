@@ -35,6 +35,7 @@ fun ChipEstado(estado: EstadoValidacion, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
 fun coloresEstado(estado: EstadoValidacion): Pair<Color, Color> = when (estado) {
     EstadoValidacion.PENDIENTE -> AmbarAlertaContenedor to AmbarAlerta
     EstadoValidacion.VALIDADA -> VerdeExitoContenedor to VerdeExito
