@@ -23,9 +23,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cl.duoc.tacticaldev.model.Rol
+import cl.duoc.tacticaldev.ui.components.AlertaFlotanteAnimada
 import cl.duoc.tacticaldev.ui.components.CampoTexto
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
+import cl.duoc.tacticaldev.ui.components.TipoAlerta
 import cl.duoc.tacticaldev.viewmodel.RegistroViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun RegistroScreen(
@@ -36,7 +39,18 @@ fun RegistroScreen(
     val estado by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    var mensajeExito by remember { mutableStateOf<String?>(null) }
+
     val cargosOperario = listOf("Técnico de mantenimiento", "Vendedora", "Transportista")
+
+    // Al crear la cuenta se muestra la confirmación y luego se vuelve al panel
+    LaunchedEffect(estado.registroExitoso) {
+        if (estado.registroExitoso) {
+            mensajeExito = "Cuenta de ${estado.nombre.trim()} creada"
+            delay(2000)
+            onRegistroExitoso()
+        }
+    }
 
     TacticalScaffold(
         titulo = "Crear Cuenta",
@@ -44,11 +58,12 @@ fun RegistroScreen(
         onVolver = onVolver,
         snackbarHostState = snackbarHostState
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
+      Box(
+          modifier = Modifier
+              .fillMaxSize()
+              .padding(padding)
+      ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -64,7 +79,7 @@ fun RegistroScreen(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Crea una cuenta para acceder al sistema en terreno",
+                    text = "Crea la cuenta de un nuevo integrante del equipo",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.outline,
                     textAlign = TextAlign.Center
@@ -181,8 +196,8 @@ fun RegistroScreen(
 
                 // Botón Registrarse
                 Button(
-                    onClick = { viewModel.registrar(onRegistroExitoso) },
-                    enabled = !estado.cargando,
+                    onClick = { viewModel.registrar {} },
+                    enabled = !estado.cargando && !estado.registroExitoso,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp)
@@ -206,5 +221,12 @@ fun RegistroScreen(
                 textAlign = TextAlign.Center
             )
         }
+
+        AlertaFlotanteAnimada(
+            mensaje = mensajeExito,
+            tipo = TipoAlerta.EXITO,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
+      }
     }
 }

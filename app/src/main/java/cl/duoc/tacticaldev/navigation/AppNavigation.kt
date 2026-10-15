@@ -42,7 +42,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.rememberCoroutineScope
 import cl.duoc.tacticaldev.data.scanner.EscanerQr
 import cl.duoc.tacticaldev.data.scanner.ResultadoEscaneo
-import cl.duoc.tacticaldev.ui.screens.PantallaEnConstruccion
 import cl.duoc.tacticaldev.ui.screens.dashboard.DashboardSupervisorScreen
 import cl.duoc.tacticaldev.ui.screens.login.RegistroScreen
 import cl.duoc.tacticaldev.viewmodel.ActivosViewModel
@@ -112,18 +111,6 @@ fun AppNavigation(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 onLoginExitoso = { rol ->
                     navigationViewModel.navegarA(rol.rutaInicio(), limpiarPila = true)
-                },
-                onIrARegistro = {
-                    navigationViewModel.navegarA(Screen.Registro.route)
-                }
-            )
-        }
-        composable(Screen.Registro.route) {
-            RegistroScreen(
-                viewModel = viewModel(factory = AppViewModelProvider.Factory),
-                onVolver = { navigationViewModel.volver() },
-                onRegistroExitoso = {
-                    navigationViewModel.volver() // Vuelve al login para iniciar sesión con su nueva cuenta
                 }
             )
         }
@@ -234,15 +221,16 @@ fun AppNavigation(
                 cargoUsuario = sesion?.cargo?.ifBlank { "Supervisora de operaciones" }.orEmpty(),
                 onIrAVisitas = { navigationViewModel.navegarA(Screen.Supervisor.route) },
                 onIrAAdministracion = { navigationViewModel.navegarA(Screen.Administracion.route) },
-                onIrAEquipo = { navigationViewModel.navegarA(Screen.Equipo.route) }, // <-- Agregas esta línea
+                onIrAEquipo = { navigationViewModel.navegarA(Screen.Equipo.route) },
                 onCerrarSesion = cerrarSesion
             )
         }
+        // El supervisor crea las cuentas de su equipo
         composable(Screen.Equipo.route) {
-            PantallaEnConstruccion(
-                titulo = "Gestión de Equipo",
-                subtitulo = "Monitoreo en tiempo real de operarios y rutas en terreno.",
-                onVolver = { navigationViewModel.volver() }
+            RegistroScreen(
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                onVolver = { navigationViewModel.volver() },
+                onRegistroExitoso = { navigationViewModel.volver() }
             )
         }
         composable(Screen.Supervisor.route) {

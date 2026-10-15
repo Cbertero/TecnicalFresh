@@ -164,7 +164,7 @@ fun DashboardSupervisorScreen(
                 ) {
                     BotonSupervisorHub(
                         titulo = "Equipo",
-                        subtitulo = "Próximamente",
+                        subtitulo = "Crear cuenta",
                         icono = Icons.Default.SupervisorAccount,
                         colorBorde = Color(0xFF818CF8), // Índigo hielo
                         onClick = onIrAEquipo,

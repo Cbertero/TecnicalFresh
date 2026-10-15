@@ -32,7 +32,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -55,8 +54,7 @@ import cl.duoc.tacticaldev.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onLoginExitoso: (Rol) -> Unit,
-    onIrARegistro : ()-> Unit
+    onLoginExitoso: (Rol) -> Unit
 ) {
     val estado by viewModel.uiState.collectAsState()
 
@@ -147,12 +145,6 @@ fun LoginScreen(
                             Text("Ingresar")
                         }
                     }
-                }
-                TextButton(
-                    onClick = onIrARegistro,
-                    modifier = Modifier.padding(top = 8.dp)
-                ) {
-                    Text("¿No tienes cuenta? Regístrate aquí")
                 }
                 Text(
                     "Usuarios de prueba: tecnico@demo.cl, vendedor@demo.cl, transportista@demo.cl " +
