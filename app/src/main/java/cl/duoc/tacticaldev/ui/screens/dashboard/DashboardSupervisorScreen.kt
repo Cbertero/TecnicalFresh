@@ -31,7 +31,8 @@ fun DashboardSupervisorScreen(
     onIrAAdministracion: () -> Unit,
     onCerrarSesion: () -> Unit,
     modifier: Modifier = Modifier,
-    onIrAEquipo: () -> Unit
+    onIrAEquipo: () -> Unit,
+    onIrATecnicos: () -> Unit = {}
 ) {
     var mostrarDialogoSalir by remember { mutableStateOf(false) }
 
@@ -176,6 +177,19 @@ fun DashboardSupervisorScreen(
                         icono = Icons.Default.Person,
                         colorBorde = Color(0xFFFB7185), // Coral rosado
                         onClick = { mostrarDialogoSalir = true },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    BotonSupervisorHub(
+                        titulo = "Técnicos API",
+                        subtitulo = "Microservicio REST",
+                        icono = Icons.Default.SupervisorAccount,
+                        colorBorde = Color(0xFFF59E0B),
+                        onClick = onIrATecnicos,
                         modifier = Modifier.weight(1f)
                     )
                 }

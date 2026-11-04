@@ -46,6 +46,8 @@ import cl.duoc.tacticaldev.ui.screens.dashboard.DashboardSupervisorScreen
 import cl.duoc.tacticaldev.ui.screens.login.RegistroScreen
 import cl.duoc.tacticaldev.viewmodel.ActivosViewModel
 import kotlinx.coroutines.launch
+import cl.duoc.tacticaldev.ui.screens.tecnico.TecnicoScreen
+import cl.duoc.tacticaldev.viewmodel.TecnicoViewModel
 
 /** Ruta de inicio según el rol del usuario conectado. */
 fun Rol.rutaInicio(): String = when (this) {
@@ -222,6 +224,7 @@ fun AppNavigation(
                 onIrAVisitas = { navigationViewModel.navegarA(Screen.Supervisor.route) },
                 onIrAAdministracion = { navigationViewModel.navegarA(Screen.Administracion.route) },
                 onIrAEquipo = { navigationViewModel.navegarA(Screen.Equipo.route) },
+                onIrATecnicos = { navigationViewModel.navegarA(Screen.Tecnicos.route) },
                 onCerrarSesion = cerrarSesion
             )
         }
@@ -262,6 +265,21 @@ fun AppNavigation(
 
             ) { padding ->
                 AdminScreen(viewModel = adminViewModel, modifier = Modifier.padding(padding))
+            }
+        }
+        composable(Screen.Tecnicos.route) {
+            val tecnicoViewModel: TecnicoViewModel = viewModel()
+            TacticalScaffold(
+                titulo = "Técnicos (Microservicio)",
+                itemsNavegacion = emptyList(),
+                rutaActual = rutaActual,
+                onVolver = { navigationViewModel.volver() },
+                onNavegar = { navigationViewModel.cambiarPestana(it, Screen.Supervisor.route) }
+            ) { padding ->
+                TecnicoScreen(
+                    viewModel = tecnicoViewModel,
+                    modifier = Modifier.padding(padding)
+                )
             }
         }
     }
