@@ -12,7 +12,7 @@ interface  ApiService{
     suspend fun getTecnicos(): List<Tecnico>
 
     @POST("/api/v1/tecnicos")
-    suspend fun guardarTecnico(tecnico: Tecnico): Tecnico
+    suspend fun guardarTecnico(@Body tecnico: Tecnico): Tecnico
 
     @DELETE("/api/v1/tecnicos/{id}")
     suspend fun eliminarTecnico(@Path("id") id: Long)
