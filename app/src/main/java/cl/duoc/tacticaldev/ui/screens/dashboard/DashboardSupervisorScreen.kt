@@ -185,7 +185,7 @@ fun DashboardSupervisorScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     BotonSupervisorHub(
-                        titulo = "Técnicos API",
+                        titulo = "Asignar Locales",
                         subtitulo = "Microservicio REST",
                         icono = Icons.Default.SupervisorAccount,
                         colorBorde = Color(0xFFF59E0B),

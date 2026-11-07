@@ -268,9 +268,9 @@ fun AppNavigation(
             }
         }
         composable(Screen.Tecnicos.route) {
-            val tecnicoViewModel: TecnicoViewModel = viewModel()
+            val tecnicoViewModel: TecnicoViewModel = viewModel(factory = AppViewModelProvider.Factory)
             TacticalScaffold(
-                titulo = "Técnicos (Microservicio)",
+                titulo = "Asignar Locales (API)",
                 itemsNavegacion = emptyList(),
                 rutaActual = rutaActual,
                 onVolver = { navigationViewModel.volver() },

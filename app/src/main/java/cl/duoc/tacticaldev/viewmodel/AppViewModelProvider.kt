@@ -1,4 +1,4 @@
- package cl.duoc.tacticaldev.viewmodel
+package cl.duoc.tacticaldev.viewmodel
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
@@ -20,7 +20,13 @@ object AppViewModelProvider {
         initializer {
             RegistroViewModel(app().container.usuarioRepository)
         }
-        initializer { ActivosViewModel(app().container.activoRepository) }
+        initializer {
+            ActivosViewModel(
+                repository = app().container.activoRepository,
+                sesionPreferences = app().container.sesionPreferences,
+                tecnicoRepository = app().container.tecnicoRepository
+            )
+        }
         initializer {
             VisitaViewModel(
                 savedStateHandle = createSavedStateHandle(),
@@ -48,6 +54,13 @@ object AppViewModelProvider {
         }
         initializer {
             AdminViewModel(app().container.activoRepository, app().container.ubicacionService)
+        }
+        initializer {
+            TecnicoViewModel(
+                repository = app().container.tecnicoRepository,
+                usuarioRepository = app().container.usuarioRepository,
+                activoRepository = app().container.activoRepository
+            )
         }
     }
 }
