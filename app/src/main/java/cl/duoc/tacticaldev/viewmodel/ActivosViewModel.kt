@@ -2,7 +2,9 @@ package cl.duoc.tacticaldev.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cl.duoc.tacticaldev.data.preferences.SesionPreferences
 import cl.duoc.tacticaldev.data.repository.ActivoRepository
+import cl.duoc.tacticaldev.data.repository.TecnicoRepository
 import cl.duoc.tacticaldev.model.ActivoConPunto
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,25 +22,77 @@ data class ActivosUiState(
     val activos: List<ActivoConPunto> = emptyList()
 )
 
-/** Expone la lista de activos como StateFlow, filtrada por el texto de búsqueda. */
-class ActivosViewModel(private val repository: ActivoRepository) : ViewModel() {
+/**
+ * Expone la lista de activos como StateFlow, filtrada por:
+ * 1) Los locales asignados al operario conectado (desde el microservicio o modo local).
+ * 2) Si aún no tiene asignaciones manuales del supervisor, asigna locales distintos según su cargo
+ *    para que Técnico, Vendedora y Transportista no vean los mismos locales.
+ * 3) El texto de búsqueda ingresado por el usuario.
+ */
+class ActivosViewModel(
+    private val repository: ActivoRepository,
+    sesionPreferences: SesionPreferences,
+    private val tecnicoRepository: TecnicoRepository
+) : ViewModel() {
 
-    // El texto se expone aparte para que el TextField se actualice sin retraso
     private val _busqueda = MutableStateFlow("")
     val busqueda: StateFlow<String> = _busqueda.asStateFlow()
 
-    val uiState: StateFlow<ActivosUiState> =
-        combine(repository.observarActivos(), _busqueda) { activos, texto ->
-            val filtro = texto.trim()
-            ActivosUiState(
-                cargando = false,
-                activos = if (filtro.isEmpty()) activos else activos.filter {
-                    it.codigo.contains(filtro, ignoreCase = true) ||
-                        it.puntoVentaNombre.contains(filtro, ignoreCase = true) ||
-                        it.comuna.contains(filtro, ignoreCase = true)
+    init {
+        viewModelScope.launch {
+            tecnicoRepository.geTecnicos()
+        }
+    }
+
+    val uiState: StateFlow<ActivosUiState> = combine(
+        repository.observarActivos(),
+        _busqueda,
+        sesionPreferences.sesion,
+        tecnicoRepository.asignacionesFlow
+    ) { activos, texto, sesion, asignaciones ->
+        val nombreUsuario = sesion?.nombre?.trim().orEmpty()
+        val cargoUsuario = sesion?.cargo?.trim().orEmpty()
+
+        // 1. Buscar locales asignados explícitamente por el supervisor a este trabajador
+        val localesAsignadosAlUsuario = asignaciones
+            .filter {
+                it.nombre.trim().equals(nombreUsuario, ignoreCase = true) &&
+                    !it.localAsignado.isNullOrBlank()
+            }
+            .mapNotNull { it.localAsignado?.trim()?.lowercase() }
+            .toSet()
+
+        // 2. Filtrar activos según asignación del supervisor, o por cargo por defecto
+        val activosDelOperario = when {
+            localesAsignadosAlUsuario.isNotEmpty() -> {
+                activos.filter { it.puntoVentaNombre.trim().lowercase() in localesAsignadosAlUsuario }
+            }
+            cargoUsuario.contains("Vendedor", ignoreCase = true) -> {
+                activos.filter { it.puntoVentaNombre.equals("Minimarket Las Rosas", ignoreCase = true) }
+            }
+            cargoUsuario.contains("Transportista", ignoreCase = true) -> {
+                activos.filter { it.puntoVentaNombre.equals("Botillería La Esquina", ignoreCase = true) }
+            }
+            cargoUsuario.contains("Técnico", ignoreCase = true) -> {
+                activos.filter {
+                    it.puntoVentaNombre.equals("Minimarket El Alba", ignoreCase = true) ||
+                        it.puntoVentaNombre.equals("Almacén Los Aromos", ignoreCase = true)
                 }
-            )
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ActivosUiState())
+            }
+            else -> activos
+        }
+
+        // 3. Aplicar filtro del buscador de texto
+        val filtro = texto.trim()
+        ActivosUiState(
+            cargando = false,
+            activos = if (filtro.isEmpty()) activosDelOperario else activosDelOperario.filter {
+                it.codigo.contains(filtro, ignoreCase = true) ||
+                    it.puntoVentaNombre.contains(filtro, ignoreCase = true) ||
+                    it.comuna.contains(filtro, ignoreCase = true)
+            }
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ActivosUiState())
 
     private val _mensajes = MutableSharedFlow<String>(extraBufferCapacity = 1)
     val mensajes: SharedFlow<String> = _mensajes.asSharedFlow()
