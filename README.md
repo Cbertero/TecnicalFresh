@@ -67,9 +67,15 @@ Aplicación móvil Android nativa desarrollada para resolver el problema de traz
 - **Control de Versiones:** Git y GitHub siguiendo metodología GitFlow (`main`, `develop`, ramas por tarea)
 - **Consumo de API REST:** Retrofit 2 + Gson + Kotlin Coroutines
 - **Backend:** Spring Boot + Spring Data JPA + MySQL, desplegado en Railway
+- **Pruebas unitarias:** Kotest + MockK + kotlinx-coroutines-test, con cobertura medida por JaCoCo
+
 ---
+
 ## 🌐 Arquitectura y API
 
+```
+App Android (Retrofit) ──HTTPS──▶ Microservicio Spring Boot (Railway) ──▶ MySQL (Railway)
+```
 
 - **Repositorio del microservicio:** [Fduran32/microservicoTecnicalFresh](https://github.com/Fduran32/microservicoTecnicalFresh)
 - **URL base:** `https://microservicotecnicalfresh-production-c2a9.up.railway.app/`
@@ -81,6 +87,7 @@ Aplicación móvil Android nativa desarrollada para resolver el problema de traz
 | `DELETE` | `/api/v1/tecnicos/{id}` | Elimina una asignación |
 
 **Persistencia actual:**
+
 | Dato | Dónde se guarda |
 | :--- | :--- |
 | Asignaciones de locales | MySQL en Railway (con caché y cola offline en el teléfono) |
@@ -88,6 +95,7 @@ Aplicación móvil Android nativa desarrollada para resolver el problema de traz
 
 > ⚠️ **Limitación conocida:** los usuarios se almacenan solo en el dispositivo (clave con hash SHA-256). Una mejora futura es moverlos al servidor con hashing BCrypt para permitir el inicio de sesión desde cualquier teléfono.
 
+---
 
 ## 🔑 Usuarios de Prueba
 
@@ -109,5 +117,38 @@ Todos los usuarios preconfigurados en la base de datos utilizan la clave: **`Cla
 1. **Clonar el repositorio:**
    ```bash
    git clone https://github.com/Cbertero/TecnicalFresh.git
-   > La app ya apunta al microservicio en Railway, no es necesario levantarlo localmente.
-   > Para probar contra un microservicio local desde el emulador, cambia `BASE_URL` en `RetrofitInstance.kt` a `http://10.0.2.2:8081/`.
+   ```
+2. **Abrir el proyecto** en Android Studio y esperar a que Gradle sincronice las dependencias.
+3. **Ejecutar la app** en un emulador o teléfono con Android 8.0 (API 26) o superior.
+4. **Iniciar sesión** con alguno de los usuarios de prueba (clave `Clave123`).
+
+> La app ya apunta al microservicio en Railway, no es necesario levantarlo localmente.
+> Para probar contra un microservicio local desde el emulador, cambia `BASE_URL` en `RetrofitInstance.kt` a `http://10.0.2.2:8081/`.
+
+---
+
+## 🧪 Pruebas Unitarias
+
+Las pruebas están escritas con **Kotest** (estilo `FunSpec`) y **MockK**, y se ejecutan en la JVM, sin emulador.
+
+| Capa | Qué se prueba | Técnica |
+| :--- | :--- | :--- |
+| Validadores, modelos, utilidades y navegación | Reglas de negocio y funciones puras | Entrada → salida esperada |
+| Repositorios de Room | Que deleguen correctamente en los DAO | Mocks de MockK + `coVerify` |
+| `TecnicoRepository` (API) | Modo online, modo offline y sincronización de pendientes | `FakeSharedPreferences` + `mockkObject(RetrofitInstance)` |
+| ViewModels (12) | Validaciones, mensajes de estado, guardado y navegación | Mocks + `Dispatchers.Main` de prueba |
+
+**Ejecutar las pruebas:**
+```bash
+./gradlew testDebugUnitTest
+```
+
+**Generar el reporte de cobertura (JaCoCo):**
+```bash
+./gradlew jacocoTestReport
+```
+El reporte queda en `app/build/reports/jacoco/jacocoTestReport/html/index.html`.
+
+**Resultados actuales:** 172 pruebas, 0 fallos y **99% de cobertura de líneas**.
+
+> La cobertura se mide sobre la lógica de la app (ViewModels, repositorios, validaciones, modelos y utilidades). Se excluyen las pantallas Compose y los envoltorios del framework Android (GPS, cámara, DataStore, DAO de Room), que requieren pruebas instrumentadas en un emulador (`androidTest`).
