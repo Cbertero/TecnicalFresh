@@ -47,6 +47,12 @@ Aplicación móvil Android nativa desarrollada para resolver el problema de traz
 - **Diseño Adaptativo (Window Size Classes):** Adaptación declarativa para pantallas Compactas (celulares), Medianas (tablets) y Expandidas.
 - **Modo Oscuro Glacial (Arctic Cyan):** Interfaz estilizada de alto contraste inspirada en la cadena de frío.
 
+### 7. Integración con Microservicio REST (API en la nube)
+- **Asignación de locales a trabajadores:** la pantalla *Asignar Locales (API)* consume el microservicio `microservicioTecnico` (Spring Boot + MySQL) desplegado en **Railway**.
+- **Operaciones disponibles:** listar, crear y eliminar asignaciones mediante Retrofit sobre HTTPS.
+- **Modo offline con sincronización automática:** si no hay internet, la asignación se guarda en el teléfono con estado *"Pendiente de Internet"* y se sube sola al servidor cuando vuelve la conexión.
+- **Indicador de estado:** cada registro muestra si está *Sincronizado en Servidor (MySQL)* o *Guardado en Local*.
+
 ---
 
 ## 🛠️ Tecnologías y Estándares Utilizados
@@ -59,8 +65,29 @@ Aplicación móvil Android nativa desarrollada para resolver el problema de traz
 - **Adaptabilidad:** Android Window Size Classes (Guía 9)
 - **Animaciones:** Jetpack Compose Animation (`Animatable`, `AnimatedVisibility`, `Spring`)
 - **Control de Versiones:** Git y GitHub siguiendo metodología GitFlow (`main`, `develop`, ramas por tarea)
-
+- **Consumo de API REST:** Retrofit 2 + Gson + Kotlin Coroutines
+- **Backend:** Spring Boot + Spring Data JPA + MySQL, desplegado en Railway
 ---
+## 🌐 Arquitectura y API
+
+
+- **Repositorio del microservicio:** [Fduran32/microservicoTecnicalFresh](https://github.com/Fduran32/microservicoTecnicalFresh)
+- **URL base:** `https://microservicotecnicalfresh-production-c2a9.up.railway.app/`
+
+| Método | Endpoint | Descripción |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/tecnicos` | Lista las asignaciones |
+| `POST` | `/api/v1/tecnicos` | Crea una asignación (`nombre`, `cargo`, `localAsignado`) |
+| `DELETE` | `/api/v1/tecnicos/{id}` | Elimina una asignación |
+
+**Persistencia actual:**
+| Dato | Dónde se guarda |
+| :--- | :--- |
+| Asignaciones de locales | MySQL en Railway (con caché y cola offline en el teléfono) |
+| Usuarios, visitas, activos y locales | Room (SQLite) local en cada dispositivo |
+
+> ⚠️ **Limitación conocida:** los usuarios se almacenan solo en el dispositivo (clave con hash SHA-256). Una mejora futura es moverlos al servidor con hashing BCrypt para permitir el inicio de sesión desde cualquier teléfono.
+
 
 ## 🔑 Usuarios de Prueba
 
@@ -82,3 +109,5 @@ Todos los usuarios preconfigurados en la base de datos utilizan la clave: **`Cla
 1. **Clonar el repositorio:**
    ```bash
    git clone https://github.com/Cbertero/TecnicalFresh.git
+   > La app ya apunta al microservicio en Railway, no es necesario levantarlo localmente.
+   > Para probar contra un microservicio local desde el emulador, cambia `BASE_URL` en `RetrofitInstance.kt` a `http://10.0.2.2:8081/`.
