@@ -8,12 +8,12 @@ import retrofit2.http.Body
 
 interface  ApiService{
 
-    @GET("/api/v1/tecnicos")
+    @GET("api/v1/tecnicos")
     suspend fun getTecnicos(): List<Tecnico>
 
-    @POST("/api/v1/tecnicos")
+    @POST("api/v1/tecnicos")
     suspend fun guardarTecnico(@Body tecnico: Tecnico): Tecnico
 
-    @DELETE("/api/v1/tecnicos/{id}")
+    @DELETE("api/v1/tecnicos/{id}")
     suspend fun eliminarTecnico(@Path("id") id: Long)
 }
