@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    jacoco
 }
 
 android {
@@ -18,6 +19,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Activa la medición de cobertura de las pruebas unitarias (JaCoCo)
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -35,6 +40,22 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    testOptions {
+        // Las clases de Android (Log, Context, etc.) devuelven valores por defecto en vez de fallar
+        unitTests.isReturnDefaultValues = true
+        // Kotest se ejecuta sobre JUnit Platform (JUnit 5)
+        unitTests.all {
+            it.useJUnitPlatform()
+            // MockK carga un agente de Java para simular clases final/objects:
+            // lo autorizamos explícitamente para que Java 21 no muestre el WARNING
+            it.jvmArgs("-XX:+EnableDynamicAgentLoading", "-Xshare:off")
+            // No usamos extensiones @AutoScan de Kotest: evita el aviso y acelera el inicio
+            it.systemProperty("kotest.framework.classpath.scanning.autoscan.disable", "true")
+        }
+    }
+    testCoverage {
+        jacocoVersion = "0.8.12"
     }
 }
 
@@ -72,8 +93,11 @@ dependencies {
     // Escáner de códigos QR (Google code scanner, no requiere permiso de cámara propio)
     implementation(libs.play.services.code.scanner)
 
-    // Pruebas
-    testImplementation(libs.junit)
+    // Pruebas unitarias: Kotest (framework y aserciones) + MockK (mocks)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Herramientas de vista previa
     debugImplementation(libs.androidx.ui.tooling)
@@ -81,4 +105,61 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+}
+
+// ---------------------------------------------------------------------------
+// Reporte de cobertura: ./gradlew jacocoTestReport
+// Resultado en app/build/reports/jacoco/jacocoTestReport/html/index.html
+// ---------------------------------------------------------------------------
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+// Se excluye lo que NO se prueba con pruebas unitarias en la JVM:
+// pantallas Compose (se prueban con pruebas instrumentadas), clases generadas
+// y envoltorios del framework Android (GPS, cámara, DataStore, Room, Activity).
+val exclusionesCobertura = listOf(
+    "**/R.class", "**/R\$*.class", "**/BuildConfig.*", "**/Manifest*.*",
+    "**/ui/**",
+    "**/MainActivity*",
+    "**/ComposableSingletons*",
+    "**/TacticalApp*",
+    "**/di/**",
+    "**/navigation/AppNavigation*",
+    "**/navigation/ItemNavegacion*",
+    "**/navigation/ItemsNavegacion*",
+    "**/data/local/AppDatabase*",
+    "**/data/local/dao/**",
+    "**/data/location/**",
+    "**/data/scanner/**",
+    "**/data/preferences/**",
+    "**/data/remote/ApiService*",
+    "**/utils/FotoUtils*",
+    "**/viewmodel/AppViewModelProvider*"
+)
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    group = "verification"
+    description = "Ejecuta las pruebas unitarias y genera el reporte de cobertura."
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+
+    classDirectories.setFrom(
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+            exclude(exclusionesCobertura)
+        }
+    )
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include(
+                "outputs/unit_test_code_coverage/debugUnitTest/*.exec",
+                "jacoco/testDebugUnitTest.exec"
+            )
+        }
+    )
 }
