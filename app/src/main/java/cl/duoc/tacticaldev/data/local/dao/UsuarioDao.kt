@@ -2,6 +2,7 @@ package cl.duoc.tacticaldev.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
 import kotlinx.coroutines.flow.Flow
@@ -17,9 +18,9 @@ interface UsuarioDao {
     @Query("SELECT COUNT(*) FROM usuarios")
     suspend fun contar(): Int
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarTodos(usuarios: List<UsuarioEntity>): List<Long>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(usuario: UsuarioEntity): Long
 }
