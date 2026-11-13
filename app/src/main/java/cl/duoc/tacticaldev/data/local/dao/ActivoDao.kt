@@ -2,6 +2,7 @@ package cl.duoc.tacticaldev.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
 import cl.duoc.tacticaldev.model.ActivoConPunto
@@ -26,9 +27,9 @@ interface ActivoDao {
     @Query("SELECT * FROM activos WHERE codigo = :codigo LIMIT 1")
     suspend fun buscarPorCodigo(codigo: String): ActivoEntity?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(activo: ActivoEntity): Long
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarTodos(activos: List<ActivoEntity>): List<Long>
 }
