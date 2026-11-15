@@ -7,6 +7,8 @@ import cl.duoc.tacticaldev.data.location.UbicacionService
 import cl.duoc.tacticaldev.data.preferences.Sesion
 import cl.duoc.tacticaldev.data.preferences.SesionPreferences
 import cl.duoc.tacticaldev.data.repository.ActivoRepository
+import cl.duoc.tacticaldev.data.repository.ClimaRepository
+import cl.duoc.tacticaldev.model.Clima
 import cl.duoc.tacticaldev.data.repository.VisitaRepository
 import cl.duoc.tacticaldev.model.EstadoEquipo
 import cl.duoc.tacticaldev.model.TipoVisita
@@ -34,6 +36,10 @@ class VisitaViewModelTest : FunSpec({
         coEvery { obtenerActivo(1) } returns activo
     }
     val visitaRepository: VisitaRepository = mockk()
+    val climaDelLocal = Clima(temperatura = 27.4, humedad = 35, descripcion = "Despejado")
+    val climaRepository: ClimaRepository = mockk {
+        coEvery { obtenerClima(any(), any()) } returns climaDelLocal
+    }
     val ubicacionService: UbicacionService = mockk()
     val sesionFlow = MutableStateFlow<Sesion?>(DatosPrueba.sesion(usuarioId = 1))
     val sesionPreferences: SesionPreferences = mockk {
@@ -46,7 +52,8 @@ class VisitaViewModelTest : FunSpec({
         activoRepository = activoRepository,
         visitaRepository = visitaRepository,
         sesionPreferences = sesionPreferences,
-        ubicacionService = ubicacionService
+        ubicacionService = ubicacionService,
+        climaRepository = climaRepository
     )
 
     val viewModel = crearViewModel()
@@ -71,6 +78,35 @@ class VisitaViewModelTest : FunSpec({
         test("carga el activo desde el repositorio") {
             viewModel.uiState.value.cargando shouldBe false
             viewModel.uiState.value.activo shouldBe activo
+        }
+    }
+
+    context("Clima (API externa)") {
+        test("al abrir consulta el clima en la ubicación del local") {
+            viewModel.uiState.value.clima shouldBe climaDelLocal
+            viewModel.uiState.value.cargandoClima shouldBe false
+            coVerify { climaRepository.obtenerClima(-33.5160, -70.7170) }
+        }
+
+        test("si la API falla el clima queda vacío y se puede reintentar") {
+            coEvery { climaRepository.obtenerClima(any(), any()) } returns null
+            val vm = crearViewModel()
+            vm.uiState.value.clima.shouldBeNull()
+
+            coEvery { climaRepository.obtenerClima(any(), any()) } returns climaDelLocal
+            vm.actualizarClima()
+
+            vm.uiState.value.clima shouldBe climaDelLocal
+        }
+
+        test("sin activo no consulta el clima") {
+            coEvery { activoRepository.obtenerActivo(1) } returns null
+            val vm = crearViewModel()
+
+            vm.actualizarClima()
+
+            vm.uiState.value.clima.shouldBeNull()
+            coVerify(exactly = 1) { climaRepository.obtenerClima(any(), any()) } // solo el del viewModel inicial
         }
     }
 

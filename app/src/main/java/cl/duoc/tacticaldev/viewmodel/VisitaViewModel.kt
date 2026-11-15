@@ -7,6 +7,7 @@ import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
 import cl.duoc.tacticaldev.data.location.UbicacionService
 import cl.duoc.tacticaldev.data.preferences.SesionPreferences
 import cl.duoc.tacticaldev.data.repository.ActivoRepository
+import cl.duoc.tacticaldev.data.repository.ClimaRepository
 import cl.duoc.tacticaldev.data.repository.VisitaRepository
 import cl.duoc.tacticaldev.domain.validacion.Validadores
 import cl.duoc.tacticaldev.model.EstadoEquipo
@@ -30,7 +31,8 @@ class VisitaViewModel(
     private val activoRepository: ActivoRepository,
     private val visitaRepository: VisitaRepository,
     private val sesionPreferences: SesionPreferences,
-    private val ubicacionService: UbicacionService
+    private val ubicacionService: UbicacionService,
+    private val climaRepository: ClimaRepository
 ) : ViewModel() {
 
     private val activoId: Long = checkNotNull(savedStateHandle[Screen.ARG_ACTIVO_ID])
@@ -42,7 +44,21 @@ class VisitaViewModel(
         viewModelScope.launch {
             val activo = activoRepository.obtenerActivo(activoId)
             _uiState.update { it.copy(cargando = false, activo = activo) }
+            if (activo != null) cargarClima(activo.latitud, activo.longitud)
         }
+    }
+
+    /** Vuelve a consultar el clima del local (botón "Reintentar"). */
+    fun actualizarClima() {
+        val activo = _uiState.value.activo ?: return
+        viewModelScope.launch { cargarClima(activo.latitud, activo.longitud) }
+    }
+
+    // API externa: clima actual en la ubicación del punto de venta
+    private suspend fun cargarClima(latitud: Double, longitud: Double) {
+        _uiState.update { it.copy(cargandoClima = true) }
+        val clima = climaRepository.obtenerClima(latitud, longitud)
+        _uiState.update { it.copy(cargandoClima = false, clima = clima) }
     }
 
     fun onTipoVisitaChange(tipo: TipoVisita) = _uiState.update {

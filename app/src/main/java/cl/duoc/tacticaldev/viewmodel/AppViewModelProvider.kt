@@ -33,7 +33,8 @@ object AppViewModelProvider {
                 activoRepository = app().container.activoRepository,
                 visitaRepository = app().container.visitaRepository,
                 sesionPreferences = app().container.sesionPreferences,
-                ubicacionService = app().container.ubicacionService
+                ubicacionService = app().container.ubicacionService,
+                climaRepository = app().container.climaRepository
             )
         }
         initializer {

@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Assignment
 import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
@@ -43,6 +44,7 @@ import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WrongLocation
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -95,6 +97,7 @@ import cl.duoc.tacticaldev.utils.FotoUtils
 import cl.duoc.tacticaldev.utils.GeoUtils
 import cl.duoc.tacticaldev.viewmodel.VisitaViewModel
 import kotlinx.coroutines.delay
+import java.util.Locale
 
 /** Formulario de registro de una visita al activo seleccionado. */
 @Composable
@@ -167,6 +170,11 @@ fun VisitaFormScreen(
                 verticalArrangement = Arrangement.spacedBy(Espaciado.m)
             ) {
                 estado.activo?.let { ResumenActivo(it) }
+
+                // API externa (Open-Meteo): clima actual en el punto de venta
+                if (estado.activo != null) {
+                    SeccionClima(estado, onReintentar = viewModel::actualizarClima)
+                }
 
                 LinearProgressIndicator(
                     progress = { progresoAnimado },
@@ -506,6 +514,51 @@ private fun InsigniaVerificacion(verificada: Boolean, distancia: Double) {
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(start = 8.dp)
             )
+        }
+    }
+}
+
+/** Muestra el clima del local consultado a la API externa Open-Meteo. */
+@Composable
+private fun SeccionClima(estado: VisitaFormUiState, onReintentar: () -> Unit) {
+    SeccionConIcono(titulo = "Clima en el punto de venta", icono = Icons.Filled.Cloud, error = null) {
+        val clima = estado.clima
+        when {
+            estado.cargandoClima -> Row(verticalAlignment = Alignment.CenterVertically) {
+                CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                Text(
+                    "Consultando el clima…",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            clima != null -> {
+                Text(
+                    "${String.format(Locale("es", "CL"), "%.1f", clima.temperatura)} °C · ${clima.descripcion}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text("Humedad ${clima.humedad}%", style = MaterialTheme.typography.bodyMedium)
+                if (clima.esDiaCaluroso) {
+                    Text(
+                        "Día caluroso: verifica que el equipo mantenga su temperatura de operación",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                Text(
+                    "Fuente: Open-Meteo (API externa)",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            else -> Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "No se pudo obtener el clima",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.weight(1f)
+                )
+                TextButton(onClick = onReintentar) { Text("Reintentar") }
+            }
         }
     }
 }

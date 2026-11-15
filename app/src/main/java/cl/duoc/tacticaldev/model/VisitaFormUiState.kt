@@ -4,6 +4,8 @@ package cl.duoc.tacticaldev.model
 data class VisitaFormUiState(
     val cargando: Boolean = true,
     val activo: ActivoConPunto? = null,
+    val clima: Clima? = null,            // API externa Open-Meteo
+    val cargandoClima: Boolean = false,
     val tipoVisita: TipoVisita? = null,
     val estadoEquipo: EstadoEquipo? = null,
     val temperatura: String = "",
