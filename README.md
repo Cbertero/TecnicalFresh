@@ -121,8 +121,6 @@ Todos usan la clave **`Clave123`**.
 | **Transportista** | `transportista@demo.cl` | Entregas, retiros y evidencia en terreno |
 | **Supervisor de operaciones** | `supervisor@demo.cl` | Validación de visitas y administración |
 
-> También puedes crear usuarios con la opción **"¿No tienes cuenta? Regístrate aquí"** del login.
-
 ---
 
 ## 📲 Pasos para Ejecutar
