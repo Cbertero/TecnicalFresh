@@ -2,7 +2,6 @@ package cl.duoc.tacticaldev.data.remote
 
 import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
 import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
-import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
 import cl.duoc.tacticaldev.data.model.Tecnico
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -10,6 +9,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import cl.duoc.tacticaldev.data.model.LoginRequest
+import cl.duoc.tacticaldev.data.model.RegistroRequest
+import cl.duoc.tacticaldev.data.model.UsuarioDto
 
 interface ApiService {
 
@@ -24,15 +26,15 @@ interface ApiService {
     suspend fun eliminarTecnico(@Path("id") id: Long)
 
     // usuarios
+    // usuarios
     @POST("api/v1/usuarios/login")
-    suspend fun loginUsuario(@Body usuario: UsuarioEntity): UsuarioEntity
+    suspend fun loginUsuario(@Body request: LoginRequest): UsuarioDto
 
     @POST("api/v1/usuarios/registro")
-    suspend fun registrarUsuario(@Body usuario: UsuarioEntity): UsuarioEntity
+    suspend fun registrarUsuario(@Body request: RegistroRequest): UsuarioDto
 
     @GET("api/v1/usuarios")
-    suspend fun getUsuarios(@Query("rol") rol: String? = null): List<UsuarioEntity>
-
+    suspend fun getUsuarios(@Query("rol") rol: String? = null): List<UsuarioDto>
     // puntos de venta
     @GET("api/v1/puntos-venta")
     suspend fun getPuntosVenta(): List<PuntoVentaEntity>
