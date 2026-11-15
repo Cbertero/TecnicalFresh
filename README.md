@@ -1,6 +1,6 @@
 # Technical Fresh · Trazabilidad y Verificación de Visitas en Terreno
 
-Proyecto semestral de **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc UC · Evaluación Parcial 4).
+Proyecto semestral de **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc UC · Evaluación Parcial 3).
 
 Aplicación móvil Android nativa que resuelve el problema de trazabilidad en la mantención y revisión de equipos de refrigeración (vitrinas freezer y conservadoras) en puntos de venta. Reemplaza el uso informal de WhatsApp, Excel y papel, evitando las *"visitas fantasma"* mediante verificación física con sensores nativos (GPS, cámara y escáner QR), y centraliza la supervisión en un microservicio propio en la nube.
 
