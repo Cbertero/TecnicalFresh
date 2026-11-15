@@ -55,8 +55,12 @@ class SupervisorViewModel(
     fun validar(visita: VisitaDetalle) {
         viewModelScope.launch {
             val supervisorId = sesionPreferences.sesion.first()?.usuarioId ?: return@launch
-            visitaRepository.validar(visita.id, supervisorId)
-            _mensajes.emit("Visita de ${visita.activoCodigo} validada")
+            try {
+                visitaRepository.validar(visita.id, supervisorId)
+                _mensajes.emit("Visita de ${visita.activoCodigo} validada")
+            } catch (e: Exception) {
+                _mensajes.emit("No se pudo validar la visita. Revisa tu conexión")
+            }
         }
     }
 
@@ -82,9 +86,13 @@ class SupervisorViewModel(
         }
         viewModelScope.launch {
             val supervisorId = sesionPreferences.sesion.first()?.usuarioId ?: return@launch
-            visitaRepository.rechazar(visita.id, estado.motivo, supervisorId)
-            _rechazo.value = RechazoUiState()
-            _mensajes.emit("Visita de ${visita.activoCodigo} rechazada")
+            try {
+                visitaRepository.rechazar(visita.id, estado.motivo, supervisorId)
+                _rechazo.value = RechazoUiState()
+                _mensajes.emit("Visita de ${visita.activoCodigo} rechazada")
+            } catch (e: Exception) {
+                _mensajes.emit("No se pudo rechazar la visita. Revisa tu conexión")
+            }
         }
     }
 }

@@ -169,8 +169,15 @@ class VisitaViewModel(
                 distanciaMetros = s.distanciaMetros ?: 0.0,
                 ubicacionVerificada = s.ubicacionVerificada
             )
-            val id = visitaRepository.registrar(visita)
-            _uiState.update { it.copy(guardando = false) }
+            val id = try {
+                visitaRepository.registrar(visita)
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(guardando = false, mensaje = "No se pudo guardar la visita. Revisa tu conexión a internet")
+                }
+                return@launch
+            }
+            _uiState.update { it.copy(guardando = false) }   // ← agregar
             onGuardada(id)
         }
     }

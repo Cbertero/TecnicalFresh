@@ -18,7 +18,7 @@ class AppContainer(context: Context) {
 
     val usuarioRepository by lazy { UsuarioRepository(database.usuarioDao()) }
     val activoRepository by lazy { ActivoRepository(database.activoDao(), database.puntoVentaDao()) }
-    val visitaRepository by lazy { VisitaRepository(database.visitaDao()) }
+    val visitaRepository by lazy { VisitaRepository(context.applicationContext) }
     val tecnicoRepository by lazy { TecnicoRepository(context.applicationContext) }
 
     val sesionPreferences by lazy { SesionPreferences(context.applicationContext) }

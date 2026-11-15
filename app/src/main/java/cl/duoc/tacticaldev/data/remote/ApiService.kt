@@ -12,6 +12,11 @@ import retrofit2.http.Query
 import cl.duoc.tacticaldev.data.model.LoginRequest
 import cl.duoc.tacticaldev.data.model.RegistroRequest
 import cl.duoc.tacticaldev.data.model.UsuarioDto
+import cl.duoc.tacticaldev.data.model.ValidacionRequest
+import cl.duoc.tacticaldev.data.model.VisitaRequest
+import cl.duoc.tacticaldev.model.VisitaDetalle
+import retrofit2.http.PUT
+
 
 interface ApiService {
 
@@ -54,4 +59,24 @@ interface ApiService {
 
     @POST("api/v1/activos")
     suspend fun guardarActivo(@Body activo: ActivoEntity): ActivoEntity
+
+    // visitas
+    @POST("api/v1/visitas")
+    suspend fun registrarVisita(@Body visita: VisitaRequest): VisitaDetalle
+
+    @GET("api/v1/visitas")
+    suspend fun getVisitas(
+        @Query("usuarioId") usuarioId: Long? = null,
+        @Query("activoId") activoId: Long? = null,
+        @Query("estado") estado: String? = null
+    ): List<VisitaDetalle>
+
+    @GET("api/v1/visitas/{id}")
+    suspend fun getVisita(@Path("id") id: Long): VisitaDetalle
+
+    @PUT("api/v1/visitas/{id}/validar")
+    suspend fun validarVisita(@Path("id") id: Long, @Body body: ValidacionRequest): VisitaDetalle
+
+    @PUT("api/v1/visitas/{id}/rechazar")
+    suspend fun rechazarVisita(@Path("id") id: Long, @Body body: ValidacionRequest): VisitaDetalle
 }
