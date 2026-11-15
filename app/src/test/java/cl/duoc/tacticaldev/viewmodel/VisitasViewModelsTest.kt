@@ -127,6 +127,17 @@ class SupervisorViewModelTest : FunSpec({
             }
         }
 
+        test("si falla la conexión al validar avisa al supervisor") {
+            runTest {
+                coEvery { visitaRepository.validar(any(), any()) } throws java.io.IOException()
+                val mensajes = recolectar(vm.mensajes)
+
+                vm.validar(pendiente)
+
+                mensajes shouldContainExactly listOf("No se pudo validar la visita. Revisa tu conexión")
+            }
+        }
+
         test("sin sesión no hace nada") {
             sesionFlow.value = null
 
@@ -178,6 +189,20 @@ class SupervisorViewModelTest : FunSpec({
                 coVerify { visitaRepository.rechazar(1, "La foto no muestra el equipo", 4) }
                 vm.rechazo.value.visita.shouldBeNull()
                 mensajes shouldContainExactly listOf("Visita de TDV-VF-001 rechazada")
+            }
+        }
+
+        test("si falla la conexión al rechazar avisa y mantiene el diálogo abierto") {
+            runTest {
+                coEvery { visitaRepository.rechazar(any(), any(), any()) } throws java.io.IOException()
+                val mensajes = recolectar(vm.mensajes)
+                vm.abrirRechazo(pendiente)
+                vm.onMotivoChange("La foto no muestra el equipo")
+
+                vm.confirmarRechazo()
+
+                vm.rechazo.value.visita shouldBe pendiente // no se pierde lo que escribió
+                mensajes shouldContainExactly listOf("No se pudo rechazar la visita. Revisa tu conexión")
             }
         }
 

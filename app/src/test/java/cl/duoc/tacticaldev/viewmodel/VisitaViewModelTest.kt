@@ -207,6 +207,18 @@ class VisitaViewModelTest : FunSpec({
             coVerify(exactly = 0) { visitaRepository.registrar(any()) }
         }
 
+        test("sin internet avisa que no se pudo guardar y quita la carga") {
+            coEvery { visitaRepository.registrar(any()) } throws java.io.IOException("Sin conexión")
+            llenarFormularioValido()
+            var guardada = false
+
+            viewModel.guardar { guardada = true }
+
+            guardada shouldBe false
+            viewModel.uiState.value.guardando shouldBe false
+            viewModel.uiState.value.mensaje shouldBe "No se pudo guardar la visita. Revisa tu conexión a internet"
+        }
+
         test("onMensajeMostrado limpia el mensaje") {
             viewModel.guardar { } // genera un mensaje
             viewModel.onMensajeMostrado()
