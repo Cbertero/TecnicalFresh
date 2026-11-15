@@ -62,7 +62,7 @@ class TecnicoRepositoryTest : FunSpec({
 
         test("con internet marca los registros como sincronizados y los guarda en caché") {
             coEvery { api.getTecnicos() } returns listOf(
-                Tecnico(id = 1, nombre = "Ana", cargo = "Vendedora", localAsignado = null, sincronizado = false)
+                Tecnico(id = 1, nombre = "Ana", cargo = "Vendedor", localAsignado = null, sincronizado = false)
             )
             val repo = nuevoRepositorio()
 
@@ -78,7 +78,7 @@ class TecnicoRepositoryTest : FunSpec({
 
         test("sin internet devuelve lo que hay guardado en el teléfono") {
             // Primero hay internet y se llena el caché...
-            coEvery { api.getTecnicos() } returns listOf(Tecnico(1, "Ana", "Vendedora", "Local A"))
+            coEvery { api.getTecnicos() } returns listOf(Tecnico(1, "Ana", "Vendedor", "Local A"))
             nuevoRepositorio().geTecnicos()
             // ...luego se corta la conexión
             sinInternet()
@@ -96,11 +96,11 @@ class TecnicoRepositoryTest : FunSpec({
 
     context("Guardar") {
         test("con internet devuelve el registro del servidor") {
-            coEvery { api.guardarTecnico(any()) } returns Tecnico(5, "Ana", "Vendedora", null)
-            coEvery { api.getTecnicos() } returns listOf(Tecnico(5, "Ana", "Vendedora", "Local A"))
+            coEvery { api.guardarTecnico(any()) } returns Tecnico(5, "Ana", "Vendedor", null)
+            coEvery { api.getTecnicos() } returns listOf(Tecnico(5, "Ana", "Vendedor", "Local A"))
             val repo = nuevoRepositorio()
 
-            val guardado = repo.GuardarTecnico("Ana", "Vendedora", "Local A")
+            val guardado = repo.GuardarTecnico("Ana", "Vendedor", "Local A")
 
             guardado.id shouldBe 5L
             guardado.localAsignado shouldBe "Local A"
@@ -112,7 +112,7 @@ class TecnicoRepositoryTest : FunSpec({
             sinInternet()
             val repo = nuevoRepositorio()
 
-            val pendiente = repo.GuardarTecnico("Ana", "Vendedora", "Local A")
+            val pendiente = repo.GuardarTecnico("Ana", "Vendedor", "Local A")
 
             pendiente.id!!.shouldBeNegative()
             pendiente.sincronizado shouldBe false
@@ -124,17 +124,17 @@ class TecnicoRepositoryTest : FunSpec({
         test("al volver internet sube los pendientes y vacía la cola") {
             sinInternet()
             val repo = nuevoRepositorio()
-            repo.GuardarTecnico("Ana", "Vendedora", "Local A")
+            repo.GuardarTecnico("Ana", "Vendedor", "Local A")
 
             // Vuelve internet
-            coEvery { api.guardarTecnico(any()) } returns Tecnico(8, "Ana", "Vendedora", "Local A")
-            coEvery { api.getTecnicos() } returns listOf(Tecnico(8, "Ana", "Vendedora", "Local A"))
+            coEvery { api.guardarTecnico(any()) } returns Tecnico(8, "Ana", "Vendedor", "Local A")
+            coEvery { api.getTecnicos() } returns listOf(Tecnico(8, "Ana", "Vendedor", "Local A"))
 
             val lista = repo.geTecnicos()
 
             // Se envía SIN el id temporal negativo: el id real lo asigna MySQL
             coVerify {
-                api.guardarTecnico(Tecnico(id = null, nombre = "Ana", cargo = "Vendedora", localAsignado = "Local A"))
+                api.guardarTecnico(Tecnico(id = null, nombre = "Ana", cargo = "Vendedor", localAsignado = "Local A"))
             }
             lista.map { it.id } shouldContainExactly listOf(8L)
             lista.all { it.sincronizado } shouldBe true
@@ -143,11 +143,11 @@ class TecnicoRepositoryTest : FunSpec({
         test("si uno falla, ese permanece en la cola") {
             sinInternet()
             val repo = nuevoRepositorio()
-            repo.GuardarTecnico("Ana", "Vendedora", "Local A")
+            repo.GuardarTecnico("Ana", "Vendedor", "Local A")
             repo.GuardarTecnico("Luis", "Técnico", "Local B")
 
             // Internet intermitente: Ana se sube, Luis falla
-            coEvery { api.guardarTecnico(match { it.nombre == "Ana" }) } returns Tecnico(1, "Ana", "Vendedora", "Local A")
+            coEvery { api.guardarTecnico(match { it.nombre == "Ana" }) } returns Tecnico(1, "Ana", "Vendedor", "Local A")
             coEvery { api.guardarTecnico(match { it.nombre == "Luis" }) } throws IOException()
 
             repo.sincronizarPendientes()
@@ -167,7 +167,7 @@ class TecnicoRepositoryTest : FunSpec({
         test("un id negativo solo se quita de la cola local") {
             sinInternet()
             val repo = nuevoRepositorio()
-            val pendiente = repo.GuardarTecnico("Ana", "Vendedora", "Local A")
+            val pendiente = repo.GuardarTecnico("Ana", "Vendedor", "Local A")
 
             repo.eliminarTecnico(pendiente.id!!)
 
@@ -177,7 +177,7 @@ class TecnicoRepositoryTest : FunSpec({
 
         test("un id positivo llama al servidor y se quita del caché") {
             coEvery { api.getTecnicos() } returns listOf(
-                Tecnico(1, "Ana", "Vendedora", "Local A"),
+                Tecnico(1, "Ana", "Vendedor", "Local A"),
                 Tecnico(2, "Luis", "Técnico", "Local B")
             )
             coEvery { api.eliminarTecnico(1) } just Runs
@@ -191,7 +191,7 @@ class TecnicoRepositoryTest : FunSpec({
         }
 
         test("un id positivo sin internet igual se quita del caché") {
-            coEvery { api.getTecnicos() } returns listOf(Tecnico(1, "Ana", "Vendedora", "Local A"))
+            coEvery { api.getTecnicos() } returns listOf(Tecnico(1, "Ana", "Vendedor", "Local A"))
             val repo = nuevoRepositorio()
             repo.geTecnicos()
             sinInternet()

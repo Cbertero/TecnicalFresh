@@ -50,7 +50,7 @@ class RegistroViewModel(private val usuarioRepository: UsuarioRepository) : View
     }
 
     fun onRolChange(rol: Rol) {
-        val nuevoCargo = if (rol == Rol.SUPERVISOR) "Supervisora de operaciones" else "Técnico de mantenimiento"
+        val nuevoCargo = if (rol == Rol.SUPERVISOR) "Supervisor de operaciones" else "Técnico de mantenimiento"
         _uiState.update { it.copy(rol = rol, cargo = nuevoCargo) }
     }
 

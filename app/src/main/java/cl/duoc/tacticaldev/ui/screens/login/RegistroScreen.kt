@@ -41,7 +41,7 @@ fun RegistroScreen(
 
     var mensajeExito by remember { mutableStateOf<String?>(null) }
 
-    val cargosOperario = listOf("Técnico de mantenimiento", "Vendedora", "Transportista")
+    val cargosOperario = listOf("Técnico de mantenimiento", "Vendedor", "Transportista")
 
     // Al crear la cuenta se muestra la confirmación y luego se vuelve al panel
     LaunchedEffect(estado.registroExitoso) {
@@ -124,7 +124,7 @@ fun RegistroScreen(
                     )
                 }
 
-                // Si es Operario, selector de cargo (Técnico, Vendedora, Transportista)
+                // Si es Operario, selector de cargo (Técnico, Vendedor, Transportista)
                 if (estado.rol == Rol.OPERARIO) {
                     Text(
                         text = "Especialidad en terreno:",

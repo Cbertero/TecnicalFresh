@@ -24,9 +24,9 @@ object DatosFicticios {
         val hash = Seguridad.sha256(CLAVE_DEMO)
         return listOf(
             UsuarioEntity(1, "Tomás Rivera", "tecnico@demo.cl", hash, Rol.OPERARIO.name, "Técnico de mantenimiento"),
-            UsuarioEntity(2, "Valentina Soto", "vendedor@demo.cl", hash, Rol.OPERARIO.name, "Vendedora"),
+            UsuarioEntity(2, "Valentina Soto", "vendedor@demo.cl", hash, Rol.OPERARIO.name, "Vendedor"),
             UsuarioEntity(3, "Diego Muñoz", "transportista@demo.cl", hash, Rol.OPERARIO.name, "Transportista"),
-            UsuarioEntity(4, "Carla Fuentes", "supervisor@demo.cl", hash, Rol.SUPERVISOR.name, "Supervisora de operaciones")
+            UsuarioEntity(4, "Carla Fuentes", "supervisor@demo.cl", hash, Rol.SUPERVISOR.name, "Supervisor de operaciones")
         )
     }
 

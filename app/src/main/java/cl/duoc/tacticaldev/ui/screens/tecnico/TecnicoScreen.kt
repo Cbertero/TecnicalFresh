@@ -90,7 +90,7 @@ fun TecnicoScreen(
             }
         }
 
-        // Selector 1: Elegir Trabajador registrado (Técnico, Vendedora, Transportista, etc.)
+        // Selector 1: Elegir Trabajador registrado (Técnico, Vendedor, Transportista, etc.)
         ExposedDropdownMenuBox(
             expanded = menuOperarioAbierto,
             onExpandedChange = { menuOperarioAbierto = !menuOperarioAbierto }

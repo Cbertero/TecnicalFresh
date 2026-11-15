@@ -26,7 +26,7 @@ data class ActivosUiState(
  * Expone la lista de activos como StateFlow, filtrada por:
  * 1) Los locales asignados al operario conectado (desde el microservicio o modo local).
  * 2) Si aún no tiene asignaciones manuales del supervisor, asigna locales distintos según su cargo
- *    para que Técnico, Vendedora y Transportista no vean los mismos locales.
+ *    para que Técnico, Vendedor y Transportista no vean los mismos locales.
  * 3) El texto de búsqueda ingresado por el usuario.
  */
 class ActivosViewModel(

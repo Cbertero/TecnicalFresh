@@ -220,7 +220,7 @@ fun AppNavigation(
         composable(Screen.DashboardSupervisor.route) {
             DashboardSupervisorScreen(
                 nombreUsuario = sesion?.nombre.orEmpty(),
-                cargoUsuario = sesion?.cargo?.ifBlank { "Supervisora de operaciones" }.orEmpty(),
+                cargoUsuario = sesion?.cargo?.ifBlank { "Supervisor de operaciones" }.orEmpty(),
                 onIrAVisitas = { navigationViewModel.navegarA(Screen.Supervisor.route) },
                 onIrAAdministracion = { navigationViewModel.navegarA(Screen.Administracion.route) },
                 onIrAEquipo = { navigationViewModel.navegarA(Screen.Equipo.route) },

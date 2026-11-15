@@ -64,7 +64,7 @@ class ActivosViewModelTest : FunSpec({
                 sesionFlow.value = DatosPrueba.sesion(nombre = "Tomás Rivera", cargo = "Técnico de mantenimiento")
                 asignaciones.value = listOf(
                     Tecnico(1, "tomás rivera ", "Técnico", "Botillería La Esquina"), // ignora mayúsculas/espacios
-                    Tecnico(2, "Otra Persona", "Vendedora", "Minimarket Las Rosas")
+                    Tecnico(2, "Otra Persona", "Vendedor", "Minimarket Las Rosas")
                 )
                 val vm = crearViewModel()
                 suscribir(vm.uiState)
@@ -74,9 +74,9 @@ class ActivosViewModelTest : FunSpec({
             }
         }
 
-        test("sin asignación la vendedora ve Minimarket Las Rosas") {
+        test("sin asignación el vendedor ve Minimarket Las Rosas") {
             runTest {
-                sesionFlow.value = DatosPrueba.sesion(nombre = "Valentina", cargo = "Vendedora")
+                sesionFlow.value = DatosPrueba.sesion(nombre = "Valentina", cargo = "Vendedor")
                 val vm = crearViewModel()
                 suscribir(vm.uiState)
 
@@ -106,7 +106,7 @@ class ActivosViewModelTest : FunSpec({
 
         test("otro cargo ve todos los activos") {
             runTest {
-                sesionFlow.value = DatosPrueba.sesion(nombre = "Carla", cargo = "Supervisora de operaciones")
+                sesionFlow.value = DatosPrueba.sesion(nombre = "Carla", cargo = "Supervisor de operaciones")
                 val vm = crearViewModel()
                 suscribir(vm.uiState)
 

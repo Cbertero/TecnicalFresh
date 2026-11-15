@@ -76,12 +76,12 @@ class UsuarioRepositoryTest : FunSpec({
         val guardado = slot<UsuarioEntity>() // "slot" captura el objeto que se le pasó al DAO
         coEvery { dao.insertar(capture(guardado)) } returns 7L
 
-        val resultado = repository.registrar(" Ana Pérez ", " ANA@Demo.cl", "secreta1", "OPERARIO", " Vendedora ")
+        val resultado = repository.registrar(" Ana Pérez ", " ANA@Demo.cl", "secreta1", "OPERARIO", " Vendedor ")
 
         resultado.getOrNull() shouldBe 7L
         guardado.captured.nombre shouldBe "Ana Pérez"
         guardado.captured.correo shouldBe "ana@demo.cl"
-        guardado.captured.cargo shouldBe "Vendedora"
+        guardado.captured.cargo shouldBe "Vendedor"
         guardado.captured.claveHash shouldBe Seguridad.sha256("secreta1") // nunca texto plano
     }
 

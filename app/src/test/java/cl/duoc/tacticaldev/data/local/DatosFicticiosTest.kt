@@ -57,7 +57,7 @@ class DatosFicticiosTest : FunSpec({
 class TecnicoModelTest : FunSpec({
 
     test("un Tecnico nuevo tiene valores por defecto correctos") {
-        val tecnico = Tecnico(nombre = "Ana", cargo = "Vendedora")
+        val tecnico = Tecnico(nombre = "Ana", cargo = "Vendedor")
         tecnico.id.shouldBeNull()
         tecnico.localAsignado shouldBe ""
         tecnico.sincronizado shouldBe true

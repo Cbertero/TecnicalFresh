@@ -56,7 +56,7 @@ class TecnicoViewModelTest : FunSpec({
     context("Al abrir la pantalla") {
         test("si todo está sincronizado muestra conectado") {
             coEvery { repository.geTecnicos() } returns
-                listOf(Tecnico(1, "Ana", "Vendedora", "Local A", sincronizado = true))
+                listOf(Tecnico(1, "Ana", "Vendedor", "Local A", sincronizado = true))
 
             val vm = crearViewModel()
 
@@ -66,7 +66,7 @@ class TecnicoViewModelTest : FunSpec({
 
         test("con pendientes muestra el modo local") {
             coEvery { repository.geTecnicos() } returns listOf(
-                Tecnico(1, "Ana", "Vendedora", "Local A", sincronizado = true),
+                Tecnico(1, "Ana", "Vendedor", "Local A", sincronizado = true),
                 Tecnico(-5, "Luis", "Técnico", "Local B", sincronizado = false)
             )
 
@@ -89,30 +89,30 @@ class TecnicoViewModelTest : FunSpec({
         test("con campos vacíos no hace nada") {
             val vm = crearViewModel()
 
-            vm.agregarTecnico("", "Vendedora", "Local A")
+            vm.agregarTecnico("", "Vendedor", "Local A")
             vm.agregarTecnico("Ana", " ", "Local A")
-            vm.agregarTecnico("Ana", "Vendedora", "")
+            vm.agregarTecnico("Ana", "Vendedor", "")
 
             coVerify(exactly = 0) { repository.GuardarTecnico(any(), any(), any()) }
         }
 
         test("con internet avisa que se guardó en el servidor") {
             coEvery { repository.GuardarTecnico(any(), any(), any()) } returns
-                Tecnico(1, "Ana", "Vendedora", "Local A", sincronizado = true)
+                Tecnico(1, "Ana", "Vendedor", "Local A", sincronizado = true)
             val vm = crearViewModel()
 
-            vm.agregarTecnico("  Ana ", " Vendedora ", " Local A ")
+            vm.agregarTecnico("  Ana ", " Vendedor ", " Local A ")
 
-            coVerify { repository.GuardarTecnico("Ana", "Vendedora", "Local A") } // llega sin espacios
+            coVerify { repository.GuardarTecnico("Ana", "Vendedor", "Local A") } // llega sin espacios
             vm.mensajeEstado.value shouldBe "Asignación guardada en servidor MySQL"
         }
 
         test("sin internet avisa que se guardó en modo local") {
             coEvery { repository.GuardarTecnico(any(), any(), any()) } returns
-                Tecnico(-1, "Ana", "Vendedora", "Local A", sincronizado = false)
+                Tecnico(-1, "Ana", "Vendedor", "Local A", sincronizado = false)
             val vm = crearViewModel()
 
-            vm.agregarTecnico("Ana", "Vendedora", "Local A")
+            vm.agregarTecnico("Ana", "Vendedor", "Local A")
 
             vm.mensajeEstado.value shouldBe "Sin internet: guardado en modo local (se subirá al reconectar)"
         }
@@ -121,7 +121,7 @@ class TecnicoViewModelTest : FunSpec({
             coEvery { repository.GuardarTecnico(any(), any(), any()) } throws IllegalStateException()
             val vm = crearViewModel()
 
-            vm.agregarTecnico("Ana", "Vendedora", "Local A")
+            vm.agregarTecnico("Ana", "Vendedor", "Local A")
 
             vm.mensajeEstado.value shouldBe "Guardado en modo local"
             vm.sincronizando.value shouldBe false

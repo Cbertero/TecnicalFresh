@@ -18,7 +18,7 @@ Aplicación móvil Android nativa desarrollada para resolver el problema de traz
 ## 🚀 Funcionalidades Implementadas
 
 ### 1. Autenticación y Registro Autónomo
-- **Registro de usuarios:** Formulario reactivo para enrolar nuevos operarios y supervisores con selección de especialidad (Técnico, Vendedora, Transportista).
+- **Registro de usuarios:** Formulario reactivo para enrolar nuevos operarios y supervisores con selección de especialidad (Técnico, Vendedor, Transportista).
 - **Seguridad:** Cifrado seguro de credenciales con hashing SHA-256 almacenado localmente en SQLite/Room.
 - **Persistencia de sesión:** Almacenamiento seguro del estado con Jetpack DataStore Preferences (si se cierra la app, se mantiene la sesión activa).
 
@@ -104,9 +104,9 @@ Todos los usuarios preconfigurados en la base de datos utilizan la clave: **`Cla
 | Perfil / Cargo | Correo Electrónico | Función Principal |
 | :--- | :--- | :--- |
 | **Técnico de mantenimiento** | `tecnico@demo.cl` | Registro de mantenciones, lectura QR y temperatura |
-| **Vendedora** | `vendedor@demo.cl` | Visitas comerciales y estado de equipos |
+| **Vendedor** | `vendedor@demo.cl` | Visitas comerciales y estado de equipos |
 | **Transportista** | `transportista@demo.cl` | Entregas, retiros y evidencia en terreno |
-| **Supervisora de operaciones** | `supervisor@demo.cl` | Validación/rechazo de visitas y administración |
+| **Supervisor de operaciones** | `supervisor@demo.cl` | Validación/rechazo de visitas y administración |
 
 > *También puedes registrar nuevos usuarios usando la opción **"¿No tienes cuenta? Regístrate aquí"** en el Login.*
 

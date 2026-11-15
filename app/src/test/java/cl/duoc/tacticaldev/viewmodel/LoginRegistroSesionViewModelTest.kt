@@ -119,7 +119,7 @@ class RegistroViewModelTest : FunSpec({
 
     test("los cambios de campos actualizan el estado") {
         llenarFormularioValido()
-        viewModel.onCargoChange("Vendedora")
+        viewModel.onCargoChange("Vendedor")
         viewModel.toggleClaveVisible()
 
         val s = viewModel.uiState.value
@@ -127,13 +127,13 @@ class RegistroViewModelTest : FunSpec({
         s.correo shouldBe "ana@demo.cl"
         s.clave shouldBe "secreta1"
         s.confirmarClave shouldBe "secreta1"
-        s.cargo shouldBe "Vendedora"
+        s.cargo shouldBe "Vendedor"
         s.claveVisible shouldBe true
     }
 
     test("onRolChange ajusta el cargo por defecto") {
         viewModel.onRolChange(Rol.SUPERVISOR)
-        viewModel.uiState.value.cargo shouldBe "Supervisora de operaciones"
+        viewModel.uiState.value.cargo shouldBe "Supervisor de operaciones"
 
         viewModel.onRolChange(Rol.OPERARIO)
         viewModel.uiState.value.cargo shouldBe "Técnico de mantenimiento"
