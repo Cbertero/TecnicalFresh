@@ -25,3 +25,8 @@ app/release/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Excepción solicitada por la pauta de evaluación: firma y APK incluidos en el repositorio
+!keystore/tecnicalfresh.jks
+!keystore.properties
+!apk/*.apk
