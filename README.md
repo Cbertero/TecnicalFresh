@@ -195,7 +195,7 @@ Escritas con **Kotest** (estilo `FunSpec`) y **MockK**; se ejecutan en la JVM, s
 ```
 El reporte queda en `app/build/reports/jacoco/jacocoTestReport/html/index.html`.
 
-**Resultados actuales:** 202 pruebas, 0 fallos y **99,5% de cobertura de líneas**.
+**Resultados actuales:** 213 pruebas, 0 fallos y **99,2% de cobertura de líneas** (86,7% de ramas).
 
 > La cobertura se mide sobre la lógica de la app (ViewModels, repositorios, validaciones, modelos y utilidades). Se excluyen las pantallas Compose y los envoltorios del framework Android (GPS, cámara, DataStore, DAO de Room), que requieren pruebas instrumentadas en un emulador.
 
