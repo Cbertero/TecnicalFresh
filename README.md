@@ -1,6 +1,6 @@
 # Technical Fresh · Trazabilidad y Verificación de Visitas en Terreno
 
-Proyecto semestral de **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc UC · Evaluación Parcial 4).
+Proyecto semestral de **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc UC · Evaluación Parcial 3).
 
 Aplicación móvil Android nativa que resuelve el problema de trazabilidad en la mantención y revisión de equipos de refrigeración (vitrinas freezer y conservadoras) en puntos de venta. Reemplaza el uso informal de WhatsApp, Excel y papel, evitando las *"visitas fantasma"* mediante verificación física con sensores nativos (GPS, cámara y escáner QR), y centraliza la supervisión en un microservicio propio en la nube.
 
@@ -18,7 +18,8 @@ Aplicación móvil Android nativa que resuelve el problema de trazabilidad en la
 ## 🚀 Funcionalidades
 
 ### 1. Autenticación y registro
-- **Login y registro contra el microservicio:** las cuentas se guardan en MySQL, por lo que un usuario puede ingresar desde cualquier teléfono.
+- **Login y registro solo contra el microservicio:** las cuentas se guardan en MySQL, por lo que un usuario puede ingresar desde cualquier teléfono. Sin internet no se puede iniciar sesión y el teléfono no guarda ninguna clave.
+- **Indicador del servidor** en el login: muestra si el microservicio está en línea y permite reintentar si no hay conexión.
 - **Seguridad de claves:** la app envía la clave por HTTPS y el servidor la almacena con **BCrypt**; el hash nunca se devuelve en las respuestas de la API.
 - **Sesión persistente** con Jetpack DataStore Preferences.
 
@@ -37,6 +38,7 @@ Aplicación móvil Android nativa que resuelve el problema de trazabilidad en la
 - Las visitas se guardan en **MySQL**: lo que registra el técnico lo ve el supervisor desde su propio teléfono.
 - Bandeja de revisión por estado (pendientes, validadas, rechazadas), con **validación o rechazo con motivo obligatorio**.
 - Historial por operario y por vitrina.
+- **Visitas sin conexión:** si no hay internet al guardar, la visita queda en una cola local (Room) y **WorkManager** la envía a MySQL apenas vuelve la conexión, aunque la app esté cerrada. Al confirmarse el envío, se borra del teléfono. En "Mis visitas" se avisa cuántas siguen pendientes.
 
 ### 5. Administración
 - Alta de puntos de venta (con la ubicación GPS actual) y de activos frigoríficos.
@@ -49,7 +51,7 @@ Aplicación móvil Android nativa que resuelve el problema de trazabilidad en la
 
 ## 🛠️ Tecnologías
 
-- **App:** Kotlin, Jetpack Compose + Material 3, MVVM con StateFlow, Retrofit 2 + Gson + Coroutines, DataStore, Room (caché local), Play Services Location, ML Kit Barcode, Coil.
+- **App:** Kotlin, Jetpack Compose + Material 3, MVVM con StateFlow, Retrofit 2 + Gson + Coroutines, DataStore, Room (caché local y cola de envío), WorkManager, Play Services Location, ML Kit Barcode, Coil.
 - **Microservicio:** Spring Boot, Spring Data JPA, MySQL, BCrypt (`spring-security-crypto`), desplegado en **Railway**.
 - **API externa:** [Open-Meteo](https://open-meteo.com) (clima, sin clave de acceso).
 - **Pruebas:** Kotest + MockK + kotlinx-coroutines-test, cobertura con JaCoCo.
@@ -106,7 +108,7 @@ La app usa **dos clientes Retrofit independientes** (`RetrofitInstance` y `OpenM
 | :--- | :--- |
 | Usuarios, visitas, puntos de venta, activos y asignaciones | **MySQL en Railway** (microservicio) |
 | Sesión del usuario | DataStore en el teléfono |
-| Copia local para funcionar sin internet | Room (usuarios, locales, activos) y cola de asignaciones pendientes |
+| Copia local para funcionar sin internet | Room: locales y activos, más las colas de **visitas** y asignaciones pendientes de envío |
 
 ---
 
@@ -120,8 +122,6 @@ Todos usan la clave **`Clave123`**.
 | **Vendedor** | `vendedor@demo.cl` | Visitas comerciales y estado de equipos |
 | **Transportista** | `transportista@demo.cl` | Entregas, retiros y evidencia en terreno |
 | **Supervisor de operaciones** | `supervisor@demo.cl` | Validación de visitas y administración |
-
-> También puedes crear usuarios con la opción **"¿No tienes cuenta? Regístrate aquí"** del login.
 
 ---
 
@@ -185,6 +185,7 @@ Escritas con **Kotest** (estilo `FunSpec`) y **MockK**; se ejecutan en la JVM, s
 | :--- | :--- | :--- |
 | Validadores, modelos, utilidades y navegación | Reglas de negocio y funciones puras | Entrada → salida esperada |
 | Repositorios del microservicio (usuarios, activos, visitas, técnicos) | Respuestas correctas, errores HTTP (401, 409, 500) y falta de conexión | `mockkObject(RetrofitInstance)` |
+| Cola de visitas sin conexión | Guardado en Room sin internet, envío a MySQL y borrado, reintento si se corta la conexión | Mock de `VisitaPendienteDao` |
 | Repositorio de la API externa (clima) | Conversión de la respuesta, datos incompletos y fallos | Mock de `OpenMeteoApi` |
 | ViewModels | Validaciones, mensajes, guardado, errores de red y navegación | Mocks + `Dispatchers.Main` de prueba |
 
