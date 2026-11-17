@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -43,6 +44,7 @@ import cl.duoc.tacticaldev.model.tipo
 import cl.duoc.tacticaldev.ui.components.AlertaFlotanteAnimada
 import cl.duoc.tacticaldev.ui.components.FotoEvidencia
 import cl.duoc.tacticaldev.ui.components.TacticalScaffold
+import cl.duoc.tacticaldev.ui.theme.AmbarAlerta
 import cl.duoc.tacticaldev.ui.theme.VerdeExito
 import cl.duoc.tacticaldev.utils.Formatos
 import cl.duoc.tacticaldev.viewmodel.ConfirmacionViewModel
@@ -56,21 +58,29 @@ fun ConfirmacionScreen(
     onVerHistorial: (Long) -> Unit
 ) {
     val visita by viewModel.visita.collectAsState()
-    var mensajeAnimado by remember { mutableStateOf<String?>("¡Visita registrada exitosamente!") }
+    val enCola = viewModel.enCola
+    var mensajeAnimado by remember {
+        mutableStateOf<String?>(if (enCola) "Visita guardada en el teléfono" else "¡Visita registrada exitosamente!")
+    }
 
     LaunchedEffect(Unit) {
         delay(3500)
         mensajeAnimado = null
     }
 
-    TacticalScaffold(titulo = "Visita registrada") { padding ->
+    TacticalScaffold(titulo = if (enCola) "Visita sin enviar" else "Visita registrada") { padding ->
         Box(
             Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
             val detalle = visita
-            if (detalle == null) {
+            if (enCola) {
+                ContenidoEnCola(
+                    onVolverInicio = onVolverInicio,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            } else if (detalle == null) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             } else {
                 ContenidoConfirmacion(
@@ -158,6 +168,38 @@ private fun ContenidoConfirmacion(
         }
         OutlinedButton(onClick = { onVerHistorial(visita.activoId) }, modifier = Modifier.fillMaxWidth()) {
             Text("Ver historial del activo")
+        }
+    }
+}
+
+/** Se muestra cuando no había internet: la visita quedó en Room y se enviará sola. */
+@Composable
+private fun ContenidoEnCola(
+    onVolverInicio: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .widthIn(max = 480.dp)
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            Icons.Filled.CloudOff,
+            contentDescription = null,
+            tint = AmbarAlerta,
+            modifier = Modifier.size(88.dp)
+        )
+        Text("Visita guardada sin conexión", style = MaterialTheme.typography.headlineSmall)
+        Text(
+            "No había internet, así que la visita quedó guardada en el teléfono. " +
+                "Se enviará automáticamente al servidor cuando vuelva la conexión.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Button(onClick = onVolverInicio, modifier = Modifier.fillMaxWidth()) {
+            Text("Volver al inicio")
         }
     }
 }

@@ -19,7 +19,7 @@ class AppContainer(context: Context) {
 
     val usuarioRepository by lazy { UsuarioRepository(database.usuarioDao()) }
     val activoRepository by lazy { ActivoRepository(database.activoDao(), database.puntoVentaDao()) }
-    val visitaRepository by lazy { VisitaRepository(context.applicationContext) }
+    val visitaRepository by lazy { VisitaRepository(context.applicationContext, database.visitaPendienteDao()) }
     val climaRepository by lazy { ClimaRepository() } // API externa Open-Meteo
     val tecnicoRepository by lazy { TecnicoRepository(context.applicationContext) }
 

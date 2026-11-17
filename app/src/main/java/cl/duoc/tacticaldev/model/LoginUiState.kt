@@ -8,7 +8,8 @@ data class LoginUiState(
     val cargando: Boolean = false,
     val errorGeneral: String? = null,
     val intentosFallidos: Int = 0,
-    val errores: LoginErrores = LoginErrores()
+    val errores: LoginErrores = LoginErrores(),
+    val servidorEnLinea: Boolean? = null   // null = comprobando
 )
 
 /** Error de validación de cada campo (null = sin error). */

@@ -2,6 +2,7 @@ package cl.duoc.tacticaldev.viewmodel
 
 import cl.duoc.tacticaldev.data.preferences.Sesion
 import cl.duoc.tacticaldev.data.preferences.SesionPreferences
+import cl.duoc.tacticaldev.data.repository.ServidorNoDisponibleException
 import cl.duoc.tacticaldev.data.repository.UsuarioRepository
 import cl.duoc.tacticaldev.model.Rol
 import cl.duoc.tacticaldev.navigation.NavigationEvent
@@ -31,7 +32,9 @@ import kotlinx.coroutines.test.runTest
  */
 class LoginViewModelTest : FunSpec({
 
-    val usuarioRepository: UsuarioRepository = mockk()
+    val usuarioRepository: UsuarioRepository = mockk {
+        coEvery { servidorDisponible() } returns true
+    }
     val sesionPreferences: SesionPreferences = mockk {
         coEvery { guardar(any()) } just Runs
     }
@@ -52,6 +55,16 @@ class LoginViewModelTest : FunSpec({
 
         viewModel.onClaveChange("123456")
         viewModel.uiState.value.errores.clave.shouldBeNull()
+    }
+
+    test("al iniciar, el indicador muestra el servidor en línea") {
+        viewModel.uiState.value.servidorEnLinea shouldBe true
+    }
+
+    test("si el servidor no responde, el indicador queda sin conexión") {
+        coEvery { usuarioRepository.servidorDisponible() } returns false
+        viewModel.comprobarServidor()
+        viewModel.uiState.value.servidorEnLinea shouldBe false
     }
 
     test("alternarVisibilidadClave cambia entre visible y oculta") {
@@ -88,6 +101,22 @@ class LoginViewModelTest : FunSpec({
         estado.errorGeneral shouldBe "Correo o clave incorrectos"
         estado.cargando shouldBe false
         estado.intentosFallidos shouldBe 1
+    }
+
+    test("iniciarSesion sin internet no deja entrar y avisa que falta conexión") {
+        coEvery { usuarioRepository.autenticar(any(), any()) } throws ServidorNoDisponibleException()
+        viewModel.onCorreoChange("tecnico@demo.cl")
+        viewModel.onClaveChange("Clave123")
+
+        var exito = false
+        viewModel.iniciarSesion { exito = true }
+
+        exito shouldBe false
+        val estado = viewModel.uiState.value
+        estado.errorGeneral shouldBe "Sin conexión con el servidor. Necesitas internet para continuar"
+        estado.servidorEnLinea shouldBe false
+        estado.cargando shouldBe false
+        coVerify(exactly = 0) { sesionPreferences.guardar(any()) }
     }
 
     test("iniciarSesion correcto guarda la sesión y navega según el rol") {

@@ -6,14 +6,26 @@ import cl.duoc.tacticaldev.data.model.LoginRequest
 import cl.duoc.tacticaldev.data.model.RegistroRequest
 import cl.duoc.tacticaldev.data.model.aEntidad
 import cl.duoc.tacticaldev.data.remote.RetrofitInstance
-import cl.duoc.tacticaldev.utils.Seguridad
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
+import kotlin.coroutines.cancellation.CancellationException
+
+/** No se pudo contactar al microservicio: no hay internet o el servidor no responde. */
+class ServidorNoDisponibleException :
+    Exception("Sin conexión con el servidor. Necesitas internet para continuar")
 
 class UsuarioRepository(private val usuarioDao: UsuarioDao? = null) {
+
+    /** true si el microservicio responde; false si no hay conexión o falla. */
+    suspend fun servidorDisponible(): Boolean = try {
+        RetrofitInstance.api.getPuntosVenta()
+        true
+    } catch (e: Exception) {
+        false
+    }
 
     private val _operariosFlow = MutableStateFlow<List<UsuarioEntity>>(emptyList())
 
@@ -37,24 +49,18 @@ class UsuarioRepository(private val usuarioDao: UsuarioDao? = null) {
         }
     }
 
-    // Envía la clave por HTTPS; el servidor la compara con BCrypt
+    // El login SIEMPRE se valida en el microservicio (BCrypt en MySQL).
+    // En el teléfono no se guarda ninguna clave: sin servidor no se puede entrar.
     suspend fun autenticar(correo: String, clave: String): UsuarioEntity? {
         val correoLimpio = correo.trim().lowercase()
-        val claveHash = Seguridad.sha256(clave) // solo para el respaldo sin internet
         return try {
-            val usuario = RetrofitInstance.api
-                .loginUsuario(LoginRequest(correoLimpio, clave))
-                .aEntidad(claveHashLocal = claveHash)
-            runCatching { usuarioDao?.insertar(usuario) }
-            usuario
+            RetrofitInstance.api.loginUsuario(LoginRequest(correoLimpio, clave)).aEntidad()
         } catch (e: HttpException) {
-            if (e.code() == 401) {
-                null
-            } else {
-                loginLocal(correoLimpio, claveHash)
-            }
+            if (e.code() == 401) null else throw ServidorNoDisponibleException()
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            loginLocal(correoLimpio, claveHash)
+            throw ServidorNoDisponibleException()
         }
     }
 
@@ -67,38 +73,22 @@ class UsuarioRepository(private val usuarioDao: UsuarioDao? = null) {
         cargo: String
     ): Result<Long> {
         val correoLimpio = correo.trim().lowercase()
-        val claveHash = Seguridad.sha256(clave)
         return try {
             val creado = RetrofitInstance.api
                 .registrarUsuario(RegistroRequest(nombre.trim(), correoLimpio, clave, rol, cargo.trim()))
-                .aEntidad(claveHashLocal = claveHash)
-            runCatching { usuarioDao?.insertar(creado) }
+                .aEntidad()
             refrescarOperarios()
             Result.success(creado.id)
         } catch (e: HttpException) {
             if (e.code() == 409) {
                 Result.failure(Exception("Ya existe una cuenta con este correo"))
             } else {
-                registrarEnLocal(UsuarioEntity(0, nombre.trim(), correoLimpio, claveHash, rol, cargo.trim()))
+                Result.failure(ServidorNoDisponibleException())
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            registrarEnLocal(UsuarioEntity(0, nombre.trim(), correoLimpio, claveHash, rol, cargo.trim()))
+            Result.failure(ServidorNoDisponibleException())
         }
-    }
-
-    private suspend fun loginLocal(correo: String, claveHash: String): UsuarioEntity? {
-        val local = usuarioDao?.buscarPorCorreo(correo)
-        return local?.takeIf { it.claveHash.isNotEmpty() && it.claveHash == claveHash }
-    }
-
-    private suspend fun registrarEnLocal(nuevo: UsuarioEntity): Result<Long> {
-        val dao = usuarioDao ?: return Result.failure(Exception("Error de conexion con el servidor"))
-        val existente = dao.buscarPorCorreo(nuevo.correo)
-        if (existente != null) {
-            return Result.failure(Exception("Ya existe una cuenta con este correo"))
-        }
-        val id = dao.insertar(nuevo)
-        refrescarOperarios()
-        return Result.success(id)
     }
 }

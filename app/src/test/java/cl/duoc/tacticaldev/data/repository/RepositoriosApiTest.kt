@@ -4,10 +4,12 @@ import android.content.Context
 import cl.duoc.tacticaldev.data.local.dao.ActivoDao
 import cl.duoc.tacticaldev.data.local.dao.PuntoVentaDao
 import cl.duoc.tacticaldev.data.local.dao.UsuarioDao
+import cl.duoc.tacticaldev.data.local.dao.VisitaPendienteDao
 import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
 import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
 import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
 import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
+import cl.duoc.tacticaldev.data.local.entity.VisitaPendienteEntity
 import cl.duoc.tacticaldev.data.model.LoginRequest
 import cl.duoc.tacticaldev.data.model.RegistroRequest
 import cl.duoc.tacticaldev.data.model.UsuarioDto
@@ -19,7 +21,7 @@ import cl.duoc.tacticaldev.model.EstadoValidacion
 import cl.duoc.tacticaldev.testutil.DatosPrueba
 import cl.duoc.tacticaldev.testutil.recolectar
 import cl.duoc.tacticaldev.utils.FotoUtils
-import cl.duoc.tacticaldev.utils.Seguridad
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -27,6 +29,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -62,7 +65,6 @@ class UsuarioRepositoryTest : FunSpec({
     val api: ApiService = mockk()
     val dao: UsuarioDao = mockk(relaxed = true) // relaxed: responde valores por defecto sin programarlo
     val repository = UsuarioRepository(dao)
-    val hashClave = Seguridad.sha256("Clave123")
     val tomas = UsuarioDto(1, "Tomás Rivera", "tecnico@demo.cl", "OPERARIO", "Técnico de mantenimiento")
 
     beforeTest {
@@ -71,11 +73,9 @@ class UsuarioRepositoryTest : FunSpec({
     }
     afterTest { unmockkAll() }
 
-    context("Login") {
-        test("con internet envía la clave al servidor y guarda el hash solo en el teléfono") {
+    context("Login (solo en el microservicio)") {
+        test("con internet envía la clave al servidor y no guarda nada en el teléfono") {
             coEvery { api.loginUsuario(any()) } returns tomas
-            val guardado = slot<UsuarioEntity>()
-            coEvery { dao.insertar(capture(guardado)) } returns 1L
 
             val usuario = repository.autenticar("  TECNICO@Demo.cl ", "Clave123")
 
@@ -83,60 +83,46 @@ class UsuarioRepositoryTest : FunSpec({
             coVerify { api.loginUsuario(LoginRequest("tecnico@demo.cl", "Clave123")) }
             usuario.shouldNotBeNull()
             usuario.nombre shouldBe "Tomás Rivera"
-            // En Room queda el SHA-256 para poder entrar sin internet
-            guardado.captured.claveHash shouldBe hashClave
+            usuario.claveHash shouldBe "" // en el teléfono no queda ninguna clave
+            coVerify(exactly = 0) { dao.insertar(any()) }
         }
 
-        test("si el servidor responde 401 la clave es incorrecta y no usa el respaldo local") {
+        test("si el servidor responde 401 la clave es incorrecta") {
             coEvery { api.loginUsuario(any()) } throws httpError(401)
 
             repository.autenticar("tecnico@demo.cl", "otraClave").shouldBeNull()
+        }
+
+        test("sin internet no deja entrar ni consulta Room") {
+            coEvery { api.loginUsuario(any()) } throws IOException()
+
+            shouldThrow<ServidorNoDisponibleException> {
+                repository.autenticar("tecnico@demo.cl", "Clave123")
+            }
             coVerify(exactly = 0) { dao.buscarPorCorreo(any()) }
         }
 
-        test("si el servidor falla con otro error usa el login local") {
+        test("si el servidor falla (500) tampoco deja entrar") {
             coEvery { api.loginUsuario(any()) } throws httpError(500)
-            coEvery { dao.buscarPorCorreo("tecnico@demo.cl") } returns DatosPrueba.usuario(claveHash = hashClave)
 
-            repository.autenticar("tecnico@demo.cl", "Clave123").shouldNotBeNull()
-        }
-
-        test("sin internet entra con el hash guardado en el teléfono") {
-            coEvery { api.loginUsuario(any()) } throws IOException()
-            coEvery { dao.buscarPorCorreo("tecnico@demo.cl") } returns DatosPrueba.usuario(claveHash = hashClave)
-
-            repository.autenticar("tecnico@demo.cl", "Clave123").shouldNotBeNull()
-            repository.autenticar("tecnico@demo.cl", "incorrecta").shouldBeNull()
-        }
-
-        test("sin internet no permite entrar si el usuario no tiene hash local") {
-            coEvery { api.loginUsuario(any()) } throws IOException()
-            coEvery { dao.buscarPorCorreo(any()) } returns DatosPrueba.usuario(claveHash = "")
-
-            repository.autenticar("tecnico@demo.cl", "").shouldBeNull()
-        }
-
-        test("sin internet ni base local devuelve null") {
-            coEvery { api.loginUsuario(any()) } throws IOException()
-
-            UsuarioRepository(null).autenticar("tecnico@demo.cl", "Clave123").shouldBeNull()
+            shouldThrow<ServidorNoDisponibleException> {
+                repository.autenticar("tecnico@demo.cl", "Clave123")
+            }
         }
     }
 
-    context("Registro") {
+    context("Registro (solo en el microservicio)") {
         test("con internet registra en MySQL y devuelve el id del servidor") {
             val nueva = UsuarioDto(9, "Ana Pérez", "ana@demo.cl", "OPERARIO", "Vendedor")
             coEvery { api.registrarUsuario(any()) } returns nueva
             coEvery { api.getUsuarios(any()) } returns listOf(nueva)
-            val guardado = slot<UsuarioEntity>()
-            coEvery { dao.insertar(capture(guardado)) } returns 9L
 
             val resultado = repository.registrar(" Ana Pérez ", " ANA@Demo.cl", "secreta1", "OPERARIO", " Vendedor ")
 
             resultado.getOrNull() shouldBe 9L
             coVerify { api.registrarUsuario(RegistroRequest("Ana Pérez", "ana@demo.cl", "secreta1", "OPERARIO", "Vendedor")) }
-            guardado.captured.claveHash shouldBe Seguridad.sha256("secreta1")
             coVerify { api.getUsuarios("OPERARIO") } // refresca la lista de trabajadores
+            coVerify(exactly = 0) { dao.insertar(any()) }
         }
 
         test("un correo repetido (409) devuelve error") {
@@ -147,31 +133,30 @@ class UsuarioRepositoryTest : FunSpec({
             resultado.exceptionOrNull()?.message shouldBe "Ya existe una cuenta con este correo"
         }
 
-        test("si el servidor falla con otro error registra en el teléfono") {
-            coEvery { api.registrarUsuario(any()) } throws httpError(500)
-            coEvery { api.getUsuarios(any()) } throws IOException()
-            coEvery { dao.buscarPorCorreo(any()) } returns null
-            coEvery { dao.insertar(any()) } returns 12L
-            every { dao.observarOperarios() } returns flowOf(emptyList())
-
-            repository.registrar("Ana", "ana@demo.cl", "secreta1", "OPERARIO", "Vendedor").getOrNull() shouldBe 12L
-        }
-
-        test("sin internet y con el correo ya guardado en el teléfono devuelve error") {
+        test("sin internet devuelve error de conexión y no guarda en el teléfono") {
             coEvery { api.registrarUsuario(any()) } throws IOException()
-            coEvery { dao.buscarPorCorreo("ana@demo.cl") } returns DatosPrueba.usuario(correo = "ana@demo.cl")
 
             val resultado = repository.registrar("Ana", "ana@demo.cl", "secreta1", "OPERARIO", "Vendedor")
 
-            resultado.exceptionOrNull()?.message shouldBe "Ya existe una cuenta con este correo"
+            resultado.exceptionOrNull().shouldBeInstanceOf<ServidorNoDisponibleException>()
+            coVerify(exactly = 0) { dao.insertar(any()) }
         }
 
-        test("sin internet ni base local devuelve error de conexión") {
-            coEvery { api.registrarUsuario(any()) } throws IOException()
+        test("si el servidor falla (500) devuelve error de conexión") {
+            coEvery { api.registrarUsuario(any()) } throws httpError(500)
 
-            val resultado = UsuarioRepository(null).registrar("Ana", "ana@demo.cl", "secreta1", "OPERARIO", "Vendedor")
+            repository.registrar("Ana", "ana@demo.cl", "secreta1", "OPERARIO", "Vendedor")
+                .exceptionOrNull().shouldBeInstanceOf<ServidorNoDisponibleException>()
+        }
+    }
 
-            resultado.exceptionOrNull()?.message shouldBe "Error de conexion con el servidor"
+    context("Estado del servidor") {
+        test("servidorDisponible es true si el microservicio responde y false si no") {
+            coEvery { api.getPuntosVenta() } returns emptyList()
+            repository.servidorDisponible() shouldBe true
+
+            coEvery { api.getPuntosVenta() } throws IOException()
+            repository.servidorDisponible() shouldBe false
         }
     }
 
@@ -385,6 +370,82 @@ class VisitaRepositoryTest : FunSpec({
         repository.registrar(visita.copy(fotoUri = ""))
 
         enviada.captured.fotoUri shouldBe ""
+    }
+
+    context("Visitas sin internet (cola en Room)") {
+        val pendienteDao: VisitaPendienteDao = mockk(relaxed = true)
+        var programada = 0
+        val repoConCola = VisitaRepository(contexto, pendienteDao) { programada++ }
+
+        test("sin internet guarda la visita en Room, programa el envío y devuelve ID_EN_COLA") {
+            coEvery { api.registrarVisita(any()) } throws IOException()
+            val guardada = slot<VisitaPendienteEntity>()
+            coEvery { pendienteDao.insertar(capture(guardada)) } returns 1L
+
+            repoConCola.registrar(visita) shouldBe VisitaRepository.ID_EN_COLA
+
+            guardada.captured.fotoBase64 shouldBe "data:image/jpeg;base64,AAA"
+            guardada.captured.fechaHora shouldBe 1_000L // conserva la hora real de la visita
+            programada shouldBe 1
+        }
+
+        test("si el servidor responde con error no la deja en cola") {
+            coEvery { api.registrarVisita(any()) } throws httpError(400)
+
+            shouldThrow<HttpException> { repoConCola.registrar(visita) }
+            coVerify(exactly = 0) { pendienteDao.insertar(any()) }
+        }
+
+        test("sin base local el error de conexión llega al ViewModel") {
+            coEvery { api.registrarVisita(any()) } throws IOException()
+
+            shouldThrow<IOException> { repository.registrar(visita) }
+        }
+
+        test("sincronizar envía cada pendiente a MySQL y la borra de Room") {
+            val p1 = DatosPrueba.visitaPendiente(id = 1)
+            val p2 = DatosPrueba.visitaPendiente(id = 2)
+            coEvery { pendienteDao.obtenerTodas() } returns listOf(p1, p2)
+            coEvery { api.registrarVisita(any()) } returns detalle
+
+            repoConCola.sincronizarPendientes() shouldBe true
+
+            coVerify(exactly = 2) { api.registrarVisita(any()) }
+            coVerify { pendienteDao.eliminar(1) }
+            coVerify { pendienteDao.eliminar(2) }
+        }
+
+        test("si se corta internet al sincronizar, no borra y pide reintentar") {
+            coEvery { pendienteDao.obtenerTodas() } returns listOf(DatosPrueba.visitaPendiente(id = 1))
+            coEvery { api.registrarVisita(any()) } throws IOException()
+
+            repoConCola.sincronizarPendientes() shouldBe false
+            coVerify(exactly = 0) { pendienteDao.eliminar(any()) }
+        }
+
+        test("un 500 del servidor también se reintenta más tarde") {
+            coEvery { pendienteDao.obtenerTodas() } returns listOf(DatosPrueba.visitaPendiente(id = 1))
+            coEvery { api.registrarVisita(any()) } throws httpError(500)
+
+            repoConCola.sincronizarPendientes() shouldBe false
+            coVerify(exactly = 0) { pendienteDao.eliminar(any()) }
+        }
+
+        test("una visita rechazada por datos inválidos (4xx) se descarta") {
+            coEvery { pendienteDao.obtenerTodas() } returns listOf(DatosPrueba.visitaPendiente(id = 5))
+            coEvery { api.registrarVisita(any()) } throws httpError(400)
+
+            repoConCola.sincronizarPendientes() shouldBe true
+            coVerify { pendienteDao.eliminar(5) }
+        }
+
+        test("observarPendientes cuenta las del usuario; sin base local es 0") {
+            every { pendienteDao.contarPorUsuario(1) } returns flowOf(3)
+
+            repoConCola.observarPendientes(1).first() shouldBe 3
+            repository.observarPendientes(1).first() shouldBe 0
+            repository.sincronizarPendientes() shouldBe true
+        }
     }
 
     test("obtenerDetalle devuelve la visita, o null si falla la conexión") {

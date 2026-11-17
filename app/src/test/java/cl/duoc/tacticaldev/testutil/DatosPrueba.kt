@@ -2,6 +2,7 @@ package cl.duoc.tacticaldev.testutil
 
 import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
 import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
+import cl.duoc.tacticaldev.data.local.entity.VisitaPendienteEntity
 import cl.duoc.tacticaldev.data.preferences.Sesion
 import cl.duoc.tacticaldev.model.ActivoConPunto
 import cl.duoc.tacticaldev.model.EstadoEquipo
@@ -92,4 +93,12 @@ object DatosPrueba {
         rol: Rol = Rol.OPERARIO,
         cargo: String = "Técnico de mantenimiento"
     ) = Sesion(usuarioId, nombre, rol, cargo)
+
+    /** Visita guardada sin internet, esperando enviarse al microservicio. */
+    fun visitaPendiente(id: Long = 1, usuarioId: Long = 1) = VisitaPendienteEntity(
+        id = id, activoId = 1, usuarioId = usuarioId, fechaHora = 1_000L,
+        tipoVisita = "MANTENCION", estadoEquipo = "OPERATIVO", temperatura = -18.5,
+        observaciones = "Sin señal en la bodega", fotoBase64 = "data:image/jpeg;base64,AAA",
+        latitud = -33.5, longitud = -70.7, distanciaMetros = 12.0, ubicacionVerificada = true
+    )
 }

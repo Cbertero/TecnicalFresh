@@ -1,5 +1,6 @@
 package cl.duoc.tacticaldev.viewmodel
 
+import cl.duoc.tacticaldev.data.repository.ServidorNoDisponibleException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cl.duoc.tacticaldev.data.preferences.Sesion
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Lógica del login: valida cada campo en tiempo real con [Validadores],
- * autentica contra Room y guarda la sesión con su rol.
+ * autentica contra el microservicio y guarda la sesión con su rol.
  */
 class LoginViewModel(
     private val usuarioRepository: UsuarioRepository,
@@ -26,6 +27,19 @@ class LoginViewModel(
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    init {
+        comprobarServidor()
+    }
+
+    /** Consulta al microservicio y actualiza el indicador de la pantalla de login. */
+    fun comprobarServidor() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(servidorEnLinea = null) }
+            val disponible = usuarioRepository.servidorDisponible()
+            _uiState.update { it.copy(servidorEnLinea = disponible) }
+        }
+    }
 
     fun onCorreoChange(valor: String) = _uiState.update {
         it.copy(correo = valor, errorGeneral = null, errores = it.errores.copy(correo = Validadores.correo(valor)))
@@ -56,20 +70,27 @@ class LoginViewModel(
         val estado = _uiState.value
         viewModelScope.launch {
             _uiState.update { it.copy(cargando = true, errorGeneral = null) }
-            val usuario = usuarioRepository.autenticar(estado.correo, estado.clave)
+            val usuario = try {
+                usuarioRepository.autenticar(estado.correo, estado.clave)
+            } catch (e: ServidorNoDisponibleException) {
+                // Sin internet no se puede iniciar sesión: el login se valida solo en el microservicio
+                _uiState.update { it.copy(cargando = false, errorGeneral = e.message, servidorEnLinea = false) }
+                return@launch
+            }
             if (usuario == null) {
                 _uiState.update {
                     it.copy(
                         cargando = false,
                         errorGeneral = "Correo o clave incorrectos",
-                        intentosFallidos = it.intentosFallidos + 1
+                        intentosFallidos = it.intentosFallidos + 1,
+                        servidorEnLinea = true // el servidor respondió (401)
                     )
                 }
                 return@launch
             }
             val rol = usuario.rol.aEnum(Rol.OPERARIO)
             sesionPreferences.guardar(Sesion(usuario.id, usuario.nombre, rol,usuario.cargo))
-            _uiState.update { LoginUiState() }
+            _uiState.update { LoginUiState(servidorEnLinea = it.servidorEnLinea) }
             onExito(rol)
         }
     }

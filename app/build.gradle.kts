@@ -103,6 +103,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // WorkManager: envía las visitas guardadas sin internet cuando vuelve la conexión
+    implementation(libs.androidx.work.runtime.ktx)
+
     // DataStore Preferences: sesión del usuario (Guía 12)
     implementation(libs.androidx.datastore.preferences)
 
@@ -154,6 +157,7 @@ val exclusionesCobertura = listOf(
     "**/data/local/dao/**",
     "**/data/location/**",
     "**/data/scanner/**",
+    "**/data/sync/**",
     "**/data/preferences/**",
     "**/data/remote/ApiService*",
     "**/utils/FotoUtils*",

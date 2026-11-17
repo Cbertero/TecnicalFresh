@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-/** Carga desde Room la visita recién guardada para mostrar el comprobante. */
+/** Carga desde el microservicio la visita recién guardada para mostrar el comprobante. */
 class ConfirmacionViewModel(
     savedStateHandle: SavedStateHandle,
     visitaRepository: VisitaRepository
@@ -22,7 +22,12 @@ class ConfirmacionViewModel(
     private val _visita = MutableStateFlow<VisitaDetalle?>(null)
     val visita: StateFlow<VisitaDetalle?> = _visita.asStateFlow()
 
+    /** true si la visita quedó guardada en el teléfono esperando internet. */
+    val enCola: Boolean = visitaId == VisitaRepository.ID_EN_COLA
+
     init {
-        viewModelScope.launch { _visita.value = visitaRepository.obtenerDetalle(visitaId) }
+        if (!enCola) {
+            viewModelScope.launch { _visita.value = visitaRepository.obtenerDetalle(visitaId) }
+        }
     }
 }

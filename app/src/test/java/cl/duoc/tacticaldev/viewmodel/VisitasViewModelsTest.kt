@@ -35,6 +35,18 @@ class ConfirmacionViewModelTest : FunSpec({
 
         vm.visita.value shouldBe detalle
     }
+
+    test("si la visita quedó en cola no la busca en el servidor") {
+        val repo: VisitaRepository = mockk()
+
+        val vm = ConfirmacionViewModel(
+            SavedStateHandle(mapOf("visitaId" to VisitaRepository.ID_EN_COLA)), repo
+        )
+
+        vm.enCola shouldBe true
+        vm.visita.value shouldBe null
+        coVerify(exactly = 0) { repo.obtenerDetalle(any()) }
+    }
 })
 
 class HistorialViewModelTest : FunSpec({
@@ -62,7 +74,10 @@ class MisVisitasViewModelTest : FunSpec({
     val sesionFlow = MutableStateFlow<Sesion?>(null)
     val sesionPreferences: SesionPreferences = mockk { every { sesion } returns sesionFlow }
     val visitas = listOf(DatosPrueba.visitaDetalle())
-    val visitaRepo: VisitaRepository = mockk { every { observarPorUsuario(1) } returns flowOf(visitas) }
+    val visitaRepo: VisitaRepository = mockk {
+        every { observarPorUsuario(1) } returns flowOf(visitas)
+        every { observarPendientes(1) } returns flowOf(0)
+    }
 
     test("con sesión muestra las visitas del operario") {
         runTest {
@@ -72,6 +87,17 @@ class MisVisitasViewModelTest : FunSpec({
 
             vm.uiState.value.visitas shouldBe visitas
             vm.uiState.value.cargando shouldBe false
+        }
+    }
+
+    test("muestra cuántas visitas esperan internet") {
+        runTest {
+            every { visitaRepo.observarPendientes(1) } returns flowOf(2)
+            sesionFlow.value = DatosPrueba.sesion(usuarioId = 1)
+            val vm = MisVisitasViewModel(sesionPreferences, visitaRepo)
+            suscribir(vm.uiState)
+
+            vm.uiState.value.pendientes shouldBe 2
         }
     }
 

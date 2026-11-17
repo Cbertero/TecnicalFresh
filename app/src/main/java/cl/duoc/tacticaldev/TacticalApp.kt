@@ -1,6 +1,7 @@
 package cl.duoc.tacticaldev
 
 import android.app.Application
+import cl.duoc.tacticaldev.data.sync.SincronizarVisitasWorker
 import cl.duoc.tacticaldev.di.AppContainer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,5 +20,7 @@ class TacticalApp : Application() {
         super.onCreate()
         container = AppContainer(this)
         appScope.launch { container.database.sembrarSiEstaVacia() }
+        // Si quedaron visitas sin enviar de una sesión anterior, se envían al haber internet
+        SincronizarVisitasWorker.programar(this)
     }
 }
