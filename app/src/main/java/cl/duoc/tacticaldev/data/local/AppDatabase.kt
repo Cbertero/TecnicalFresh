@@ -86,16 +86,27 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var instancia: AppDatabase? = null
 
-        fun obtener(context: Context): AppDatabase =
-            instancia ?: synchronized(this) {
-                instancia ?: Room.databaseBuilder(
-                    context.applicationContext,
+        // Aplicación dueña de la instancia. En el teléfono es siempre la misma; en las
+        // pruebas con Robolectric cada prueba crea una aplicación nueva y cierra la base
+        // anterior, por eso en ese caso se vuelve a crear.
+        @Volatile
+        private var aplicacion: Context? = null
+
+        fun obtener(context: Context): AppDatabase {
+            val app = context.applicationContext
+            return instancia?.takeIf { aplicacion === app } ?: synchronized(this) {
+                instancia?.takeIf { aplicacion === app } ?: Room.databaseBuilder(
+                    app,
                     AppDatabase::class.java,
                     NOMBRE_BD
                 )
                     .addMigrations(MIGRACION_1_2)
                     .build()
-                    .also { instancia = it }
+                    .also {
+                        instancia = it
+                        aplicacion = app
+                    }
             }
+        }
     }
 }

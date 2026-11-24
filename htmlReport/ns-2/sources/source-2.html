@@ -1,0 +1,527 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AppDatabase_Impl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local</a>
+</div>
+
+<h1>Coverage Summary for Class: AppDatabase_Impl (cl.duoc.tacticaldev.data.local)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AppDatabase_Impl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/74)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AppDatabase_Impl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/126)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/56)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/200)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local;
+&nbsp;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.room.DatabaseConfiguration;
+&nbsp;import androidx.room.InvalidationTracker;
+&nbsp;import androidx.room.RoomDatabase;
+&nbsp;import androidx.room.RoomOpenHelper;
+&nbsp;import androidx.room.migration.AutoMigrationSpec;
+&nbsp;import androidx.room.migration.Migration;
+&nbsp;import androidx.room.util.DBUtil;
+&nbsp;import androidx.room.util.TableInfo;
+&nbsp;import androidx.sqlite.db.SupportSQLiteDatabase;
+&nbsp;import androidx.sqlite.db.SupportSQLiteOpenHelper;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.ActivoDao;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.ActivoDao_Impl;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.PuntoVentaDao;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.PuntoVentaDao_Impl;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.UsuarioDao;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.UsuarioDao_Impl;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.VisitaDao;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.VisitaDao_Impl;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.VisitaPendienteDao;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.VisitaPendienteDao_Impl;
+&nbsp;import java.lang.Class;
+&nbsp;import java.lang.Override;
+&nbsp;import java.lang.String;
+&nbsp;import java.lang.SuppressWarnings;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Set;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;
+&nbsp;@Generated(&quot;androidx.room.RoomProcessor&quot;)
+&nbsp;@SuppressWarnings({&quot;unchecked&quot;, &quot;deprecation&quot;})
+<b class="nc">&nbsp;public final class AppDatabase_Impl extends AppDatabase {</b>
+&nbsp;  private volatile UsuarioDao _usuarioDao;
+&nbsp;
+&nbsp;  private volatile PuntoVentaDao _puntoVentaDao;
+&nbsp;
+&nbsp;  private volatile ActivoDao _activoDao;
+&nbsp;
+&nbsp;  private volatile VisitaDao _visitaDao;
+&nbsp;
+&nbsp;  private volatile VisitaPendienteDao _visitaPendienteDao;
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
+<b class="nc">&nbsp;    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {</b>
+&nbsp;      @Override
+&nbsp;      public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `usuarios` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `correo` TEXT NOT NULL, `claveHash` TEXT NOT NULL, `rol` TEXT NOT NULL, `cargo` TEXT NOT NULL)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE UNIQUE INDEX IF NOT EXISTS `index_usuarios_correo` ON `usuarios` (`correo`)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `puntos_venta` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `direccion` TEXT NOT NULL, `comuna` TEXT NOT NULL, `latitud` REAL NOT NULL, `longitud` REAL NOT NULL)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `activos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `codigo` TEXT NOT NULL, `tipo` TEXT NOT NULL, `marca` TEXT NOT NULL, `modelo` TEXT NOT NULL, `puntoVentaId` INTEGER NOT NULL, FOREIGN KEY(`puntoVentaId`) REFERENCES `puntos_venta`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE INDEX IF NOT EXISTS `index_activos_puntoVentaId` ON `activos` (`puntoVentaId`)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE UNIQUE INDEX IF NOT EXISTS `index_activos_codigo` ON `activos` (`codigo`)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `visitas` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `activoId` INTEGER NOT NULL, `usuarioId` INTEGER NOT NULL, `fechaHora` INTEGER NOT NULL, `tipoVisita` TEXT NOT NULL, `estadoEquipo` TEXT NOT NULL, `temperatura` REAL NOT NULL, `observaciones` TEXT NOT NULL, `fotoUri` TEXT NOT NULL, `latitud` REAL NOT NULL, `longitud` REAL NOT NULL, `distanciaMetros` REAL NOT NULL, `ubicacionVerificada` INTEGER NOT NULL, `estadoValidacion` TEXT NOT NULL, `motivoRechazo` TEXT, `supervisorId` INTEGER, FOREIGN KEY(`activoId`) REFERENCES `activos`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`usuarioId`) REFERENCES `usuarios`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE INDEX IF NOT EXISTS `index_visitas_activoId` ON `visitas` (`activoId`)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE INDEX IF NOT EXISTS `index_visitas_usuarioId` ON `visitas` (`usuarioId`)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS `visitas_pendientes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `activoId` INTEGER NOT NULL, `usuarioId` INTEGER NOT NULL, `fechaHora` INTEGER NOT NULL, `tipoVisita` TEXT NOT NULL, `estadoEquipo` TEXT NOT NULL, `temperatura` REAL NOT NULL, `observaciones` TEXT NOT NULL, `fotoBase64` TEXT NOT NULL, `latitud` REAL NOT NULL, `longitud` REAL NOT NULL, `distanciaMetros` REAL NOT NULL, `ubicacionVerificada` INTEGER NOT NULL)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, &#39;ed2dd50bb21a18d5bdd9a689210074af&#39;)&quot;);</b>
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `usuarios`&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `puntos_venta`&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `activos`&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `visitas`&quot;);</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;DROP TABLE IF EXISTS `visitas_pendientes`&quot;);</b>
+<b class="nc">&nbsp;        final List&lt;? extends RoomDatabase.Callback&gt; _callbacks = mCallbacks;</b>
+<b class="nc">&nbsp;        if (_callbacks != null) {</b>
+<b class="nc">&nbsp;          for (RoomDatabase.Callback _callback : _callbacks) {</b>
+<b class="nc">&nbsp;            _callback.onDestructiveMigration(db);</b>
+&nbsp;          }
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onCreate(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        final List&lt;? extends RoomDatabase.Callback&gt; _callbacks = mCallbacks;</b>
+<b class="nc">&nbsp;        if (_callbacks != null) {</b>
+<b class="nc">&nbsp;          for (RoomDatabase.Callback _callback : _callbacks) {</b>
+<b class="nc">&nbsp;            _callback.onCreate(db);</b>
+&nbsp;          }
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onOpen(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        mDatabase = db;</b>
+<b class="nc">&nbsp;        db.execSQL(&quot;PRAGMA foreign_keys = ON&quot;);</b>
+<b class="nc">&nbsp;        internalInitInvalidationTracker(db);</b>
+<b class="nc">&nbsp;        final List&lt;? extends RoomDatabase.Callback&gt; _callbacks = mCallbacks;</b>
+<b class="nc">&nbsp;        if (_callbacks != null) {</b>
+<b class="nc">&nbsp;          for (RoomDatabase.Callback _callback : _callbacks) {</b>
+<b class="nc">&nbsp;            _callback.onOpen(db);</b>
+&nbsp;          }
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onPreMigrate(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        DBUtil.dropFtsSyncTriggers(db);</b>
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      public void onPostMigrate(@NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;      }</b>
+&nbsp;
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public RoomOpenHelper.ValidationResult onValidateSchema(
+&nbsp;          @NonNull final SupportSQLiteDatabase db) {
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsUsuarios = new HashMap&lt;String, TableInfo.Column&gt;(6);</b>
+<b class="nc">&nbsp;        _columnsUsuarios.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsUsuarios.put(&quot;nombre&quot;, new TableInfo.Column(&quot;nombre&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsUsuarios.put(&quot;correo&quot;, new TableInfo.Column(&quot;correo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsUsuarios.put(&quot;claveHash&quot;, new TableInfo.Column(&quot;claveHash&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsUsuarios.put(&quot;rol&quot;, new TableInfo.Column(&quot;rol&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsUsuarios.put(&quot;cargo&quot;, new TableInfo.Column(&quot;cargo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysUsuarios = new HashSet&lt;TableInfo.ForeignKey&gt;(0);</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesUsuarios = new HashSet&lt;TableInfo.Index&gt;(1);</b>
+<b class="nc">&nbsp;        _indicesUsuarios.add(new TableInfo.Index(&quot;index_usuarios_correo&quot;, true, Arrays.asList(&quot;correo&quot;), Arrays.asList(&quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        final TableInfo _infoUsuarios = new TableInfo(&quot;usuarios&quot;, _columnsUsuarios, _foreignKeysUsuarios, _indicesUsuarios);</b>
+<b class="nc">&nbsp;        final TableInfo _existingUsuarios = TableInfo.read(db, &quot;usuarios&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoUsuarios.equals(_existingUsuarios)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;usuarios(cl.duoc.tacticaldev.data.local.entity.UsuarioEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoUsuarios + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingUsuarios);
+&nbsp;        }
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsPuntosVenta = new HashMap&lt;String, TableInfo.Column&gt;(6);</b>
+<b class="nc">&nbsp;        _columnsPuntosVenta.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsPuntosVenta.put(&quot;nombre&quot;, new TableInfo.Column(&quot;nombre&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsPuntosVenta.put(&quot;direccion&quot;, new TableInfo.Column(&quot;direccion&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsPuntosVenta.put(&quot;comuna&quot;, new TableInfo.Column(&quot;comuna&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsPuntosVenta.put(&quot;latitud&quot;, new TableInfo.Column(&quot;latitud&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsPuntosVenta.put(&quot;longitud&quot;, new TableInfo.Column(&quot;longitud&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysPuntosVenta = new HashSet&lt;TableInfo.ForeignKey&gt;(0);</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesPuntosVenta = new HashSet&lt;TableInfo.Index&gt;(0);</b>
+<b class="nc">&nbsp;        final TableInfo _infoPuntosVenta = new TableInfo(&quot;puntos_venta&quot;, _columnsPuntosVenta, _foreignKeysPuntosVenta, _indicesPuntosVenta);</b>
+<b class="nc">&nbsp;        final TableInfo _existingPuntosVenta = TableInfo.read(db, &quot;puntos_venta&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoPuntosVenta.equals(_existingPuntosVenta)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;puntos_venta(cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoPuntosVenta + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingPuntosVenta);
+&nbsp;        }
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsActivos = new HashMap&lt;String, TableInfo.Column&gt;(6);</b>
+<b class="nc">&nbsp;        _columnsActivos.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsActivos.put(&quot;codigo&quot;, new TableInfo.Column(&quot;codigo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsActivos.put(&quot;tipo&quot;, new TableInfo.Column(&quot;tipo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsActivos.put(&quot;marca&quot;, new TableInfo.Column(&quot;marca&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsActivos.put(&quot;modelo&quot;, new TableInfo.Column(&quot;modelo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsActivos.put(&quot;puntoVentaId&quot;, new TableInfo.Column(&quot;puntoVentaId&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysActivos = new HashSet&lt;TableInfo.ForeignKey&gt;(1);</b>
+<b class="nc">&nbsp;        _foreignKeysActivos.add(new TableInfo.ForeignKey(&quot;puntos_venta&quot;, &quot;CASCADE&quot;, &quot;NO ACTION&quot;, Arrays.asList(&quot;puntoVentaId&quot;), Arrays.asList(&quot;id&quot;)));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesActivos = new HashSet&lt;TableInfo.Index&gt;(2);</b>
+<b class="nc">&nbsp;        _indicesActivos.add(new TableInfo.Index(&quot;index_activos_puntoVentaId&quot;, false, Arrays.asList(&quot;puntoVentaId&quot;), Arrays.asList(&quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        _indicesActivos.add(new TableInfo.Index(&quot;index_activos_codigo&quot;, true, Arrays.asList(&quot;codigo&quot;), Arrays.asList(&quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        final TableInfo _infoActivos = new TableInfo(&quot;activos&quot;, _columnsActivos, _foreignKeysActivos, _indicesActivos);</b>
+<b class="nc">&nbsp;        final TableInfo _existingActivos = TableInfo.read(db, &quot;activos&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoActivos.equals(_existingActivos)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;activos(cl.duoc.tacticaldev.data.local.entity.ActivoEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoActivos + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingActivos);
+&nbsp;        }
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsVisitas = new HashMap&lt;String, TableInfo.Column&gt;(16);</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;activoId&quot;, new TableInfo.Column(&quot;activoId&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;usuarioId&quot;, new TableInfo.Column(&quot;usuarioId&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;fechaHora&quot;, new TableInfo.Column(&quot;fechaHora&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;tipoVisita&quot;, new TableInfo.Column(&quot;tipoVisita&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;estadoEquipo&quot;, new TableInfo.Column(&quot;estadoEquipo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;temperatura&quot;, new TableInfo.Column(&quot;temperatura&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;observaciones&quot;, new TableInfo.Column(&quot;observaciones&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;fotoUri&quot;, new TableInfo.Column(&quot;fotoUri&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;latitud&quot;, new TableInfo.Column(&quot;latitud&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;longitud&quot;, new TableInfo.Column(&quot;longitud&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;distanciaMetros&quot;, new TableInfo.Column(&quot;distanciaMetros&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;ubicacionVerificada&quot;, new TableInfo.Column(&quot;ubicacionVerificada&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;estadoValidacion&quot;, new TableInfo.Column(&quot;estadoValidacion&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;motivoRechazo&quot;, new TableInfo.Column(&quot;motivoRechazo&quot;, &quot;TEXT&quot;, false, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitas.put(&quot;supervisorId&quot;, new TableInfo.Column(&quot;supervisorId&quot;, &quot;INTEGER&quot;, false, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysVisitas = new HashSet&lt;TableInfo.ForeignKey&gt;(2);</b>
+<b class="nc">&nbsp;        _foreignKeysVisitas.add(new TableInfo.ForeignKey(&quot;activos&quot;, &quot;CASCADE&quot;, &quot;NO ACTION&quot;, Arrays.asList(&quot;activoId&quot;), Arrays.asList(&quot;id&quot;)));</b>
+<b class="nc">&nbsp;        _foreignKeysVisitas.add(new TableInfo.ForeignKey(&quot;usuarios&quot;, &quot;CASCADE&quot;, &quot;NO ACTION&quot;, Arrays.asList(&quot;usuarioId&quot;), Arrays.asList(&quot;id&quot;)));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesVisitas = new HashSet&lt;TableInfo.Index&gt;(2);</b>
+<b class="nc">&nbsp;        _indicesVisitas.add(new TableInfo.Index(&quot;index_visitas_activoId&quot;, false, Arrays.asList(&quot;activoId&quot;), Arrays.asList(&quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        _indicesVisitas.add(new TableInfo.Index(&quot;index_visitas_usuarioId&quot;, false, Arrays.asList(&quot;usuarioId&quot;), Arrays.asList(&quot;ASC&quot;)));</b>
+<b class="nc">&nbsp;        final TableInfo _infoVisitas = new TableInfo(&quot;visitas&quot;, _columnsVisitas, _foreignKeysVisitas, _indicesVisitas);</b>
+<b class="nc">&nbsp;        final TableInfo _existingVisitas = TableInfo.read(db, &quot;visitas&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoVisitas.equals(_existingVisitas)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;visitas(cl.duoc.tacticaldev.data.local.entity.VisitaEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoVisitas + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingVisitas);
+&nbsp;        }
+<b class="nc">&nbsp;        final HashMap&lt;String, TableInfo.Column&gt; _columnsVisitasPendientes = new HashMap&lt;String, TableInfo.Column&gt;(13);</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;id&quot;, new TableInfo.Column(&quot;id&quot;, &quot;INTEGER&quot;, true, 1, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;activoId&quot;, new TableInfo.Column(&quot;activoId&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;usuarioId&quot;, new TableInfo.Column(&quot;usuarioId&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;fechaHora&quot;, new TableInfo.Column(&quot;fechaHora&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;tipoVisita&quot;, new TableInfo.Column(&quot;tipoVisita&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;estadoEquipo&quot;, new TableInfo.Column(&quot;estadoEquipo&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;temperatura&quot;, new TableInfo.Column(&quot;temperatura&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;observaciones&quot;, new TableInfo.Column(&quot;observaciones&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;fotoBase64&quot;, new TableInfo.Column(&quot;fotoBase64&quot;, &quot;TEXT&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;latitud&quot;, new TableInfo.Column(&quot;latitud&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;longitud&quot;, new TableInfo.Column(&quot;longitud&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;distanciaMetros&quot;, new TableInfo.Column(&quot;distanciaMetros&quot;, &quot;REAL&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        _columnsVisitasPendientes.put(&quot;ubicacionVerificada&quot;, new TableInfo.Column(&quot;ubicacionVerificada&quot;, &quot;INTEGER&quot;, true, 0, null, TableInfo.CREATED_FROM_ENTITY));</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.ForeignKey&gt; _foreignKeysVisitasPendientes = new HashSet&lt;TableInfo.ForeignKey&gt;(0);</b>
+<b class="nc">&nbsp;        final HashSet&lt;TableInfo.Index&gt; _indicesVisitasPendientes = new HashSet&lt;TableInfo.Index&gt;(0);</b>
+<b class="nc">&nbsp;        final TableInfo _infoVisitasPendientes = new TableInfo(&quot;visitas_pendientes&quot;, _columnsVisitasPendientes, _foreignKeysVisitasPendientes, _indicesVisitasPendientes);</b>
+<b class="nc">&nbsp;        final TableInfo _existingVisitasPendientes = TableInfo.read(db, &quot;visitas_pendientes&quot;);</b>
+<b class="nc">&nbsp;        if (!_infoVisitasPendientes.equals(_existingVisitasPendientes)) {</b>
+<b class="nc">&nbsp;          return new RoomOpenHelper.ValidationResult(false, &quot;visitas_pendientes(cl.duoc.tacticaldev.data.local.entity.VisitaPendienteEntity).\n&quot;</b>
+&nbsp;                  + &quot; Expected:\n&quot; + _infoVisitasPendientes + &quot;\n&quot;
+&nbsp;                  + &quot; Found:\n&quot; + _existingVisitasPendientes);
+&nbsp;        }
+<b class="nc">&nbsp;        return new RoomOpenHelper.ValidationResult(true, null);</b>
+&nbsp;      }
+&nbsp;    }, &quot;ed2dd50bb21a18d5bdd9a689210074af&quot;, &quot;f9b3388bec3eee382aeb78061d4e41b8&quot;);
+<b class="nc">&nbsp;    final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();</b>
+<b class="nc">&nbsp;    final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);</b>
+<b class="nc">&nbsp;    return _helper;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  protected InvalidationTracker createInvalidationTracker() {
+<b class="nc">&nbsp;    final HashMap&lt;String, String&gt; _shadowTablesMap = new HashMap&lt;String, String&gt;(0);</b>
+<b class="nc">&nbsp;    final HashMap&lt;String, Set&lt;String&gt;&gt; _viewTables = new HashMap&lt;String, Set&lt;String&gt;&gt;(0);</b>
+<b class="nc">&nbsp;    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, &quot;usuarios&quot;,&quot;puntos_venta&quot;,&quot;activos&quot;,&quot;visitas&quot;,&quot;visitas_pendientes&quot;);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public void clearAllTables() {
+<b class="nc">&nbsp;    super.assertNotMainThread();</b>
+<b class="nc">&nbsp;    final SupportSQLiteDatabase _db = super.getOpenHelper().getWritableDatabase();</b>
+<b class="nc">&nbsp;    final boolean _supportsDeferForeignKeys = android.os.Build.VERSION.SDK_INT &gt;= android.os.Build.VERSION_CODES.LOLLIPOP;</b>
+&nbsp;    try {
+<b class="nc">&nbsp;      if (!_supportsDeferForeignKeys) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;PRAGMA foreign_keys = FALSE&quot;);</b>
+&nbsp;      }
+<b class="nc">&nbsp;      super.beginTransaction();</b>
+<b class="nc">&nbsp;      if (_supportsDeferForeignKeys) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;PRAGMA defer_foreign_keys = TRUE&quot;);</b>
+&nbsp;      }
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `usuarios`&quot;);</b>
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `puntos_venta`&quot;);</b>
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `activos`&quot;);</b>
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `visitas`&quot;);</b>
+<b class="nc">&nbsp;      _db.execSQL(&quot;DELETE FROM `visitas_pendientes`&quot;);</b>
+<b class="nc">&nbsp;      super.setTransactionSuccessful();</b>
+&nbsp;    } finally {
+<b class="nc">&nbsp;      super.endTransaction();</b>
+<b class="nc">&nbsp;      if (!_supportsDeferForeignKeys) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;PRAGMA foreign_keys = TRUE&quot;);</b>
+&nbsp;      }
+<b class="nc">&nbsp;      _db.query(&quot;PRAGMA wal_checkpoint(FULL)&quot;).close();</b>
+<b class="nc">&nbsp;      if (!_db.inTransaction()) {</b>
+<b class="nc">&nbsp;        _db.execSQL(&quot;VACUUM&quot;);</b>
+&nbsp;      }
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  protected Map&lt;Class&lt;?&gt;, List&lt;Class&lt;?&gt;&gt;&gt; getRequiredTypeConverters() {
+<b class="nc">&nbsp;    final HashMap&lt;Class&lt;?&gt;, List&lt;Class&lt;?&gt;&gt;&gt; _typeConvertersMap = new HashMap&lt;Class&lt;?&gt;, List&lt;Class&lt;?&gt;&gt;&gt;();</b>
+<b class="nc">&nbsp;    _typeConvertersMap.put(UsuarioDao.class, UsuarioDao_Impl.getRequiredConverters());</b>
+<b class="nc">&nbsp;    _typeConvertersMap.put(PuntoVentaDao.class, PuntoVentaDao_Impl.getRequiredConverters());</b>
+<b class="nc">&nbsp;    _typeConvertersMap.put(ActivoDao.class, ActivoDao_Impl.getRequiredConverters());</b>
+<b class="nc">&nbsp;    _typeConvertersMap.put(VisitaDao.class, VisitaDao_Impl.getRequiredConverters());</b>
+<b class="nc">&nbsp;    _typeConvertersMap.put(VisitaPendienteDao.class, VisitaPendienteDao_Impl.getRequiredConverters());</b>
+<b class="nc">&nbsp;    return _typeConvertersMap;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  public Set&lt;Class&lt;? extends AutoMigrationSpec&gt;&gt; getRequiredAutoMigrationSpecs() {
+<b class="nc">&nbsp;    final HashSet&lt;Class&lt;? extends AutoMigrationSpec&gt;&gt; _autoMigrationSpecsSet = new HashSet&lt;Class&lt;? extends AutoMigrationSpec&gt;&gt;();</b>
+<b class="nc">&nbsp;    return _autoMigrationSpecsSet;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @NonNull
+&nbsp;  public List&lt;Migration&gt; getAutoMigrations(
+&nbsp;      @NonNull final Map&lt;Class&lt;? extends AutoMigrationSpec&gt;, AutoMigrationSpec&gt; autoMigrationSpecs) {
+<b class="nc">&nbsp;    final List&lt;Migration&gt; _autoMigrations = new ArrayList&lt;Migration&gt;();</b>
+<b class="nc">&nbsp;    return _autoMigrations;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public UsuarioDao usuarioDao() {
+<b class="nc">&nbsp;    if (_usuarioDao != null) {</b>
+<b class="nc">&nbsp;      return _usuarioDao;</b>
+&nbsp;    } else {
+<b class="nc">&nbsp;      synchronized(this) {</b>
+<b class="nc">&nbsp;        if(_usuarioDao == null) {</b>
+<b class="nc">&nbsp;          _usuarioDao = new UsuarioDao_Impl(this);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return _usuarioDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public PuntoVentaDao puntoVentaDao() {
+<b class="nc">&nbsp;    if (_puntoVentaDao != null) {</b>
+<b class="nc">&nbsp;      return _puntoVentaDao;</b>
+&nbsp;    } else {
+<b class="nc">&nbsp;      synchronized(this) {</b>
+<b class="nc">&nbsp;        if(_puntoVentaDao == null) {</b>
+<b class="nc">&nbsp;          _puntoVentaDao = new PuntoVentaDao_Impl(this);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return _puntoVentaDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public ActivoDao activoDao() {
+<b class="nc">&nbsp;    if (_activoDao != null) {</b>
+<b class="nc">&nbsp;      return _activoDao;</b>
+&nbsp;    } else {
+<b class="nc">&nbsp;      synchronized(this) {</b>
+<b class="nc">&nbsp;        if(_activoDao == null) {</b>
+<b class="nc">&nbsp;          _activoDao = new ActivoDao_Impl(this);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return _activoDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public VisitaDao visitaDao() {
+<b class="nc">&nbsp;    if (_visitaDao != null) {</b>
+<b class="nc">&nbsp;      return _visitaDao;</b>
+&nbsp;    } else {
+<b class="nc">&nbsp;      synchronized(this) {</b>
+<b class="nc">&nbsp;        if(_visitaDao == null) {</b>
+<b class="nc">&nbsp;          _visitaDao = new VisitaDao_Impl(this);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return _visitaDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public VisitaPendienteDao visitaPendienteDao() {
+<b class="nc">&nbsp;    if (_visitaPendienteDao != null) {</b>
+<b class="nc">&nbsp;      return _visitaPendienteDao;</b>
+&nbsp;    } else {
+<b class="nc">&nbsp;      synchronized(this) {</b>
+<b class="nc">&nbsp;        if(_visitaPendienteDao == null) {</b>
+<b class="nc">&nbsp;          _visitaPendienteDao = new VisitaPendienteDao_Impl(this);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return _visitaPendienteDao;</b>
+<b class="nc">&nbsp;      }</b>
+&nbsp;    }
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

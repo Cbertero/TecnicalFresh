@@ -1,0 +1,208 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ApiService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.remote</a>
+</div>
+
+<h1>Coverage Summary for Class: ApiService (cl.duoc.tacticaldev.data.remote)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">ApiService$DefaultImpls</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ApiService$Subclass7</td>
+  </tr>
+  <tr>
+    <td class="name">ApiService$Subclass7$auxiliary$34bzv7Fi</td>
+  </tr>
+  <tr>
+    <td class="name">ApiService$Subclass7$auxiliary$OOzPXxlk</td>
+  </tr>
+  <tr>
+    <td class="name">ApiService$Subclass7$auxiliary$woIq8DU5</td>
+  </tr>
+  <tr>
+    <td class="name">ApiService$Subclass7$auxiliary$ZrJ2EOFJ</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.remote
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
+&nbsp;import cl.duoc.tacticaldev.data.model.Tecnico
+&nbsp;import retrofit2.http.Body
+&nbsp;import retrofit2.http.DELETE
+&nbsp;import retrofit2.http.GET
+&nbsp;import retrofit2.http.POST
+&nbsp;import retrofit2.http.Path
+&nbsp;import retrofit2.http.Query
+&nbsp;import cl.duoc.tacticaldev.data.model.LoginRequest
+&nbsp;import cl.duoc.tacticaldev.data.model.RegistroRequest
+&nbsp;import cl.duoc.tacticaldev.data.model.UsuarioDto
+&nbsp;import cl.duoc.tacticaldev.data.model.ValidacionRequest
+&nbsp;import cl.duoc.tacticaldev.data.model.VisitaRequest
+&nbsp;import cl.duoc.tacticaldev.model.VisitaDetalle
+&nbsp;import retrofit2.http.PUT
+&nbsp;
+&nbsp;
+&nbsp;interface ApiService {
+&nbsp;
+&nbsp;    // tecnicos
+&nbsp;    @GET(&quot;api/v1/tecnicos&quot;)
+&nbsp;    suspend fun getTecnicos(): List&lt;Tecnico&gt;
+&nbsp;
+&nbsp;    @POST(&quot;api/v1/tecnicos&quot;)
+&nbsp;    suspend fun guardarTecnico(@Body tecnico: Tecnico): Tecnico
+&nbsp;
+&nbsp;    @DELETE(&quot;api/v1/tecnicos/{id}&quot;)
+&nbsp;    suspend fun eliminarTecnico(@Path(&quot;id&quot;) id: Long)
+&nbsp;
+&nbsp;    // usuarios
+&nbsp;    // usuarios
+&nbsp;    @POST(&quot;api/v1/usuarios/login&quot;)
+&nbsp;    suspend fun loginUsuario(@Body request: LoginRequest): UsuarioDto
+&nbsp;
+&nbsp;    @POST(&quot;api/v1/usuarios/registro&quot;)
+&nbsp;    suspend fun registrarUsuario(@Body request: RegistroRequest): UsuarioDto
+&nbsp;
+&nbsp;    @GET(&quot;api/v1/usuarios&quot;)
+<b class="nc">&nbsp;    suspend fun getUsuarios(@Query(&quot;rol&quot;) rol: String? = null): List&lt;UsuarioDto&gt;</b>
+&nbsp;    // puntos de venta
+&nbsp;    @GET(&quot;api/v1/puntos-venta&quot;)
+&nbsp;    suspend fun getPuntosVenta(): List&lt;PuntoVentaEntity&gt;
+&nbsp;
+&nbsp;    @POST(&quot;api/v1/puntos-venta&quot;)
+&nbsp;    suspend fun guardarPuntoVenta(@Body puntoVenta: PuntoVentaEntity): PuntoVentaEntity
+&nbsp;
+&nbsp;    // activos
+&nbsp;    @GET(&quot;api/v1/activos&quot;)
+&nbsp;    suspend fun getActivos(): List&lt;ActivoEntity&gt;
+&nbsp;
+&nbsp;    @GET(&quot;api/v1/activos/{id}&quot;)
+&nbsp;    suspend fun getActivoPorId(@Path(&quot;id&quot;) id: Long): ActivoEntity
+&nbsp;
+&nbsp;    @GET(&quot;api/v1/activos/codigo/{codigo}&quot;)
+&nbsp;    suspend fun getActivoPorCodigo(@Path(&quot;codigo&quot;) codigo: String): ActivoEntity
+&nbsp;
+&nbsp;    @POST(&quot;api/v1/activos&quot;)
+&nbsp;    suspend fun guardarActivo(@Body activo: ActivoEntity): ActivoEntity
+&nbsp;
+&nbsp;    // visitas
+&nbsp;    @POST(&quot;api/v1/visitas&quot;)
+&nbsp;    suspend fun registrarVisita(@Body visita: VisitaRequest): VisitaDetalle
+&nbsp;
+&nbsp;    @GET(&quot;api/v1/visitas&quot;)
+&nbsp;    suspend fun getVisitas(
+<b class="fc">&nbsp;        @Query(&quot;usuarioId&quot;) usuarioId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;activoId&quot;) activoId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;estado&quot;) estado: String? = null</b>
+&nbsp;    ): List&lt;VisitaDetalle&gt;
+&nbsp;
+&nbsp;    @GET(&quot;api/v1/visitas/{id}&quot;)
+&nbsp;    suspend fun getVisita(@Path(&quot;id&quot;) id: Long): VisitaDetalle
+&nbsp;
+&nbsp;    @PUT(&quot;api/v1/visitas/{id}/validar&quot;)
+&nbsp;    suspend fun validarVisita(@Path(&quot;id&quot;) id: Long, @Body body: ValidacionRequest): VisitaDetalle
+&nbsp;
+&nbsp;    @PUT(&quot;api/v1/visitas/{id}/rechazar&quot;)
+&nbsp;    suspend fun rechazarVisita(@Path(&quot;id&quot;) id: Long, @Body body: ValidacionRequest): VisitaDetalle
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

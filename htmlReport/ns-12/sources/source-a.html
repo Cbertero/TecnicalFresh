@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TipoAlerta</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.ui.components</a>
+</div>
+
+<h1>Coverage Summary for Class: TipoAlerta (cl.duoc.tacticaldev.ui.components)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TipoAlerta</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (4/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TipoAlerta$WhenMappings</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (4/8)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.ui.components
+&nbsp;
+&nbsp;import androidx.compose.animation.*
+&nbsp;import androidx.compose.animation.core.Spring
+&nbsp;import androidx.compose.animation.core.spring
+&nbsp;import androidx.compose.foundation.BorderStroke
+&nbsp;import androidx.compose.foundation.layout.*
+&nbsp;import androidx.compose.foundation.shape.RoundedCornerShape
+&nbsp;import androidx.compose.material.icons.Icons
+&nbsp;import androidx.compose.material.icons.filled.Cancel
+&nbsp;import androidx.compose.material.icons.filled.CheckCircle
+&nbsp;import androidx.compose.material.icons.filled.Info
+&nbsp;import androidx.compose.material3.Icon
+&nbsp;import androidx.compose.material3.MaterialTheme
+&nbsp;import androidx.compose.material3.Surface
+&nbsp;import androidx.compose.material3.Text
+&nbsp;import androidx.compose.runtime.Composable
+&nbsp;import androidx.compose.ui.Alignment
+&nbsp;import androidx.compose.ui.Modifier
+&nbsp;import androidx.compose.ui.graphics.Color
+&nbsp;import androidx.compose.ui.graphics.vector.ImageVector
+&nbsp;import androidx.compose.ui.text.font.FontWeight
+&nbsp;import androidx.compose.ui.unit.dp
+&nbsp;import cl.duoc.tacticaldev.ui.theme.RojoError
+&nbsp;import cl.duoc.tacticaldev.ui.theme.SuperficieTarjeta
+&nbsp;import cl.duoc.tacticaldev.ui.theme.VerdeExito
+&nbsp;
+<b class="fc">&nbsp;enum class TipoAlerta(val icono: ImageVector) {</b>
+<b class="fc">&nbsp;    EXITO(Icons.Default.CheckCircle),</b>
+<b class="fc">&nbsp;    ERROR(Icons.Default.Cancel),</b>
+<b class="fc">&nbsp;    INFO(Icons.Default.Info);</b>
+&nbsp;
+&nbsp;    val color: Color
+<b class="nc">&nbsp;        @Composable get() = when (this) {</b>
+<b class="nc">&nbsp;            EXITO -&gt; VerdeExito</b>
+<b class="nc">&nbsp;            ERROR -&gt; RojoError</b>
+<b class="nc">&nbsp;            INFO -&gt; Color(0xFF38BDF8)</b>
+&nbsp;        }
+&nbsp;}
+&nbsp;/**
+&nbsp; * Banner flotante superior con animación de entrada elástica y rebote.
+&nbsp; */
+&nbsp;@Composable
+&nbsp;fun AlertaFlotanteAnimada(
+&nbsp;    mensaje: String?,
+&nbsp;    modifier: Modifier = Modifier,
+&nbsp;    tipo: TipoAlerta = if (mensaje?.contains(&quot;rechazada&quot;, ignoreCase = true) == true) TipoAlerta.ERROR else TipoAlerta.EXITO
+&nbsp;) {
+&nbsp;    AnimatedVisibility(
+&nbsp;        visible = !mensaje.isNullOrBlank(),
+&nbsp;        enter = fadeIn(animationSpec = spring(stiffness = Spring.StiffnessMediumLow)) +
+&nbsp;                slideInVertically(
+&nbsp;                    initialOffsetY = { -it },
+&nbsp;                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMediumLow)
+&nbsp;                ) + scaleIn(initialScale = 0.85f),
+&nbsp;        exit = fadeOut() + slideOutVertically(targetOffsetY = { -it }) + scaleOut(targetScale = 0.9f),
+&nbsp;        modifier = modifier
+&nbsp;    ) {
+&nbsp;        if (!mensaje.isNullOrBlank()) {
+&nbsp;            Surface(
+&nbsp;                shape = RoundedCornerShape(24.dp),
+&nbsp;                color = SuperficieTarjeta.copy(alpha = 0.95f),
+&nbsp;                border = BorderStroke(1.dp, tipo.color.copy(alpha = 0.5f)),
+&nbsp;                shadowElevation = 8.dp,
+&nbsp;                modifier = Modifier
+&nbsp;                    .padding(horizontal = 24.dp, vertical = 16.dp)
+&nbsp;                    .fillMaxWidth()
+&nbsp;            ) {
+&nbsp;                Row(
+&nbsp;                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+&nbsp;                    verticalAlignment = Alignment.CenterVertically,
+&nbsp;                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+&nbsp;                ) {
+&nbsp;                    Icon(
+&nbsp;                        imageVector = tipo.icono,
+&nbsp;                        contentDescription = null,
+&nbsp;                        tint = tipo.color,
+&nbsp;                        modifier = Modifier.size(28.dp)
+&nbsp;                    )
+&nbsp;                    Text(
+&nbsp;                        text = mensaje,
+&nbsp;                        style = MaterialTheme.typography.bodyMedium,
+&nbsp;                        fontWeight = FontWeight.Medium,
+&nbsp;                        color = Color.White
+&nbsp;                    )
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

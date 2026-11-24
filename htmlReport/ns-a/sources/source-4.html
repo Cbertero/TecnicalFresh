@@ -1,0 +1,346 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TecnicoRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: TecnicoRepository (cl.duoc.tacticaldev.data.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TecnicoRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73,7%
+  </span>
+  <span class="absValue">
+    (28/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (79/79)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TecnicoRepository$Companion</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoRepository$eliminarTecnico$1</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoRepository$geTecnicos$1</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoRepository$GuardarTecnico$1</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoRepository$leerCacheServidor$type$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoRepository$leerColaPendientes$type$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoRepository$sincronizarPendientes$1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73,7%
+  </span>
+  <span class="absValue">
+    (28/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (82/82)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.repository
+&nbsp;
+&nbsp;import android.content.Context
+&nbsp;import cl.duoc.tacticaldev.data.model.Tecnico
+&nbsp;import cl.duoc.tacticaldev.data.remote.RetrofitInstance
+&nbsp;import com.google.gson.Gson
+&nbsp;import com.google.gson.reflect.TypeToken
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;
+<b class="fc">&nbsp;class TecnicoRepository(context: Context) {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val prefs = context.getSharedPreferences(&quot;tecnicos_offline_prefs&quot;, Context.MODE_PRIVATE)</b>
+<b class="fc">&nbsp;    private val gson = Gson()</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _asignacionesFlow = MutableStateFlow&lt;List&lt;Tecnico&gt;&gt;(leerTodoLocal())</b>
+<b class="fc">&nbsp;    val asignacionesFlow: StateFlow&lt;List&lt;Tecnico&gt;&gt; = _asignacionesFlow.asStateFlow()</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Intenta sincronizar los pendientes con el servidor y descargar la lista actualizada.
+&nbsp;     * Si no hay internet, devuelve la copia local + los pendientes sin fallar.
+&nbsp;     */
+<b class="fc">&nbsp;    suspend fun geTecnicos(): List&lt;Tecnico&gt; {</b>
+<b class="pc">&nbsp;        sincronizarPendientes()</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            val remotos = RetrofitInstance.api.getTecnicos().map {</b>
+<b class="fc">&nbsp;                it.copy(localAsignado = it.localAsignado.orEmpty(), sincronizado = true)</b>
+&nbsp;            }
+<b class="fc">&nbsp;            guardarCacheServidor(remotos)</b>
+<b class="fc">&nbsp;            val combinados = remotos + leerColaPendientes()</b>
+<b class="fc">&nbsp;            _asignacionesFlow.value = combinados</b>
+<b class="fc">&nbsp;            combinados</b>
+<b class="fc">&nbsp;        } catch (e: Exception) {</b>
+&nbsp;            // Modo Offline: devolvemos lo que hay guardado en el teléfono
+<b class="fc">&nbsp;            val locales = leerTodoLocal()</b>
+<b class="fc">&nbsp;            _asignacionesFlow.value = locales</b>
+<b class="fc">&nbsp;            locales</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Guarda una asignación de local. Si hay internet, va directo a MySQL.
+&nbsp;     * Si no hay internet, se guarda en la cola local (sincronizado = false).
+&nbsp;     */
+<b class="fc">&nbsp;    suspend fun GuardarTecnico(nombre: String, cargo: String, localAsignado: String): Tecnico {</b>
+<b class="fc">&nbsp;        val nuevo = Tecnico(</b>
+<b class="fc">&nbsp;            id = null,</b>
+<b class="fc">&nbsp;            nombre = nombre,</b>
+<b class="fc">&nbsp;            cargo = cargo,</b>
+<b class="fc">&nbsp;            localAsignado = localAsignado,</b>
+<b class="fc">&nbsp;            sincronizado = true</b>
+&nbsp;        )
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            val guardadoRemoto = RetrofitInstance.api.guardarTecnico(nuevo).copy(</b>
+<b class="fc">&nbsp;                localAsignado = localAsignado,</b>
+<b class="fc">&nbsp;                sincronizado = true</b>
+&nbsp;            )
+<b class="pc">&nbsp;            geTecnicos()</b>
+<b class="fc">&nbsp;            guardadoRemoto</b>
+&nbsp;        } catch (e: Exception) {
+&nbsp;            // Sin conexión: guardamos localmente con un ID temporal negativo
+<b class="fc">&nbsp;            val pendiente = nuevo.copy(</b>
+<b class="fc">&nbsp;                id = -System.currentTimeMillis(),</b>
+<b class="fc">&nbsp;                sincronizado = false</b>
+&nbsp;            )
+<b class="fc">&nbsp;            val colaActual = leerColaPendientes().toMutableList()</b>
+<b class="fc">&nbsp;            colaActual.add(pendiente)</b>
+<b class="fc">&nbsp;            guardarColaPendientes(colaActual)</b>
+<b class="fc">&nbsp;            _asignacionesFlow.value = leerTodoLocal()</b>
+<b class="fc">&nbsp;            pendiente</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Elimina una asignación (del servidor si tiene ID positivo, o de la cola local si era offline).
+&nbsp;     */
+<b class="fc">&nbsp;    suspend fun eliminarTecnico(id: Long) {</b>
+<b class="fc">&nbsp;        if (id &lt; 0) {</b>
+<b class="pc">&nbsp;            val colaActual = leerColaPendientes().filterNot { it.id == id }</b>
+<b class="fc">&nbsp;            guardarColaPendientes(colaActual)</b>
+<b class="fc">&nbsp;            _asignacionesFlow.value = leerTodoLocal()</b>
+<b class="fc">&nbsp;            return</b>
+&nbsp;        }
+<b class="fc">&nbsp;        try {</b>
+<b class="pc">&nbsp;            RetrofitInstance.api.eliminarTecnico(id)</b>
+<b class="fc">&nbsp;        } catch (_: Exception) {</b>
+&nbsp;            // Si está offline, lo quitamos también del caché local
+&nbsp;        }
+<b class="pc">&nbsp;        val cacheActual = leerCacheServidor().filterNot { it.id == id }</b>
+<b class="fc">&nbsp;        guardarCacheServidor(cacheActual)</b>
+<b class="fc">&nbsp;        _asignacionesFlow.value = leerTodoLocal()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sube automáticamente a MySQL todos los registros creados cuando no había internet.
+&nbsp;     */
+<b class="fc">&nbsp;    suspend fun sincronizarPendientes() {</b>
+<b class="fc">&nbsp;        val pendientes = leerColaPendientes()</b>
+<b class="fc">&nbsp;        if (pendientes.isEmpty()) return</b>
+&nbsp;
+<b class="fc">&nbsp;        val aunPendientes = mutableListOf&lt;Tecnico&gt;()</b>
+<b class="fc">&nbsp;        for (item in pendientes) {</b>
+<b class="fc">&nbsp;            try {</b>
+<b class="pc">&nbsp;                RetrofitInstance.api.guardarTecnico(</b>
+<b class="fc">&nbsp;                    Tecnico(</b>
+<b class="fc">&nbsp;                        id = null,</b>
+<b class="fc">&nbsp;                        nombre = item.nombre,</b>
+<b class="fc">&nbsp;                        cargo = item.cargo,</b>
+<b class="pc">&nbsp;                        localAsignado = item.localAsignado.orEmpty()</b>
+&nbsp;                    )
+&nbsp;                )
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="fc">&nbsp;                aunPendientes.add(item)</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        guardarColaPendientes(aunPendientes)</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    private fun leerTodoLocal(): List&lt;Tecnico&gt; = leerCacheServidor() + leerColaPendientes()</b>
+&nbsp;
+&nbsp;    private fun leerCacheServidor(): List&lt;Tecnico&gt; {
+<b class="fc">&nbsp;        val json = prefs.getString(KEY_CACHE_SERVIDOR, null) ?: return emptyList()</b>
+<b class="fc">&nbsp;        val type = object : TypeToken&lt;List&lt;Tecnico&gt;&gt;() {}.type</b>
+<b class="fc">&nbsp;        return runCatching { gson.fromJson&lt;List&lt;Tecnico&gt;&gt;(json, type) }.getOrDefault(emptyList())</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun guardarCacheServidor(lista: List&lt;Tecnico&gt;) {
+<b class="fc">&nbsp;        prefs.edit().putString(KEY_CACHE_SERVIDOR, gson.toJson(lista)).apply()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private fun leerColaPendientes(): List&lt;Tecnico&gt; {
+<b class="fc">&nbsp;        val json = prefs.getString(KEY_COLA_PENDIENTES, null) ?: return emptyList()</b>
+<b class="fc">&nbsp;        val type = object : TypeToken&lt;List&lt;Tecnico&gt;&gt;() {}.type</b>
+<b class="fc">&nbsp;        return runCatching { gson.fromJson&lt;List&lt;Tecnico&gt;&gt;(json, type) }.getOrDefault(emptyList())</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun guardarColaPendientes(lista: List&lt;Tecnico&gt;) {
+<b class="fc">&nbsp;        prefs.edit().putString(KEY_COLA_PENDIENTES, gson.toJson(lista)).apply()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    private companion object {</b>
+&nbsp;        const val KEY_CACHE_SERVIDOR = &quot;cache_servidor&quot;
+&nbsp;        const val KEY_COLA_PENDIENTES = &quot;cola_pendientes&quot;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

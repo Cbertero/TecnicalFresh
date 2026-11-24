@@ -1,0 +1,264 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UsuarioRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: UsuarioRepository (cl.duoc.tacticaldev.data.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UsuarioRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (20/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,2%
+  </span>
+  <span class="absValue">
+    (40/42)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UsuarioRepository$autenticar$1</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioRepository$observarOperarios$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioRepository$refrescarOperarios$1</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioRepository$registrar$1</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioRepository$servidorDisponible$1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,6%
+  </span>
+  <span class="absValue">
+    (21/32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,6%
+  </span>
+  <span class="absValue">
+    (43/45)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.repository
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.UsuarioDao
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
+&nbsp;import cl.duoc.tacticaldev.data.model.LoginRequest
+&nbsp;import cl.duoc.tacticaldev.data.model.RegistroRequest
+&nbsp;import cl.duoc.tacticaldev.data.model.aEntidad
+&nbsp;import cl.duoc.tacticaldev.data.remote.RetrofitInstance
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.firstOrNull
+&nbsp;import kotlinx.coroutines.flow.onStart
+&nbsp;import retrofit2.HttpException
+&nbsp;import kotlin.coroutines.cancellation.CancellationException
+&nbsp;
+&nbsp;/** No se pudo contactar al microservicio: no hay internet o el servidor no responde. */
+&nbsp;class ServidorNoDisponibleException :
+&nbsp;    Exception(&quot;Sin conexión con el servidor. Necesitas internet para continuar&quot;)
+&nbsp;
+&nbsp;class UsuarioRepository(private val usuarioDao: UsuarioDao? = null) {
+&nbsp;
+&nbsp;    /** true si el microservicio responde; false si no hay conexión o falla. */
+<b class="fc">&nbsp;    suspend fun servidorDisponible(): Boolean = try {</b>
+<b class="pc">&nbsp;        RetrofitInstance.api.getPuntosVenta()</b>
+<b class="fc">&nbsp;        true</b>
+<b class="fc">&nbsp;    } catch (e: Exception) {</b>
+<b class="fc">&nbsp;        false</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _operariosFlow = MutableStateFlow&lt;List&lt;UsuarioEntity&gt;&gt;(emptyList())</b>
+&nbsp;
+<b class="fc">&nbsp;    fun observarOperarios(): Flow&lt;List&lt;UsuarioEntity&gt;&gt; = _operariosFlow.onStart {</b>
+<b class="pc">&nbsp;        refrescarOperarios()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    suspend fun refrescarOperarios(): List&lt;UsuarioEntity&gt; {</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            val remotos = RetrofitInstance.api.getUsuarios(&quot;OPERARIO&quot;).map { it.aEntidad() }</b>
+<b class="fc">&nbsp;            _operariosFlow.value = remotos</b>
+&nbsp;            // No se guardan en Room: el servidor ya no envía el hash y REPLACE
+&nbsp;            // borraría el hash local de quienes iniciaron sesión en este teléfono.
+<b class="fc">&nbsp;            remotos</b>
+&nbsp;        } catch (e: Exception) {
+<b class="pc">&nbsp;            val locales = runCatching { usuarioDao?.observarOperarios()?.firstOrNull() }.getOrNull().orEmpty()</b>
+<b class="fc">&nbsp;            if (locales.isNotEmpty()) {</b>
+<b class="fc">&nbsp;                _operariosFlow.value = locales</b>
+&nbsp;            }
+<b class="fc">&nbsp;            _operariosFlow.value</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // El login SIEMPRE se valida en el microservicio (BCrypt en MySQL).
+&nbsp;    // En el teléfono no se guarda ninguna clave: sin servidor no se puede entrar.
+<b class="fc">&nbsp;    suspend fun autenticar(correo: String, clave: String): UsuarioEntity? {</b>
+<b class="fc">&nbsp;        val correoLimpio = correo.trim().lowercase()</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            RetrofitInstance.api.loginUsuario(LoginRequest(correoLimpio, clave)).aEntidad()</b>
+<b class="fc">&nbsp;        } catch (e: HttpException) {</b>
+<b class="fc">&nbsp;            if (e.code() == 401) null else throw ServidorNoDisponibleException()</b>
+&nbsp;        } catch (e: CancellationException) {
+<b class="nc">&nbsp;            throw e</b>
+<b class="fc">&nbsp;        } catch (e: Exception) {</b>
+<b class="fc">&nbsp;            throw ServidorNoDisponibleException()</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // Registra el usuario en MySQL; el servidor guarda la clave con BCrypt
+<b class="fc">&nbsp;    suspend fun registrar(</b>
+&nbsp;        nombre: String,
+&nbsp;        correo: String,
+&nbsp;        clave: String,
+&nbsp;        rol: String,
+&nbsp;        cargo: String
+&nbsp;    ): Result&lt;Long&gt; {
+<b class="fc">&nbsp;        val correoLimpio = correo.trim().lowercase()</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="fc">&nbsp;            val creado = RetrofitInstance.api</b>
+<b class="pc">&nbsp;                .registrarUsuario(RegistroRequest(nombre.trim(), correoLimpio, clave, rol, cargo.trim()))</b>
+<b class="fc">&nbsp;                .aEntidad()</b>
+<b class="pc">&nbsp;            refrescarOperarios()</b>
+<b class="fc">&nbsp;            Result.success(creado.id)</b>
+<b class="fc">&nbsp;        } catch (e: HttpException) {</b>
+<b class="fc">&nbsp;            if (e.code() == 409) {</b>
+<b class="fc">&nbsp;                Result.failure(Exception(&quot;Ya existe una cuenta con este correo&quot;))</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                Result.failure(ServidorNoDisponibleException())</b>
+&nbsp;            }
+&nbsp;        } catch (e: CancellationException) {
+<b class="nc">&nbsp;            throw e</b>
+<b class="fc">&nbsp;        } catch (e: Exception) {</b>
+<b class="fc">&nbsp;            Result.failure(ServidorNoDisponibleException())</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

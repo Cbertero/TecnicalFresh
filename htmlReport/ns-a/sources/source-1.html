@@ -1,0 +1,320 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ActivoRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.repository</a>
+</div>
+
+<h1>Coverage Summary for Class: ActivoRepository (cl.duoc.tacticaldev.data.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActivoRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,6%
+  </span>
+  <span class="absValue">
+    (63/96)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (72/72)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ActivoRepository$buscarPorCodigo$1</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$observarActivos$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$observarPuntosVenta$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$obtenerActivo$1</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$refrescarDatos$$inlined$sortedBy$1</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$refrescarDatos$1</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$registrarActivo$1</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoRepository$registrarPuntoVenta$1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65%
+  </span>
+  <span class="absValue">
+    (65/100)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (78/78)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.repository
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.ActivoDao
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.PuntoVentaDao
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
+&nbsp;import cl.duoc.tacticaldev.data.remote.RetrofitInstance
+&nbsp;import cl.duoc.tacticaldev.model.ActivoConPunto
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.firstOrNull
+&nbsp;import kotlinx.coroutines.flow.onStart
+&nbsp;
+&nbsp;class ActivoRepository(
+<b class="fc">&nbsp;    private val activoDao: ActivoDao? = null,</b>
+<b class="fc">&nbsp;    private val puntoVentaDao: PuntoVentaDao? = null</b>
+<b class="fc">&nbsp;) {</b>
+<b class="fc">&nbsp;    private val _puntosFlow = MutableStateFlow&lt;List&lt;PuntoVentaEntity&gt;&gt;(emptyList())</b>
+<b class="fc">&nbsp;    private val _activosFlow = MutableStateFlow&lt;List&lt;ActivoConPunto&gt;&gt;(emptyList())</b>
+&nbsp;
+<b class="fc">&nbsp;    fun observarActivos(): Flow&lt;List&lt;ActivoConPunto&gt;&gt; = _activosFlow.onStart {</b>
+<b class="pc">&nbsp;        refrescarDatos()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun observarPuntosVenta(): Flow&lt;List&lt;PuntoVentaEntity&gt;&gt; = _puntosFlow.onStart {</b>
+<b class="pc">&nbsp;        refrescarDatos()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    // trae los locales y activos desde el microservicio
+<b class="fc">&nbsp;    suspend fun refrescarDatos() {</b>
+<b class="fc">&nbsp;        try {</b>
+<b class="pc">&nbsp;            val puntos = RetrofitInstance.api.getPuntosVenta().sortedBy { it.nombre }</b>
+<b class="pc">&nbsp;            val activos = RetrofitInstance.api.getActivos()</b>
+<b class="fc">&nbsp;            _puntosFlow.value = puntos</b>
+<b class="fc">&nbsp;            _activosFlow.value = armarActivosConPunto(activos, puntos)</b>
+&nbsp;
+<b class="fc">&nbsp;            runCatching {</b>
+<b class="pc">&nbsp;                puntoVentaDao?.insertarTodos(puntos)</b>
+<b class="pc">&nbsp;                activoDao?.insertarTodos(activos)</b>
+&nbsp;            }
+&nbsp;        } catch (e: Exception) {
+<b class="pc">&nbsp;            val puntosLocales = runCatching { puntoVentaDao?.observarTodos()?.firstOrNull() }.getOrNull().orEmpty()</b>
+<b class="pc">&nbsp;            val activosLocales = runCatching { activoDao?.observarActivosConPunto()?.firstOrNull() }.getOrNull().orEmpty()</b>
+<b class="fc">&nbsp;            if (puntosLocales.isNotEmpty()) _puntosFlow.value = puntosLocales</b>
+<b class="fc">&nbsp;            if (activosLocales.isNotEmpty()) _activosFlow.value = activosLocales</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    suspend fun obtenerActivo(id: Long): ActivoConPunto? {</b>
+<b class="pc">&nbsp;        if (_activosFlow.value.isEmpty()) {</b>
+<b class="pc">&nbsp;            refrescarDatos()</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return _activosFlow.value.find { it.id == id }</b>
+<b class="pc">&nbsp;            ?: runCatching { activoDao?.buscarActivoConPunto(id) }.getOrNull()</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    suspend fun buscarPorCodigo(codigo: String): ActivoEntity? {</b>
+<b class="fc">&nbsp;        val codigoLimpio = codigo.trim().uppercase()</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            RetrofitInstance.api.getActivoPorCodigo(codigoLimpio)</b>
+&nbsp;        } catch (e: Exception) {
+<b class="pc">&nbsp;            runCatching { activoDao?.buscarPorCodigo(codigoLimpio) }.getOrNull()</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    suspend fun registrarPuntoVenta(puntoVenta: PuntoVentaEntity): Long {</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            val guardado = RetrofitInstance.api.guardarPuntoVenta(puntoVenta)</b>
+<b class="pc">&nbsp;            runCatching { puntoVentaDao?.insertar(guardado) }</b>
+<b class="pc">&nbsp;            refrescarDatos()</b>
+<b class="fc">&nbsp;            guardado.id</b>
+<b class="fc">&nbsp;        } catch (e: Exception) {</b>
+<b class="pc">&nbsp;            val id = puntoVentaDao?.insertar(puntoVenta) ?: 0L</b>
+<b class="pc">&nbsp;            refrescarDatos()</b>
+<b class="fc">&nbsp;            id</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    suspend fun registrarActivo(activo: ActivoEntity): Long {</b>
+<b class="fc">&nbsp;        val limpio = activo.copy(codigo = activo.codigo.trim().uppercase())</b>
+<b class="fc">&nbsp;        return try {</b>
+<b class="pc">&nbsp;            val guardado = RetrofitInstance.api.guardarActivo(limpio)</b>
+<b class="pc">&nbsp;            runCatching { activoDao?.insertar(guardado) }</b>
+<b class="pc">&nbsp;            refrescarDatos()</b>
+<b class="fc">&nbsp;            guardado.id</b>
+<b class="fc">&nbsp;        } catch (e: Exception) {</b>
+<b class="pc">&nbsp;            val id = activoDao?.insertar(limpio) ?: 0L</b>
+<b class="pc">&nbsp;            refrescarDatos()</b>
+<b class="fc">&nbsp;            id</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // junta los datos del activo con su punto de venta
+&nbsp;    private fun armarActivosConPunto(
+&nbsp;        activos: List&lt;ActivoEntity&gt;,
+&nbsp;        puntos: List&lt;PuntoVentaEntity&gt;
+&nbsp;    ): List&lt;ActivoConPunto&gt; {
+<b class="fc">&nbsp;        val mapaPuntos = puntos.associateBy { it.id }</b>
+<b class="fc">&nbsp;        return activos.mapNotNull { a -&gt;</b>
+<b class="fc">&nbsp;            val p = mapaPuntos[a.puntoVentaId] ?: return@mapNotNull null</b>
+<b class="fc">&nbsp;            ActivoConPunto(</b>
+<b class="fc">&nbsp;                id = a.id,</b>
+<b class="fc">&nbsp;                codigo = a.codigo,</b>
+<b class="fc">&nbsp;                tipo = a.tipo,</b>
+<b class="fc">&nbsp;                marca = a.marca,</b>
+<b class="fc">&nbsp;                modelo = a.modelo,</b>
+<b class="fc">&nbsp;                puntoVentaId = a.puntoVentaId,</b>
+<b class="fc">&nbsp;                puntoVentaNombre = p.nombre,</b>
+<b class="fc">&nbsp;                direccion = p.direccion,</b>
+<b class="fc">&nbsp;                comuna = p.comuna,</b>
+<b class="fc">&nbsp;                latitud = p.latitud,</b>
+<b class="fc">&nbsp;                longitud = p.longitud,</b>
+<b class="fc">&nbsp;                ultimaVisita = null</b>
+<b class="fc">&nbsp;            )</b>
+<b class="fc">&nbsp;        }.sortedWith(compareBy({ it.puntoVentaNombre }, { it.codigo }))</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

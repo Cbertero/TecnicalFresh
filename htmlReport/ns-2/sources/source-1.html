@@ -1,0 +1,311 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AppDatabase</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local</a>
+</div>
+
+<h1>Coverage Summary for Class: AppDatabase (cl.duoc.tacticaldev.data.local)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AppDatabase</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AppDatabase$Companion</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AppDatabase$Companion$MIGRACION_1_2$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AppDatabase$sembrarSiEstaVacia$1</td>
+  </tr>
+  <tr>
+    <td class="name">AppDatabase$sembrarSiEstaVacia$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local
+&nbsp;
+&nbsp;import android.content.Context
+&nbsp;import androidx.room.Database
+&nbsp;import androidx.room.Room
+&nbsp;import androidx.room.RoomDatabase
+&nbsp;import androidx.room.migration.Migration
+&nbsp;import androidx.sqlite.db.SupportSQLiteDatabase
+&nbsp;import androidx.room.withTransaction
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.ActivoDao
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.PuntoVentaDao
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.UsuarioDao
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.VisitaDao
+&nbsp;import cl.duoc.tacticaldev.data.local.dao.VisitaPendienteDao
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.VisitaPendienteEntity
+&nbsp;
+&nbsp;/**
+&nbsp; * Base de datos local (Room/SQLite). Permite trabajar sin conexión en terreno:
+&nbsp; * todas las visitas quedan guardadas en el dispositivo.
+&nbsp; */
+<b class="nc">&nbsp;@Database(</b>
+&nbsp;    entities = [
+&nbsp;        UsuarioEntity::class, PuntoVentaEntity::class, ActivoEntity::class,
+&nbsp;        VisitaEntity::class, VisitaPendienteEntity::class
+&nbsp;    ],
+&nbsp;    version = 2,
+&nbsp;    exportSchema = false
+&nbsp;)
+<b class="nc">&nbsp;abstract class AppDatabase : RoomDatabase() {</b>
+&nbsp;
+&nbsp;    abstract fun usuarioDao(): UsuarioDao
+&nbsp;    abstract fun puntoVentaDao(): PuntoVentaDao
+&nbsp;    abstract fun activoDao(): ActivoDao
+&nbsp;    abstract fun visitaDao(): VisitaDao
+&nbsp;    abstract fun visitaPendienteDao(): VisitaPendienteDao
+&nbsp;
+&nbsp;    /** Carga los datos ficticios solo la primera vez que se abre la app. */
+<b class="nc">&nbsp;    suspend fun sembrarSiEstaVacia() {</b>
+<b class="nc">&nbsp;        if (usuarioDao().contar() &gt; 0) return</b>
+<b class="nc">&nbsp;        withTransaction {</b>
+<b class="nc">&nbsp;            usuarioDao().insertarTodos(DatosFicticios.usuarios())</b>
+<b class="nc">&nbsp;            puntoVentaDao().insertarTodos(DatosFicticios.puntosVenta())</b>
+<b class="nc">&nbsp;            activoDao().insertarTodos(DatosFicticios.activos())</b>
+<b class="nc">&nbsp;            visitaDao().insertarTodas(DatosFicticios.visitas())</b>
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    companion object {
+&nbsp;        private const val NOMBRE_BD = &quot;tacticaldev.db&quot;
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Versión 1 → 2: agrega la tabla de visitas pendientes de envío y borra
+&nbsp;         * los hashes de claves que guardaba el login sin internet.
+&nbsp;         * Con una migración no se borran los datos que ya tenía el teléfono.
+&nbsp;         */
+<b class="nc">&nbsp;        val MIGRACION_1_2 = object : Migration(1, 2) {</b>
+&nbsp;            override fun migrate(db: SupportSQLiteDatabase) {
+<b class="nc">&nbsp;                db.execSQL(</b>
+&nbsp;                    &quot;&quot;&quot;
+&nbsp;                    CREATE TABLE IF NOT EXISTS `visitas_pendientes` (
+&nbsp;                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+&nbsp;                        `activoId` INTEGER NOT NULL,
+&nbsp;                        `usuarioId` INTEGER NOT NULL,
+&nbsp;                        `fechaHora` INTEGER NOT NULL,
+&nbsp;                        `tipoVisita` TEXT NOT NULL,
+&nbsp;                        `estadoEquipo` TEXT NOT NULL,
+&nbsp;                        `temperatura` REAL NOT NULL,
+&nbsp;                        `observaciones` TEXT NOT NULL,
+&nbsp;                        `fotoBase64` TEXT NOT NULL,
+&nbsp;                        `latitud` REAL NOT NULL,
+&nbsp;                        `longitud` REAL NOT NULL,
+&nbsp;                        `distanciaMetros` REAL NOT NULL,
+&nbsp;                        `ubicacionVerificada` INTEGER NOT NULL
+&nbsp;                    )
+<b class="nc">&nbsp;                    &quot;&quot;&quot;.trimIndent()</b>
+&nbsp;                )
+&nbsp;                // El login ahora se valida solo en el microservicio: se borran las claves guardadas
+<b class="nc">&nbsp;                db.execSQL(&quot;UPDATE usuarios SET claveHash = &#39;&#39;&quot;)</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        @Volatile
+&nbsp;        private var instancia: AppDatabase? = null
+&nbsp;
+&nbsp;        // Aplicación dueña de la instancia. En el teléfono es siempre la misma; en las
+&nbsp;        // pruebas con Robolectric cada prueba crea una aplicación nueva y cierra la base
+&nbsp;        // anterior, por eso en ese caso se vuelve a crear.
+&nbsp;        @Volatile
+&nbsp;        private var aplicacion: Context? = null
+&nbsp;
+&nbsp;        fun obtener(context: Context): AppDatabase {
+<b class="nc">&nbsp;            val app = context.applicationContext</b>
+<b class="nc">&nbsp;            return instancia?.takeIf { aplicacion === app } ?: synchronized(this) {</b>
+<b class="nc">&nbsp;                instancia?.takeIf { aplicacion === app } ?: Room.databaseBuilder(</b>
+<b class="nc">&nbsp;                    app,</b>
+<b class="nc">&nbsp;                    AppDatabase::class.java,</b>
+<b class="nc">&nbsp;                    NOMBRE_BD</b>
+&nbsp;                )
+<b class="nc">&nbsp;                    .addMigrations(MIGRACION_1_2)</b>
+<b class="nc">&nbsp;                    .build()</b>
+<b class="nc">&nbsp;                    .also {</b>
+<b class="nc">&nbsp;                        instancia = it</b>
+<b class="nc">&nbsp;                        aplicacion = app</b>
+<b class="nc">&nbsp;                    }</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

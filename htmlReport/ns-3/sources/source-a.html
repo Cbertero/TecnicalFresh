@@ -1,0 +1,103 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ActivoDaoKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: ActivoDaoKt (cl.duoc.tacticaldev.data.local.dao)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ActivoDaoKt</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local.dao
+&nbsp;
+&nbsp;import androidx.room.Dao
+&nbsp;import androidx.room.Insert
+&nbsp;import androidx.room.OnConflictStrategy
+&nbsp;import androidx.room.Query
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
+&nbsp;import cl.duoc.tacticaldev.model.ActivoConPunto
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;
+&nbsp;private const val SELECT_ACTIVO_CON_PUNTO = &quot;&quot;&quot;
+&nbsp;    SELECT a.id, a.codigo, a.tipo, a.marca, a.modelo, a.puntoVentaId,
+&nbsp;           p.nombre AS puntoVentaNombre, p.direccion, p.comuna, p.latitud, p.longitud,
+&nbsp;           (SELECT MAX(v.fechaHora) FROM visitas v WHERE v.activoId = a.id) AS ultimaVisita
+&nbsp;    FROM activos a
+&nbsp;    INNER JOIN puntos_venta p ON p.id = a.puntoVentaId
+&nbsp;&quot;&quot;&quot;
+&nbsp;
+&nbsp;@Dao
+&nbsp;interface ActivoDao {
+&nbsp;    @Query(&quot;$SELECT_ACTIVO_CON_PUNTO ORDER BY p.nombre, a.codigo&quot;)
+&nbsp;    fun observarActivosConPunto(): Flow&lt;List&lt;ActivoConPunto&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;$SELECT_ACTIVO_CON_PUNTO WHERE a.id = :id&quot;)
+&nbsp;    suspend fun buscarActivoConPunto(id: Long): ActivoConPunto?
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM activos WHERE codigo = :codigo LIMIT 1&quot;)
+&nbsp;    suspend fun buscarPorCodigo(codigo: String): ActivoEntity?
+&nbsp;
+&nbsp;    @Insert(onConflict = OnConflictStrategy.REPLACE)
+&nbsp;    suspend fun insertar(activo: ActivoEntity): Long
+&nbsp;
+&nbsp;    @Insert(onConflict = OnConflictStrategy.REPLACE)
+&nbsp;    suspend fun insertarTodos(activos: List&lt;ActivoEntity&gt;): List&lt;Long&gt;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

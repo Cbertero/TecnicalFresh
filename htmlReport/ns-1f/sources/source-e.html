@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RegistroUiState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: RegistroUiState (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RegistroUiState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.repository.UsuarioRepository
+&nbsp;import cl.duoc.tacticaldev.domain.validacion.Validadores
+&nbsp;import cl.duoc.tacticaldev.model.Rol
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class RegistroUiState(
+<b class="fc">&nbsp;    val nombre: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val correo: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val clave: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val confirmarClave: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val rol: Rol = Rol.OPERARIO,</b>
+<b class="fc">&nbsp;    val cargo: String = &quot;Técnico de mantenimiento&quot;,</b>
+<b class="fc">&nbsp;    val claveVisible: Boolean = false,</b>
+<b class="fc">&nbsp;    val cargando: Boolean = false,</b>
+<b class="fc">&nbsp;    val errorNombre: String? = null,</b>
+<b class="fc">&nbsp;    val errorCorreo: String? = null,</b>
+<b class="fc">&nbsp;    val errorClave: String? = null,</b>
+<b class="fc">&nbsp;    val errorConfirmarClave: String? = null,</b>
+<b class="fc">&nbsp;    val errorGeneral: String? = null,</b>
+<b class="fc">&nbsp;    val registroExitoso: Boolean = false</b>
+<b class="fc">&nbsp;)</b>
+&nbsp;
+&nbsp;class RegistroViewModel(private val usuarioRepository: UsuarioRepository) : ViewModel() {
+&nbsp;
+&nbsp;    private val _uiState = MutableStateFlow(RegistroUiState())
+&nbsp;    val uiState: StateFlow&lt;RegistroUiState&gt; = _uiState.asStateFlow()
+&nbsp;
+&nbsp;    fun onNombreChange(valor: String) {
+&nbsp;        _uiState.update { it.copy(nombre = valor, errorNombre = null, errorGeneral = null) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onCorreoChange(valor: String) {
+&nbsp;        _uiState.update { it.copy(correo = valor, errorCorreo = null, errorGeneral = null) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onClaveChange(valor: String) {
+&nbsp;        _uiState.update { it.copy(clave = valor, errorClave = null, errorGeneral = null) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onConfirmarClaveChange(valor: String) {
+&nbsp;        _uiState.update { it.copy(confirmarClave = valor, errorConfirmarClave = null, errorGeneral = null) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onRolChange(rol: Rol) {
+&nbsp;        val nuevoCargo = if (rol == Rol.SUPERVISOR) &quot;Supervisor de operaciones&quot; else &quot;Técnico de mantenimiento&quot;
+&nbsp;        _uiState.update { it.copy(rol = rol, cargo = nuevoCargo) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onCargoChange(cargo: String) {
+&nbsp;        _uiState.update { it.copy(cargo = cargo) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun toggleClaveVisible() {
+&nbsp;        _uiState.update { it.copy(claveVisible = !it.claveVisible) }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun validar(): Boolean {
+&nbsp;        val s = _uiState.value
+&nbsp;        val errNombre = if (s.nombre.trim().length &lt; 3) &quot;El nombre debe tener al menos 3 caracteres&quot; else null
+&nbsp;        val errCorreo = Validadores.correo(s.correo)
+&nbsp;        val errClave = Validadores.clave(s.clave)
+&nbsp;        val errConfirmar = when {
+&nbsp;            s.confirmarClave.isBlank() -&gt; &quot;Confirma tu clave&quot;
+&nbsp;            s.clave != s.confirmarClave -&gt; &quot;Las contraseñas no coinciden&quot;
+&nbsp;            else -&gt; null
+&nbsp;        }
+&nbsp;
+&nbsp;        _uiState.update {
+&nbsp;            it.copy(
+&nbsp;                errorNombre = errNombre,
+&nbsp;                errorCorreo = errCorreo,
+&nbsp;                errorClave = errClave,
+&nbsp;                errorConfirmarClave = errConfirmar
+&nbsp;            )
+&nbsp;        }
+&nbsp;        return errNombre == null &amp;&amp; errCorreo == null &amp;&amp; errClave == null &amp;&amp; errConfirmar == null
+&nbsp;    }
+&nbsp;    fun registrar(onExito: () -&gt; Unit) {
+&nbsp;        if (!validar()) return
+&nbsp;        val s = _uiState.value
+&nbsp;        viewModelScope.launch {
+&nbsp;            _uiState.update { it.copy(cargando = true, errorGeneral = null) }
+&nbsp;            val resultado = usuarioRepository.registrar(
+&nbsp;                nombre = s.nombre,
+&nbsp;                correo = s.correo,
+&nbsp;                clave = s.clave,
+&nbsp;                rol = s.rol.name,
+&nbsp;                cargo = s.cargo
+&nbsp;            )
+&nbsp;            resultado.fold(
+&nbsp;                onSuccess = {
+&nbsp;                    _uiState.update { it.copy(cargando = false, registroExitoso = true) }
+&nbsp;                    onExito()
+&nbsp;                },
+&nbsp;                onFailure = { error -&gt;
+&nbsp;                    _uiState.update {
+&nbsp;                        it.copy(cargando = false, errorGeneral = error.localizedMessage ?: &quot;Error al registrar&quot;)
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

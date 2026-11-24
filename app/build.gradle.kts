@@ -66,6 +66,8 @@ android {
     testOptions {
         // Las clases de Android (Log, Context, etc.) devuelven valores por defecto en vez de fallar
         unitTests.isReturnDefaultValues = true
+        // Robolectric necesita los recursos (layouts, drawables, manifest) para las pruebas de UI
+        unitTests.isIncludeAndroidResources = true
         // Kotest se ejecuta sobre JUnit Platform (JUnit 5)
         unitTests.all {
             it.useJUnitPlatform()
@@ -78,6 +80,14 @@ android {
     }
     testCoverage {
         jacocoVersion = "0.8.12"
+    }
+}
+
+// Las pruebas unitarias se ejecutan solo en "debug": ahí está la actividad vacía
+// (ui-test-manifest) que necesitan las pruebas de pantallas Compose.
+androidComponents {
+    beforeVariants(selector().withBuildType("release")) { variante ->
+        variante.enableUnitTest = false
     }
 }
 
@@ -124,6 +134,20 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
 
+    // Pruebas con Android simulado en la JVM (Robolectric): Room, WorkManager, DataStore y pantallas Compose.
+    // Se escriben con JUnit 4 y corren junto a Kotest gracias al motor "vintage" de JUnit 5.
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core.ktx)
+    testImplementation(libs.androidx.test.ext.junit.ktx)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.ui.test.junit4)
+    testImplementation(libs.androidx.work.testing)
+    testRuntimeOnly(libs.junit.vintage.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    // Registra la actividad vacía que usa createComposeRule()
+    debugImplementation(libs.androidx.ui.test.manifest)
+
     // Herramientas de vista previa
     debugImplementation(libs.androidx.ui.tooling)
 
@@ -140,29 +164,33 @@ jacoco {
     toolVersion = "0.8.12"
 }
 
-// Se excluye lo que NO se prueba con pruebas unitarias en la JVM:
-// pantallas Compose (se prueban con pruebas instrumentadas), clases generadas
-// y envoltorios del framework Android (GPS, cámara, DataStore, Room, Activity).
+// Solo se excluye código generado: las pantallas Compose, Room, WorkManager,
+// DataStore, GPS y cámara se prueban en la JVM con Robolectric.
 val exclusionesCobertura = listOf(
     "**/R.class", "**/R\$*.class", "**/BuildConfig.*", "**/Manifest*.*",
-    "**/ui/**",
-    "**/MainActivity*",
-    "**/ComposableSingletons*",
-    "**/TacticalApp*",
-    "**/di/**",
-    "**/navigation/AppNavigation*",
-    "**/navigation/ItemNavegacion*",
-    "**/navigation/ItemsNavegacion*",
-    "**/data/local/AppDatabase*",
-    "**/data/local/dao/**",
-    "**/data/location/**",
-    "**/data/scanner/**",
-    "**/data/sync/**",
-    "**/data/preferences/**",
-    "**/data/remote/ApiService*",
-    "**/utils/FotoUtils*",
-    "**/viewmodel/AppViewModelProvider*"
+    // Lambdas que genera el compilador de Compose (no son código escrito por nosotros)
+    "**/ComposableSingletons*"
 )
+
+// Robolectric carga las clases con su propio ClassLoader: sin esto JaCoCo no las mide
+tasks.withType<Test>().configureEach {
+    // Robolectric carga un Android completo por prueba: con poca memoria la JVM se cae
+    // (OutOfMemoryError) y las pruebas que faltaban no se miden. Se da más memoria y se
+    // reinicia la JVM cada cierto número de clases de prueba para liberarla.
+    maxHeapSize = "4g"
+    forkEvery = 40
+    // "Run with Coverage" de Android Studio usa el medidor de IntelliJ, que reescribe también
+    // las clases de Android que carga Robolectric y la JVM las rechaza ("VerifyError: Bad
+    // return type"). Sin la verificación de bytecode las pruebas corren y se miden igual.
+    jvmArgs("-noverify")
+    extensions.configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        // Solo el código de la app: si se instrumentan las clases de Android que carga
+        // Robolectric, la JVM las rechaza con "VerifyError: Bad return type"
+        includes = listOf("cl.duoc.tacticaldev.*")
+        excludes = listOf("jdk.internal.*")
+    }
+}
 
 tasks.register<JacocoReport>("jacocoTestReport") {
     group = "verification"

@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TransicionesNavegacion</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.ui.animaciones</a>
+</div>
+
+<h1>Coverage Summary for Class: TransicionesNavegacion (cl.duoc.tacticaldev.ui.animaciones)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TransicionesNavegacion</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.ui.animaciones
+&nbsp;
+&nbsp;import androidx.compose.animation.AnimatedContentTransitionScope
+&nbsp;import androidx.compose.animation.EnterTransition
+&nbsp;import androidx.compose.animation.ExitTransition
+&nbsp;import androidx.compose.animation.core.Animatable
+&nbsp;import androidx.compose.animation.core.tween
+&nbsp;import androidx.compose.animation.fadeIn
+&nbsp;import androidx.compose.animation.fadeOut
+&nbsp;import androidx.compose.animation.slideInHorizontally
+&nbsp;import androidx.compose.animation.slideOutHorizontally
+&nbsp;import androidx.compose.foundation.layout.offset
+&nbsp;import androidx.compose.runtime.LaunchedEffect
+&nbsp;import androidx.compose.runtime.remember
+&nbsp;import androidx.compose.ui.Modifier
+&nbsp;import androidx.compose.ui.composed
+&nbsp;import androidx.compose.ui.unit.IntOffset
+&nbsp;import androidx.navigation.NavBackStackEntry
+&nbsp;import kotlin.math.roundToInt
+&nbsp;
+&nbsp;/** Duración estándar de las transiciones entre pantallas. */
+&nbsp;const val DURACION_TRANSICION = 300
+&nbsp;
+&nbsp;/** Transiciones del NavHost: la pantalla nueva entra deslizándose desde la derecha. */
+<b class="fc">&nbsp;object TransicionesNavegacion {</b>
+<b class="fc">&nbsp;    val entrada: AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; EnterTransition = {</b>
+<b class="fc">&nbsp;        slideInHorizontally(tween(DURACION_TRANSICION)) { it / 4 } + fadeIn(tween(DURACION_TRANSICION))</b>
+&nbsp;    }
+<b class="fc">&nbsp;    val salida: AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; ExitTransition = {</b>
+<b class="fc">&nbsp;        fadeOut(tween(DURACION_TRANSICION))</b>
+&nbsp;    }
+<b class="fc">&nbsp;    val entradaAlVolver: AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; EnterTransition = {</b>
+<b class="fc">&nbsp;        fadeIn(tween(DURACION_TRANSICION))</b>
+&nbsp;    }
+<b class="fc">&nbsp;    val salidaAlVolver: AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; ExitTransition = {</b>
+<b class="fc">&nbsp;        slideOutHorizontally(tween(DURACION_TRANSICION)) { it / 4 } + fadeOut(tween(DURACION_TRANSICION))</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Sacude horizontalmente el elemento cada vez que [disparador] cambia.
+&nbsp; * Se usa como retroalimentación cuando un formulario tiene errores.
+&nbsp; */
+&nbsp;fun Modifier.sacudir(disparador: Int): Modifier = composed {
+&nbsp;    val desplazamiento = remember { Animatable(0f) }
+&nbsp;    LaunchedEffect(disparador) {
+&nbsp;        if (disparador == 0) return@LaunchedEffect
+&nbsp;        for (valor in listOf(-18f, 18f, -12f, 12f, -6f, 6f, 0f)) {
+&nbsp;            desplazamiento.animateTo(valor, tween(durationMillis = 45))
+&nbsp;        }
+&nbsp;    }
+&nbsp;    offset { IntOffset(desplazamiento.value.roundToInt(), 0) }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

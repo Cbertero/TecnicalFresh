@@ -17,6 +17,11 @@ junit = "4.13.2"
 mockk = "1.13.13"
 kotest = "5.9.1"
 coroutinesTest = "1.8.1"
+robolectric = "4.14.1"
+androidxTestCore = "1.6.1"
+androidxTestExtJunit = "1.2.1"
+junitJupiter = "5.10.2"
+junitPlatform = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +50,15 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+# Pruebas que necesitan Android en la JVM (Room, WorkManager, DataStore, pantallas Compose)
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "androidxTestCore" }
+androidx-test-ext-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExtJunit" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "work" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "junitJupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatform" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

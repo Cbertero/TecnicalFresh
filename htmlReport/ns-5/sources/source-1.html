@@ -1,0 +1,287 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UbicacionService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.location</a>
+</div>
+
+<h1>Coverage Summary for Class: UbicacionService (cl.duoc.tacticaldev.data.location)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UbicacionService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UbicacionService$Companion</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UbicacionService$consultarUbicacion$2$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UbicacionService$consultarUbicacion$2$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UbicacionService$consultarUbicacion$2$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UbicacionService$obtenerUbicacionActual$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UbicacionService$sam$com_google_android_gms_tasks_OnSuccessListener$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/19)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.location
+&nbsp;
+&nbsp;import android.Manifest
+&nbsp;import android.annotation.SuppressLint
+&nbsp;import android.content.Context
+&nbsp;import android.content.pm.PackageManager
+&nbsp;import android.location.Location
+&nbsp;import androidx.core.content.ContextCompat
+&nbsp;import com.google.android.gms.location.LocationServices
+&nbsp;import com.google.android.gms.location.Priority
+&nbsp;import com.google.android.gms.tasks.CancellationTokenSource
+&nbsp;import kotlinx.coroutines.suspendCancellableCoroutine
+&nbsp;import kotlinx.coroutines.withTimeoutOrNull
+&nbsp;import kotlin.coroutines.resume
+&nbsp;
+&nbsp;/** Obtiene la ubicación actual del dispositivo con el Fused Location Provider. */
+<b class="fc">&nbsp;class UbicacionService(private val context: Context) {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val cliente = LocationServices.getFusedLocationProviderClient(context)</b>
+&nbsp;
+&nbsp;    fun tienePermiso(): Boolean =
+<b class="fc">&nbsp;        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==</b>
+&nbsp;            PackageManager.PERMISSION_GRANTED ||
+<b class="fc">&nbsp;            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) ==</b>
+<b class="fc">&nbsp;            PackageManager.PERMISSION_GRANTED</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Devuelve la ubicación actual o null si no hay permiso o no se pudo obtener.
+&nbsp;     * Con GPS desactivado la consulta podía quedar esperando, por eso tiene un tiempo máximo.
+&nbsp;     */
+&nbsp;    @SuppressLint(&quot;MissingPermission&quot;) // el permiso se verifica con tienePermiso()
+&nbsp;    suspend fun obtenerUbicacionActual(): Location? {
+<b class="fc">&nbsp;        if (!tienePermiso()) return null</b>
+<b class="fc">&nbsp;        return withTimeoutOrNull(TIEMPO_MAXIMO_MS) { consultarUbicacion() }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @SuppressLint(&quot;MissingPermission&quot;)
+&nbsp;    private suspend fun consultarUbicacion(): Location? =
+<b class="fc">&nbsp;        suspendCancellableCoroutine { continuacion -&gt;</b>
+<b class="fc">&nbsp;            val token = CancellationTokenSource()</b>
+<b class="fc">&nbsp;            cliente.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, token.token)</b>
+<b class="fc">&nbsp;                .addOnSuccessListener { ubicacion -&gt; continuacion.resume(ubicacion) }</b>
+<b class="fc">&nbsp;                .addOnFailureListener { continuacion.resume(null) }</b>
+<b class="fc">&nbsp;            continuacion.invokeOnCancellation { token.cancel() }</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;    private companion object {</b>
+&nbsp;        const val TIEMPO_MAXIMO_MS = 15_000L
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

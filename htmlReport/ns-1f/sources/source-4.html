@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AppViewModelProvider</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: AppViewModelProvider (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AppViewModelProvider</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModelProvider
+&nbsp;import androidx.lifecycle.createSavedStateHandle
+&nbsp;import androidx.lifecycle.viewmodel.CreationExtras
+&nbsp;import androidx.lifecycle.viewmodel.initializer
+&nbsp;import androidx.lifecycle.viewmodel.viewModelFactory
+&nbsp;import cl.duoc.tacticaldev.TacticalApp
+&nbsp;
+&nbsp;/**
+&nbsp; * Fábrica única de ViewModels: entrega a cada ViewModel los repositorios
+&nbsp; * del AppContainer (las vistas nunca acceden directo a los datos).
+&nbsp; */
+&nbsp;object AppViewModelProvider {
+<b class="nc">&nbsp;    val Factory = viewModelFactory {</b>
+<b class="nc">&nbsp;        initializer { SesionViewModel(app().container.sesionPreferences) }</b>
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            LoginViewModel(app().container.usuarioRepository, app().container.sesionPreferences)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            RegistroViewModel(app().container.usuarioRepository)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            ActivosViewModel(</b>
+<b class="nc">&nbsp;                repository = app().container.activoRepository,</b>
+<b class="nc">&nbsp;                sesionPreferences = app().container.sesionPreferences,</b>
+<b class="nc">&nbsp;                tecnicoRepository = app().container.tecnicoRepository</b>
+&nbsp;            )
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            VisitaViewModel(</b>
+<b class="nc">&nbsp;                savedStateHandle = createSavedStateHandle(),</b>
+<b class="nc">&nbsp;                activoRepository = app().container.activoRepository,</b>
+<b class="nc">&nbsp;                visitaRepository = app().container.visitaRepository,</b>
+<b class="nc">&nbsp;                sesionPreferences = app().container.sesionPreferences,</b>
+<b class="nc">&nbsp;                ubicacionService = app().container.ubicacionService,</b>
+<b class="nc">&nbsp;                climaRepository = app().container.climaRepository</b>
+&nbsp;            )
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            ConfirmacionViewModel(createSavedStateHandle(), app().container.visitaRepository)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            HistorialViewModel(</b>
+<b class="nc">&nbsp;                createSavedStateHandle(),</b>
+<b class="nc">&nbsp;                app().container.activoRepository,</b>
+<b class="nc">&nbsp;                app().container.visitaRepository</b>
+&nbsp;            )
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            MisVisitasViewModel(app().container.sesionPreferences, app().container.visitaRepository)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            SupervisorViewModel(app().container.visitaRepository, app().container.sesionPreferences)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            AdminViewModel(app().container.activoRepository, app().container.ubicacionService)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        initializer {</b>
+<b class="nc">&nbsp;            TecnicoViewModel(</b>
+<b class="nc">&nbsp;                repository = app().container.tecnicoRepository,</b>
+<b class="nc">&nbsp;                usuarioRepository = app().container.usuarioRepository,</b>
+<b class="nc">&nbsp;                activoRepository = app().container.activoRepository</b>
+&nbsp;            )
+&nbsp;        }
+<b class="nc">&nbsp;    }</b>
+&nbsp;}
+&nbsp;
+&nbsp;/** Obtiene la instancia de [TacticalApp] desde los CreationExtras. */
+&nbsp;fun CreationExtras.app(): TacticalApp =
+&nbsp;    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as TacticalApp
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

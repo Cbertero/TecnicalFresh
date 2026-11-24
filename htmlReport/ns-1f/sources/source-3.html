@@ -1,0 +1,384 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AdminViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: AdminViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AdminViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (69/69)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AdminViewModel$guardarActivo$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    58,3%
+  </span>
+  <span class="absValue">
+    (7/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AdminViewModel$guardarPuntoVenta$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">AdminViewModel$usarUbicacionActual$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,4%
+  </span>
+  <span class="absValue">
+    (17/26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (105/105)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
+&nbsp;import cl.duoc.tacticaldev.data.location.UbicacionService
+&nbsp;import cl.duoc.tacticaldev.data.repository.ActivoRepository
+&nbsp;import cl.duoc.tacticaldev.domain.validacion.Validadores
+&nbsp;import cl.duoc.tacticaldev.model.ActivoForm
+&nbsp;import cl.duoc.tacticaldev.model.AdminUiState
+&nbsp;import cl.duoc.tacticaldev.model.PuntoVentaForm
+&nbsp;import cl.duoc.tacticaldev.model.TipoActivo
+&nbsp;import kotlinx.coroutines.flow.MutableSharedFlow
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.SharedFlow
+&nbsp;import kotlinx.coroutines.flow.SharingStarted
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asSharedFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.stateIn
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;import java.util.Locale
+&nbsp;
+&nbsp;/** Registro de nuevos puntos de venta y activos por parte del supervisor. */
+<b class="fc">&nbsp;class AdminViewModel(</b>
+<b class="fc">&nbsp;    private val activoRepository: ActivoRepository,</b>
+<b class="fc">&nbsp;    private val ubicacionService: UbicacionService</b>
+<b class="fc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _uiState = MutableStateFlow(AdminUiState())</b>
+<b class="fc">&nbsp;    val uiState: StateFlow&lt;AdminUiState&gt; = _uiState.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    val puntosVenta: StateFlow&lt;List&lt;PuntoVentaEntity&gt;&gt; = activoRepository.observarPuntosVenta()</b>
+<b class="fc">&nbsp;        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _mensajes = MutableSharedFlow&lt;String&gt;(extraBufferCapacity = 1)</b>
+<b class="fc">&nbsp;    val mensajes: SharedFlow&lt;String&gt; = _mensajes.asSharedFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onPestanaChange(indice: Int) = _uiState.update { it.copy(pestana = indice) }</b>
+&nbsp;
+&nbsp;    // ---------- Punto de venta ----------
+&nbsp;
+&nbsp;    private fun actualizarPunto(cambio: (PuntoVentaForm) -&gt; PuntoVentaForm) =
+<b class="fc">&nbsp;        _uiState.update { it.copy(puntoVenta = cambio(it.puntoVenta)) }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onNombrePuntoChange(v: String) = actualizarPunto {</b>
+<b class="fc">&nbsp;        it.copy(nombre = v, errores = it.errores.copy(nombre = Validadores.textoRequerido(v, &quot;el nombre&quot;)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onDireccionChange(v: String) = actualizarPunto {</b>
+<b class="fc">&nbsp;        it.copy(direccion = v, errores = it.errores.copy(direccion = Validadores.textoRequerido(v, &quot;la dirección&quot;, max = 80)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onComunaChange(v: String) = actualizarPunto {</b>
+<b class="fc">&nbsp;        it.copy(comuna = v, errores = it.errores.copy(comuna = Validadores.textoRequerido(v, &quot;la comuna&quot;, max = 40)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onLatitudChange(v: String) = actualizarPunto {</b>
+<b class="fc">&nbsp;        it.copy(latitud = v, errores = it.errores.copy(latitud = Validadores.latitud(v)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onLongitudChange(v: String) = actualizarPunto {</b>
+<b class="fc">&nbsp;        it.copy(longitud = v, errores = it.errores.copy(longitud = Validadores.longitud(v)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /** Completa latitud y longitud con la ubicación actual (útil al instalar un equipo). */
+&nbsp;    fun usarUbicacionActual() {
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(obteniendoUbicacion = true) }</b>
+<b class="pc">&nbsp;            val ubicacion = ubicacionService.obtenerUbicacionActual()</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(obteniendoUbicacion = false) }</b>
+<b class="fc">&nbsp;            if (ubicacion == null) {</b>
+<b class="pc">&nbsp;                _mensajes.emit(&quot;No se pudo obtener la ubicación&quot;)</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                onLatitudChange(String.format(Locale.US, &quot;%.6f&quot;, ubicacion.latitude))</b>
+<b class="fc">&nbsp;                onLongitudChange(String.format(Locale.US, &quot;%.6f&quot;, ubicacion.longitude))</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun onPermisoUbicacionDenegado() {
+<b class="fc">&nbsp;        _mensajes.tryEmit(&quot;Se necesita el permiso de ubicación&quot;)</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun guardarPuntoVenta() {
+<b class="fc">&nbsp;        val f = _uiState.value.puntoVenta</b>
+<b class="fc">&nbsp;        val errores = f.errores.copy(</b>
+<b class="fc">&nbsp;            nombre = Validadores.textoRequerido(f.nombre, &quot;el nombre&quot;),</b>
+<b class="fc">&nbsp;            direccion = Validadores.textoRequerido(f.direccion, &quot;la dirección&quot;, max = 80),</b>
+<b class="fc">&nbsp;            comuna = Validadores.textoRequerido(f.comuna, &quot;la comuna&quot;, max = 40),</b>
+<b class="fc">&nbsp;            latitud = Validadores.latitud(f.latitud),</b>
+<b class="fc">&nbsp;            longitud = Validadores.longitud(f.longitud)</b>
+&nbsp;        )
+<b class="fc">&nbsp;        actualizarPunto { it.copy(errores = errores) }</b>
+<b class="fc">&nbsp;        if (errores.hayErrores) return</b>
+&nbsp;
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(guardando = true) }</b>
+<b class="pc">&nbsp;            activoRepository.registrarPuntoVenta(</b>
+<b class="fc">&nbsp;                PuntoVentaEntity(</b>
+<b class="fc">&nbsp;                    nombre = f.nombre.trim(),</b>
+<b class="fc">&nbsp;                    direccion = f.direccion.trim(),</b>
+<b class="fc">&nbsp;                    comuna = f.comuna.trim(),</b>
+<b class="fc">&nbsp;                    latitud = f.latitud.replace(&#39;,&#39;, &#39;.&#39;).toDouble(),</b>
+<b class="fc">&nbsp;                    longitud = f.longitud.replace(&#39;,&#39;, &#39;.&#39;).toDouble()</b>
+&nbsp;                )
+&nbsp;            )
+<b class="fc">&nbsp;            _uiState.update { it.copy(guardando = false, puntoVenta = PuntoVentaForm()) }</b>
+<b class="pc">&nbsp;            _mensajes.emit(&quot;Punto de venta \&quot;${f.nombre.trim()}\&quot; registrado&quot;)</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    // ---------- Activo ----------
+&nbsp;
+&nbsp;    private fun actualizarActivo(cambio: (ActivoForm) -&gt; ActivoForm) =
+<b class="fc">&nbsp;        _uiState.update { it.copy(activo = cambio(it.activo)) }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onCodigoChange(v: String) = actualizarActivo {</b>
+<b class="fc">&nbsp;        it.copy(codigo = v.uppercase(), errores = it.errores.copy(codigo = Validadores.codigoActivo(v)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onTipoActivoChange(tipo: TipoActivo) = actualizarActivo {</b>
+<b class="fc">&nbsp;        it.copy(tipo = tipo, errores = it.errores.copy(tipo = null))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onMarcaChange(v: String) = actualizarActivo {</b>
+<b class="fc">&nbsp;        it.copy(marca = v, errores = it.errores.copy(marca = Validadores.textoRequerido(v, &quot;la marca&quot;, min = 2, max = 30)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onModeloChange(v: String) = actualizarActivo {</b>
+<b class="fc">&nbsp;        it.copy(modelo = v, errores = it.errores.copy(modelo = Validadores.textoRequerido(v, &quot;el modelo&quot;, min = 2, max = 30)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onPuntoVentaChange(id: Long) = actualizarActivo {</b>
+<b class="fc">&nbsp;        it.copy(puntoVentaId = id, errores = it.errores.copy(puntoVenta = null))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun guardarActivo() {
+<b class="fc">&nbsp;        val f = _uiState.value.activo</b>
+<b class="fc">&nbsp;        val errores = f.errores.copy(</b>
+<b class="fc">&nbsp;            codigo = Validadores.codigoActivo(f.codigo),</b>
+<b class="fc">&nbsp;            tipo = Validadores.seleccion(f.tipo, &quot;el tipo de activo&quot;),</b>
+<b class="fc">&nbsp;            marca = Validadores.textoRequerido(f.marca, &quot;la marca&quot;, min = 2, max = 30),</b>
+<b class="fc">&nbsp;            modelo = Validadores.textoRequerido(f.modelo, &quot;el modelo&quot;, min = 2, max = 30),</b>
+<b class="fc">&nbsp;            puntoVenta = Validadores.seleccion(f.puntoVentaId, &quot;el punto de venta&quot;)</b>
+&nbsp;        )
+<b class="fc">&nbsp;        actualizarActivo { it.copy(errores = errores) }</b>
+<b class="fc">&nbsp;        if (errores.hayErrores) return</b>
+&nbsp;
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+&nbsp;            // El código del QR debe ser único
+<b class="pc">&nbsp;            if (activoRepository.buscarPorCodigo(f.codigo) != null) {</b>
+<b class="fc">&nbsp;                actualizarActivo { it.copy(errores = it.errores.copy(codigo = &quot;Ya existe un activo con este código&quot;)) }</b>
+<b class="fc">&nbsp;                return@launch</b>
+&nbsp;            }
+<b class="fc">&nbsp;            _uiState.update { it.copy(guardando = true) }</b>
+<b class="pc">&nbsp;            activoRepository.registrarActivo(</b>
+<b class="fc">&nbsp;                ActivoEntity(</b>
+<b class="fc">&nbsp;                    codigo = f.codigo.trim().uppercase(),</b>
+<b class="pc">&nbsp;                    tipo = checkNotNull(f.tipo).name,</b>
+<b class="fc">&nbsp;                    marca = f.marca.trim(),</b>
+<b class="fc">&nbsp;                    modelo = f.modelo.trim(),</b>
+<b class="pc">&nbsp;                    puntoVentaId = checkNotNull(f.puntoVentaId)</b>
+&nbsp;                )
+&nbsp;            )
+<b class="fc">&nbsp;            _uiState.update { it.copy(guardando = false, activo = ActivoForm()) }</b>
+<b class="pc">&nbsp;            _mensajes.emit(&quot;Activo ${f.codigo.trim().uppercase()} registrado&quot;)</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

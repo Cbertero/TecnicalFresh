@@ -1,0 +1,132 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ActivoEntity</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: ActivoEntity (cl.duoc.tacticaldev.data.local.entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActivoEntity</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local.entity
+&nbsp;
+&nbsp;import androidx.room.Entity
+&nbsp;import androidx.room.ForeignKey
+&nbsp;import androidx.room.Index
+&nbsp;import androidx.room.PrimaryKey
+&nbsp;
+&nbsp;/** Vitrina freezer o conservadora instalada en un punto de venta. */
+&nbsp;@Entity(
+&nbsp;    tableName = &quot;activos&quot;,
+&nbsp;    foreignKeys = [
+&nbsp;        ForeignKey(
+&nbsp;            entity = PuntoVentaEntity::class,
+&nbsp;            parentColumns = [&quot;id&quot;],
+&nbsp;            childColumns = [&quot;puntoVentaId&quot;],
+&nbsp;            onDelete = ForeignKey.CASCADE
+&nbsp;        )
+&nbsp;    ],
+&nbsp;    indices = [Index(&quot;puntoVentaId&quot;), Index(value = [&quot;codigo&quot;], unique = true)]
+&nbsp;)
+&nbsp;data class ActivoEntity(
+<b class="fc">&nbsp;    @PrimaryKey(autoGenerate = true) val id: Long = 0,</b>
+<b class="fc">&nbsp;    val codigo: String,</b>
+<b class="fc">&nbsp;    val tipo: String,</b>
+<b class="fc">&nbsp;    val marca: String,</b>
+<b class="fc">&nbsp;    val modelo: String,</b>
+<b class="fc">&nbsp;    val puntoVentaId: Long</b>
+<b class="fc">&nbsp;)</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

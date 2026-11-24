@@ -1,0 +1,184 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > FotoEvidenciaKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.ui.components</a>
+</div>
+
+<h1>Coverage Summary for Class: FotoEvidenciaKt (cl.duoc.tacticaldev.ui.components)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FotoEvidenciaKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.ui.components
+&nbsp;
+&nbsp;import android.net.Uri
+&nbsp;import android.util.Base64
+&nbsp;import androidx.compose.foundation.background
+&nbsp;import androidx.compose.foundation.layout.Box
+&nbsp;import androidx.compose.foundation.layout.size
+&nbsp;import androidx.compose.foundation.shape.RoundedCornerShape
+&nbsp;import androidx.compose.material.icons.Icons
+&nbsp;import androidx.compose.material.icons.filled.AddAPhoto
+&nbsp;import androidx.compose.material3.Icon
+&nbsp;import androidx.compose.material3.MaterialTheme
+&nbsp;import androidx.compose.runtime.Composable
+&nbsp;import androidx.compose.runtime.remember
+&nbsp;import androidx.compose.ui.Alignment
+&nbsp;import androidx.compose.ui.Modifier
+&nbsp;import androidx.compose.ui.draw.clip
+&nbsp;import androidx.compose.ui.layout.ContentScale
+&nbsp;import androidx.compose.ui.platform.LocalContext
+&nbsp;import androidx.compose.ui.unit.dp
+&nbsp;import coil.compose.AsyncImage
+&nbsp;import coil.request.ImageRequest
+&nbsp;
+&nbsp;/**
+&nbsp; * Componente reutilizable que muestra la foto de evidencia (equivalente al
+&nbsp; * ImagenInteligente de la Guía 13). Si no hay foto muestra un ícono por defecto.
+&nbsp; */
+&nbsp;@Composable
+&nbsp;fun FotoEvidencia(
+&nbsp;    uri: String?,
+<b class="nc">&nbsp;    modifier: Modifier = Modifier,</b>
+<b class="nc">&nbsp;    descripcion: String = &quot;Foto de evidencia&quot;</b>
+<b class="nc">&nbsp;) {</b>
+<b class="nc">&nbsp;    val forma = RoundedCornerShape(12.dp)</b>
+<b class="nc">&nbsp;    if (uri.isNullOrBlank()) {</b>
+<b class="nc">&nbsp;        Box(</b>
+<b class="nc">&nbsp;            modifier = modifier</b>
+<b class="nc">&nbsp;                .clip(forma)</b>
+<b class="nc">&nbsp;                .background(MaterialTheme.colorScheme.surfaceVariant),</b>
+<b class="nc">&nbsp;            contentAlignment = Alignment.Center</b>
+&nbsp;        ) {
+<b class="nc">&nbsp;            Icon(</b>
+<b class="nc">&nbsp;                Icons.Filled.AddAPhoto,</b>
+<b class="nc">&nbsp;                contentDescription = &quot;Sin foto&quot;,</b>
+<b class="nc">&nbsp;                tint = MaterialTheme.colorScheme.onSurfaceVariant,</b>
+<b class="nc">&nbsp;                modifier = Modifier.size(36.dp)</b>
+&nbsp;            )
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;    } else {</b>
+&nbsp;        // La foto puede venir del servidor (Base64) o ser local recién tomada (content://)
+<b class="nc">&nbsp;        val modelo = remember(uri) {</b>
+<b class="nc">&nbsp;            if (uri.startsWith(&quot;data:image&quot;)) {</b>
+<b class="nc">&nbsp;                Base64.decode(uri.substringAfter(&quot;,&quot;), Base64.DEFAULT)</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                Uri.parse(uri)</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        }
+<b class="nc">&nbsp;        AsyncImage(</b>
+<b class="nc">&nbsp;            model = ImageRequest.Builder(LocalContext.current)</b>
+<b class="nc">&nbsp;                .data(modelo)</b>
+<b class="nc">&nbsp;                .crossfade(true)</b>
+<b class="nc">&nbsp;                .build(),</b>
+<b class="nc">&nbsp;            contentDescription = descripcion,</b>
+<b class="nc">&nbsp;            modifier = modifier.clip(forma),</b>
+<b class="nc">&nbsp;            contentScale = ContentScale.Crop</b>
+&nbsp;        )
+&nbsp;    }
+<b class="nc">&nbsp;}</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

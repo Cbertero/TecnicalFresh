@@ -1,0 +1,306 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TecnicoViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: TecnicoViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TecnicoViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/22)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TecnicoViewModel$agregarTecnico$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoViewModel$eliminarTecnico$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TecnicoViewModel$fetchTecnicos$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/13)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (15/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (57/57)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
+&nbsp;import cl.duoc.tacticaldev.data.model.Tecnico
+&nbsp;import cl.duoc.tacticaldev.data.repository.ActivoRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.TecnicoRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.UsuarioRepository
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.SharingStarted
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.stateIn
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+<b class="fc">&nbsp;class TecnicoViewModel(</b>
+<b class="fc">&nbsp;    private val repository: TecnicoRepository,</b>
+&nbsp;    usuarioRepository: UsuarioRepository,
+&nbsp;    activoRepository: ActivoRepository
+<b class="fc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    val tecnicoList: StateFlow&lt;List&lt;Tecnico&gt;&gt; = repository.asignacionesFlow</b>
+&nbsp;
+<b class="fc">&nbsp;    val operarios: StateFlow&lt;List&lt;UsuarioEntity&gt;&gt; = usuarioRepository.observarOperarios()</b>
+<b class="fc">&nbsp;        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())</b>
+&nbsp;
+<b class="fc">&nbsp;    val locales: StateFlow&lt;List&lt;PuntoVentaEntity&gt;&gt; = activoRepository.observarPuntosVenta()</b>
+<b class="fc">&nbsp;        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _mensajeEstado = MutableStateFlow&lt;String?&gt;(null)</b>
+<b class="fc">&nbsp;    val mensajeEstado: StateFlow&lt;String?&gt; = _mensajeEstado.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _sincronizando = MutableStateFlow(false)</b>
+<b class="fc">&nbsp;    val sincronizando: StateFlow&lt;Boolean&gt; = _sincronizando.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    init {</b>
+<b class="fc">&nbsp;        fetchTecnicos()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun fetchTecnicos() {
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _sincronizando.value = true</b>
+<b class="fc">&nbsp;            try {</b>
+<b class="pc">&nbsp;                val lista = repository.geTecnicos()</b>
+<b class="fc">&nbsp;                val pendientes = lista.count { !it.sincronizado }</b>
+<b class="fc">&nbsp;                _mensajeEstado.value = if (pendientes &gt; 0) {</b>
+<b class="fc">&nbsp;                    &quot;Modo local activo: $pendientes asignación(es) pendientes de internet&quot;</b>
+&nbsp;                } else {
+<b class="fc">&nbsp;                    &quot;Conectado y sincronizado con el servidor MySQL&quot;</b>
+&nbsp;                }
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="fc">&nbsp;                _mensajeEstado.value = &quot;Modo local (sin conexión al servidor)&quot;</b>
+&nbsp;            } finally {
+<b class="fc">&nbsp;                _sincronizando.value = false</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun agregarTecnico(nombre: String, cargo: String, localAsignado: String) {
+<b class="fc">&nbsp;        if (nombre.isBlank() || cargo.isBlank() || localAsignado.isBlank()) return</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _sincronizando.value = true</b>
+<b class="fc">&nbsp;            try {</b>
+<b class="pc">&nbsp;                val guardado = repository.GuardarTecnico(</b>
+<b class="fc">&nbsp;                    nombre = nombre.trim(),</b>
+<b class="fc">&nbsp;                    cargo = cargo.trim(),</b>
+<b class="fc">&nbsp;                    localAsignado = localAsignado.trim()</b>
+&nbsp;                )
+<b class="fc">&nbsp;                _mensajeEstado.value = if (guardado.sincronizado) {</b>
+<b class="fc">&nbsp;                    &quot;Asignación guardada en servidor MySQL&quot;</b>
+&nbsp;                } else {
+<b class="fc">&nbsp;                    &quot;Sin internet: guardado en modo local (se subirá al reconectar)&quot;</b>
+&nbsp;                }
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="fc">&nbsp;                _mensajeEstado.value = &quot;Guardado en modo local&quot;</b>
+&nbsp;            } finally {
+<b class="fc">&nbsp;                _sincronizando.value = false</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun eliminarTecnico(id: Long) {
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            try {</b>
+<b class="pc">&nbsp;                repository.eliminarTecnico(id)</b>
+<b class="fc">&nbsp;                fetchTecnicos()</b>
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="fc">&nbsp;                println(&quot;Error al eliminar técnico: ${e.localizedMessage}&quot;)</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

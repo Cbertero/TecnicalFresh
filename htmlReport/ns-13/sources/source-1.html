@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PantallaEnConstruccionKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.ui.screens</a>
+</div>
+
+<h1>Coverage Summary for Class: PantallaEnConstruccionKt (cl.duoc.tacticaldev.ui.screens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PantallaEnConstruccionKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PantallaEnConstruccionKt$PantallaEnConstruccion$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.ui.screens
+&nbsp;
+&nbsp;import androidx.compose.foundation.layout.*
+&nbsp;import androidx.compose.material.icons.Icons
+&nbsp;import androidx.compose.material.icons.filled.Construction
+&nbsp;import androidx.compose.material3.Icon
+&nbsp;import androidx.compose.material3.MaterialTheme
+&nbsp;import androidx.compose.material3.Text
+&nbsp;import androidx.compose.runtime.Composable
+&nbsp;import androidx.compose.ui.Alignment
+&nbsp;import androidx.compose.ui.Modifier
+&nbsp;import androidx.compose.ui.text.style.TextAlign
+&nbsp;import androidx.compose.ui.unit.dp
+&nbsp;import cl.duoc.tacticaldev.ui.components.TacticalScaffold
+&nbsp;
+&nbsp;@Composable
+&nbsp;fun PantallaEnConstruccion(
+&nbsp;    titulo: String,
+<b class="nc">&nbsp;    subtitulo: String = &quot;Esta funcionalidad estará disponible en la próxima versión.&quot;,</b>
+&nbsp;    onVolver: () -&gt; Unit
+<b class="nc">&nbsp;) {</b>
+<b class="nc">&nbsp;    TacticalScaffold(</b>
+<b class="nc">&nbsp;        titulo = titulo,</b>
+<b class="nc">&nbsp;        itemsNavegacion = emptyList(),</b>
+<b class="nc">&nbsp;        onVolver = onVolver</b>
+<b class="nc">&nbsp;    ) { padding -&gt;</b>
+<b class="nc">&nbsp;        Column(</b>
+<b class="nc">&nbsp;            modifier = Modifier</b>
+<b class="nc">&nbsp;                .fillMaxSize()</b>
+<b class="nc">&nbsp;                .padding(padding)</b>
+&nbsp;        ) {
+<b class="nc">&nbsp;            Box(</b>
+<b class="nc">&nbsp;                modifier = Modifier</b>
+<b class="nc">&nbsp;                    .weight(1f)</b>
+<b class="nc">&nbsp;                    .fillMaxWidth()</b>
+<b class="nc">&nbsp;                    .padding(32.dp),</b>
+<b class="nc">&nbsp;                contentAlignment = Alignment.Center</b>
+&nbsp;            ) {
+<b class="nc">&nbsp;                Column(</b>
+<b class="nc">&nbsp;                    horizontalAlignment = Alignment.CenterHorizontally,</b>
+<b class="nc">&nbsp;                    verticalArrangement = Arrangement.spacedBy(16.dp)</b>
+&nbsp;                ) {
+<b class="nc">&nbsp;                    Icon(</b>
+<b class="nc">&nbsp;                        imageVector = Icons.Default.Construction,</b>
+<b class="nc">&nbsp;                        contentDescription = null,</b>
+<b class="nc">&nbsp;                        modifier = Modifier.size(72.dp),</b>
+<b class="nc">&nbsp;                        tint = MaterialTheme.colorScheme.primary</b>
+&nbsp;                    )
+<b class="nc">&nbsp;                    Text(</b>
+<b class="nc">&nbsp;                        text = &quot;Módulo en Construcción&quot;,</b>
+<b class="nc">&nbsp;                        style = MaterialTheme.typography.titleLarge</b>
+&nbsp;                    )
+<b class="nc">&nbsp;                    Text(</b>
+<b class="nc">&nbsp;                        text = subtitulo,</b>
+<b class="nc">&nbsp;                        style = MaterialTheme.typography.bodyMedium,</b>
+<b class="nc">&nbsp;                        color = MaterialTheme.colorScheme.outline,</b>
+<b class="nc">&nbsp;                        textAlign = TextAlign.Center</b>
+&nbsp;                    )
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            // Footer corporativo al fondo
+<b class="nc">&nbsp;            Text(</b>
+<b class="nc">&nbsp;                text = &quot;TecnicalFresh • Gestión de Mantenimiento&quot;,</b>
+<b class="nc">&nbsp;                style = MaterialTheme.typography.labelSmall,</b>
+<b class="nc">&nbsp;                color = MaterialTheme.colorScheme.outline,</b>
+<b class="nc">&nbsp;                modifier = Modifier</b>
+<b class="nc">&nbsp;                    .fillMaxWidth()</b>
+<b class="nc">&nbsp;                    .padding(vertical = 12.dp),</b>
+<b class="nc">&nbsp;                textAlign = TextAlign.Center</b>
+&nbsp;            )
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+<b class="nc">&nbsp;}</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,442 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VisitaViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: VisitaViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VisitaViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (10/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (72/72)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">VisitaViewModel$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$actualizarClima$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$cargarClima$1</td>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$guardar$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55,6%
+  </span>
+  <span class="absValue">
+    (10/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$obtenerUbicacion$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/22)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68,2%
+  </span>
+  <span class="absValue">
+    (30/44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (128/128)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.SavedStateHandle
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
+&nbsp;import cl.duoc.tacticaldev.data.location.UbicacionService
+&nbsp;import cl.duoc.tacticaldev.data.preferences.SesionPreferences
+&nbsp;import cl.duoc.tacticaldev.data.repository.ActivoRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.ClimaRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.VisitaRepository
+&nbsp;import cl.duoc.tacticaldev.domain.validacion.Validadores
+&nbsp;import cl.duoc.tacticaldev.model.EstadoEquipo
+&nbsp;import cl.duoc.tacticaldev.model.TipoVisita
+&nbsp;import cl.duoc.tacticaldev.model.VisitaFormUiState
+&nbsp;import cl.duoc.tacticaldev.navigation.Screen
+&nbsp;import cl.duoc.tacticaldev.utils.GeoUtils
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.first
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;/**
+&nbsp; * Lógica del formulario de visita. Toda la validación se delega a [Validadores]
+&nbsp; * y el estado se expone como StateFlow para que la vista solo lo observe.
+&nbsp; */
+<b class="fc">&nbsp;class VisitaViewModel(</b>
+&nbsp;    savedStateHandle: SavedStateHandle,
+<b class="fc">&nbsp;    private val activoRepository: ActivoRepository,</b>
+<b class="fc">&nbsp;    private val visitaRepository: VisitaRepository,</b>
+<b class="fc">&nbsp;    private val sesionPreferences: SesionPreferences,</b>
+<b class="fc">&nbsp;    private val ubicacionService: UbicacionService,</b>
+<b class="fc">&nbsp;    private val climaRepository: ClimaRepository</b>
+<b class="fc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="pc">&nbsp;    private val activoId: Long = checkNotNull(savedStateHandle[Screen.ARG_ACTIVO_ID])</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _uiState = MutableStateFlow(VisitaFormUiState())</b>
+<b class="fc">&nbsp;    val uiState: StateFlow&lt;VisitaFormUiState&gt; = _uiState.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    init {</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="pc">&nbsp;            val activo = activoRepository.obtenerActivo(activoId)</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(cargando = false, activo = activo) }</b>
+<b class="pc">&nbsp;            if (activo != null) cargarClima(activo.latitud, activo.longitud)</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /** Vuelve a consultar el clima del local (botón &quot;Reintentar&quot;). */
+&nbsp;    fun actualizarClima() {
+<b class="fc">&nbsp;        val activo = _uiState.value.activo ?: return</b>
+<b class="pc">&nbsp;        viewModelScope.launch { cargarClima(activo.latitud, activo.longitud) }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    // API externa: clima actual en la ubicación del punto de venta
+<b class="fc">&nbsp;    private suspend fun cargarClima(latitud: Double, longitud: Double) {</b>
+<b class="fc">&nbsp;        _uiState.update { it.copy(cargandoClima = true) }</b>
+<b class="pc">&nbsp;        val clima = climaRepository.obtenerClima(latitud, longitud)</b>
+<b class="fc">&nbsp;        _uiState.update { it.copy(cargandoClima = false, clima = clima) }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onTipoVisitaChange(tipo: TipoVisita) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(tipoVisita = tipo, errores = it.errores.copy(tipoVisita = null))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onEstadoEquipoChange(estado: EstadoEquipo) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(</b>
+<b class="fc">&nbsp;            estadoEquipo = estado,</b>
+<b class="fc">&nbsp;            errores = it.errores.copy(</b>
+<b class="fc">&nbsp;                estadoEquipo = null,</b>
+&nbsp;                // Si cambia el estado, la regla de observaciones también cambia
+<b class="fc">&nbsp;                observaciones = Validadores.observaciones(it.observaciones, estado)</b>
+&nbsp;            )
+<b class="fc">&nbsp;        )</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onTemperaturaChange(valor: String) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(temperatura = valor, errores = it.errores.copy(temperatura = Validadores.temperatura(valor)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onObservacionesChange(valor: String) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(</b>
+<b class="fc">&nbsp;            observaciones = valor,</b>
+<b class="fc">&nbsp;            errores = it.errores.copy(observaciones = Validadores.observaciones(valor, it.estadoEquipo))</b>
+<b class="fc">&nbsp;        )</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /** Recibe el URI de la foto tomada con la cámara. */
+<b class="fc">&nbsp;    fun onFotoCapturada(uri: String) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(fotoUri = uri, errores = it.errores.copy(foto = null))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Obtiene la ubicación GPS y calcula la distancia al punto de venta.
+&nbsp;     * Si está dentro del radio, la visita queda como &quot;ubicación verificada&quot;.
+&nbsp;     */
+&nbsp;    fun obtenerUbicacion() {
+<b class="fc">&nbsp;        val activo = _uiState.value.activo ?: return</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(obteniendoUbicacion = true) }</b>
+<b class="pc">&nbsp;            val ubicacion = ubicacionService.obtenerUbicacionActual()</b>
+<b class="fc">&nbsp;            if (ubicacion == null) {</b>
+<b class="fc">&nbsp;                _uiState.update {</b>
+<b class="fc">&nbsp;                    it.copy(</b>
+<b class="fc">&nbsp;                        obteniendoUbicacion = false,</b>
+<b class="fc">&nbsp;                        errores = it.errores.copy(ubicacion = &quot;No se pudo obtener la ubicación. Activa el GPS e intenta de nuevo&quot;)</b>
+<b class="fc">&nbsp;                    )</b>
+&nbsp;                }
+<b class="fc">&nbsp;                return@launch</b>
+&nbsp;            }
+<b class="fc">&nbsp;            val distancia = GeoUtils.distanciaMetros(</b>
+<b class="fc">&nbsp;                ubicacion.latitude, ubicacion.longitude, activo.latitud, activo.longitud</b>
+&nbsp;            )
+<b class="fc">&nbsp;            _uiState.update {</b>
+<b class="fc">&nbsp;                it.copy(</b>
+<b class="fc">&nbsp;                    obteniendoUbicacion = false,</b>
+<b class="fc">&nbsp;                    latitud = ubicacion.latitude,</b>
+<b class="fc">&nbsp;                    longitud = ubicacion.longitude,</b>
+<b class="fc">&nbsp;                    distanciaMetros = distancia,</b>
+<b class="fc">&nbsp;                    ubicacionVerificada = GeoUtils.estaDentroDelRadio(distancia),</b>
+<b class="fc">&nbsp;                    errores = it.errores.copy(ubicacion = null)</b>
+<b class="fc">&nbsp;                )</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onPermisoUbicacionDenegado() = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(errores = it.errores.copy(ubicacion = &quot;Se necesita el permiso de ubicación para verificar la visita&quot;))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onConfirmacionChange(valor: Boolean) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(confirmado = valor, errores = it.errores.copy(confirmacion = Validadores.confirmacion(valor)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onMensajeMostrado() = _uiState.update { it.copy(mensaje = null) }</b>
+&nbsp;
+&nbsp;    /** Valida todos los campos y actualiza los errores. Devuelve true si todo es válido. */
+&nbsp;    fun validarFormulario(): Boolean {
+<b class="fc">&nbsp;        val s = _uiState.value</b>
+<b class="fc">&nbsp;        val errores = s.errores.copy(</b>
+<b class="fc">&nbsp;            tipoVisita = Validadores.seleccion(s.tipoVisita, &quot;el tipo de visita&quot;),</b>
+<b class="fc">&nbsp;            estadoEquipo = Validadores.seleccion(s.estadoEquipo, &quot;el estado del equipo&quot;),</b>
+<b class="fc">&nbsp;            temperatura = Validadores.temperatura(s.temperatura),</b>
+<b class="fc">&nbsp;            observaciones = Validadores.observaciones(s.observaciones, s.estadoEquipo),</b>
+<b class="fc">&nbsp;            foto = Validadores.foto(s.fotoUri),</b>
+<b class="fc">&nbsp;            ubicacion = Validadores.ubicacion(s.latitud, s.longitud),</b>
+<b class="fc">&nbsp;            confirmacion = Validadores.confirmacion(s.confirmado)</b>
+&nbsp;        )
+<b class="fc">&nbsp;        _uiState.update { it.copy(errores = errores) }</b>
+<b class="fc">&nbsp;        return !errores.hayErrores</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Valida y guarda la visita en Room con la fecha y hora actuales.
+&nbsp;     * Al terminar entrega el id de la visita para mostrar la confirmación.
+&nbsp;     */
+&nbsp;    fun guardar(onGuardada: (Long) -&gt; Unit) {
+<b class="fc">&nbsp;        if (!validarFormulario()) {</b>
+<b class="fc">&nbsp;            _uiState.update {</b>
+<b class="fc">&nbsp;                it.copy(mensaje = &quot;Revisa los campos marcados en rojo&quot;, intentosFallidos = it.intentosFallidos + 1)</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return</b>
+&nbsp;        }
+<b class="fc">&nbsp;        val s = _uiState.value</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(guardando = true) }</b>
+<b class="pc">&nbsp;            val sesion = sesionPreferences.sesion.first()</b>
+<b class="fc">&nbsp;            if (sesion == null) {</b>
+<b class="fc">&nbsp;                _uiState.update { it.copy(guardando = false, mensaje = &quot;La sesión expiró, vuelve a ingresar&quot;) }</b>
+<b class="fc">&nbsp;                return@launch</b>
+&nbsp;            }
+<b class="fc">&nbsp;            val visita = VisitaEntity(</b>
+<b class="fc">&nbsp;                activoId = activoId,</b>
+<b class="fc">&nbsp;                usuarioId = sesion.usuarioId,</b>
+<b class="fc">&nbsp;                fechaHora = System.currentTimeMillis(),</b>
+<b class="pc">&nbsp;                tipoVisita = checkNotNull(s.tipoVisita).name,</b>
+<b class="pc">&nbsp;                estadoEquipo = checkNotNull(s.estadoEquipo).name,</b>
+<b class="fc">&nbsp;                temperatura = s.temperatura.replace(&#39;,&#39;, &#39;.&#39;).toDouble(),</b>
+<b class="fc">&nbsp;                observaciones = s.observaciones.trim(),</b>
+<b class="pc">&nbsp;                fotoUri = s.fotoUri.orEmpty(),</b>
+<b class="pc">&nbsp;                latitud = checkNotNull(s.latitud),</b>
+<b class="pc">&nbsp;                longitud = checkNotNull(s.longitud),</b>
+<b class="pc">&nbsp;                distanciaMetros = s.distanciaMetros ?: 0.0,</b>
+<b class="fc">&nbsp;                ubicacionVerificada = s.ubicacionVerificada</b>
+&nbsp;            )
+<b class="fc">&nbsp;            val id = try {</b>
+<b class="pc">&nbsp;                visitaRepository.registrar(visita)</b>
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="fc">&nbsp;                _uiState.update {</b>
+<b class="fc">&nbsp;                    it.copy(guardando = false, mensaje = &quot;No se pudo guardar la visita. Revisa tu conexión a internet&quot;)</b>
+&nbsp;                }
+<b class="fc">&nbsp;                return@launch</b>
+&nbsp;            }
+<b class="fc">&nbsp;            _uiState.update { it.copy(guardando = false) }   // ← agregar</b>
+<b class="fc">&nbsp;            onGuardada(id)</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

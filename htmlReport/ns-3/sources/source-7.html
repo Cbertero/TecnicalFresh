@@ -1,0 +1,109 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UsuarioDao</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: UsuarioDao (cl.duoc.tacticaldev.data.local.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass14</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass14$auxiliary$5lji92Cd</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass14$auxiliary$8JmRmTCU</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass14$auxiliary$n16LmH1z</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao$Subclass14$auxiliary$trrTl5Lw</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local.dao
+&nbsp;
+&nbsp;import androidx.room.Dao
+&nbsp;import androidx.room.Insert
+&nbsp;import androidx.room.OnConflictStrategy
+&nbsp;import androidx.room.Query
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;
+&nbsp;@Dao
+&nbsp;interface UsuarioDao {
+&nbsp;    @Query(&quot;SELECT * FROM usuarios WHERE correo = :correo LIMIT 1&quot;)
+&nbsp;    suspend fun buscarPorCorreo(correo: String): UsuarioEntity?
+&nbsp;
+&nbsp;    @Query(&quot;SELECT * FROM usuarios WHERE rol = &#39;OPERARIO&#39; ORDER BY nombre ASC&quot;)
+&nbsp;    fun observarOperarios(): Flow&lt;List&lt;UsuarioEntity&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;SELECT COUNT(*) FROM usuarios&quot;)
+&nbsp;    suspend fun contar(): Int
+&nbsp;
+&nbsp;    @Insert(onConflict = OnConflictStrategy.REPLACE)
+&nbsp;    suspend fun insertarTodos(usuarios: List&lt;UsuarioEntity&gt;): List&lt;Long&gt;
+&nbsp;
+&nbsp;    @Insert(onConflict = OnConflictStrategy.REPLACE)
+&nbsp;    suspend fun insertar(usuario: UsuarioEntity): Long
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VisitaDao</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: VisitaDao (cl.duoc.tacticaldev.data.local.dao)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">VisitaDao</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local.dao
+&nbsp;
+&nbsp;import androidx.room.Dao
+&nbsp;import androidx.room.Insert
+&nbsp;import androidx.room.Query
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
+&nbsp;import cl.duoc.tacticaldev.model.VisitaDetalle
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;
+&nbsp;private const val SELECT_VISITA_DETALLE = &quot;&quot;&quot;
+&nbsp;    SELECT v.id, v.activoId, a.codigo AS activoCodigo, a.tipo AS activoTipo,
+&nbsp;           p.nombre AS puntoVentaNombre, v.usuarioId, u.nombre AS usuarioNombre,
+&nbsp;           v.fechaHora, v.tipoVisita, v.estadoEquipo, v.temperatura, v.observaciones,
+&nbsp;           v.fotoUri, v.distanciaMetros, v.ubicacionVerificada, v.estadoValidacion, v.motivoRechazo
+&nbsp;    FROM visitas v
+&nbsp;    INNER JOIN activos a ON a.id = v.activoId
+&nbsp;    INNER JOIN puntos_venta p ON p.id = a.puntoVentaId
+&nbsp;    INNER JOIN usuarios u ON u.id = v.usuarioId
+&nbsp;&quot;&quot;&quot;
+&nbsp;
+&nbsp;@Dao
+&nbsp;interface VisitaDao {
+&nbsp;    @Insert
+&nbsp;    suspend fun insertar(visita: VisitaEntity): Long
+&nbsp;
+&nbsp;    @Insert
+&nbsp;    suspend fun insertarTodas(visitas: List&lt;VisitaEntity&gt;): List&lt;Long&gt;
+&nbsp;
+&nbsp;    @Query(&quot;$SELECT_VISITA_DETALLE WHERE v.id = :id&quot;)
+&nbsp;    suspend fun buscarDetalle(id: Long): VisitaDetalle?
+&nbsp;
+&nbsp;    @Query(&quot;$SELECT_VISITA_DETALLE WHERE v.activoId = :activoId ORDER BY v.fechaHora DESC&quot;)
+&nbsp;    fun observarPorActivo(activoId: Long): Flow&lt;List&lt;VisitaDetalle&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;$SELECT_VISITA_DETALLE WHERE v.usuarioId = :usuarioId ORDER BY v.fechaHora DESC&quot;)
+&nbsp;    fun observarPorUsuario(usuarioId: Long): Flow&lt;List&lt;VisitaDetalle&gt;&gt;
+&nbsp;
+&nbsp;    @Query(&quot;$SELECT_VISITA_DETALLE WHERE v.estadoValidacion = :estado ORDER BY v.fechaHora DESC&quot;)
+&nbsp;    fun observarPorEstado(estado: String): Flow&lt;List&lt;VisitaDetalle&gt;&gt;
+&nbsp;
+&nbsp;    @Query(
+&nbsp;        &quot;&quot;&quot;
+&nbsp;        UPDATE visitas
+&nbsp;        SET estadoValidacion = :estado, motivoRechazo = :motivo, supervisorId = :supervisorId
+&nbsp;        WHERE id = :id
+&nbsp;        &quot;&quot;&quot;
+&nbsp;    )
+&nbsp;    suspend fun actualizarValidacion(id: Long, estado: String, motivo: String?, supervisorId: Long)
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

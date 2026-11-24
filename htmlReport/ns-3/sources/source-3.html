@@ -1,0 +1,485 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UsuarioDao_Impl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: UsuarioDao_Impl (cl.duoc.tacticaldev.data.local.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UsuarioDao_Impl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UsuarioDao_Impl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao_Impl$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao_Impl$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao_Impl$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao_Impl$5</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UsuarioDao_Impl$6</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/86)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local.dao;
+&nbsp;
+&nbsp;import android.database.Cursor;
+&nbsp;import android.os.CancellationSignal;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.annotation.Nullable;
+&nbsp;import androidx.room.CoroutinesRoom;
+&nbsp;import androidx.room.EntityInsertionAdapter;
+&nbsp;import androidx.room.RoomDatabase;
+&nbsp;import androidx.room.RoomSQLiteQuery;
+&nbsp;import androidx.room.util.CursorUtil;
+&nbsp;import androidx.room.util.DBUtil;
+&nbsp;import androidx.sqlite.db.SupportSQLiteStatement;
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity;
+&nbsp;import java.lang.Class;
+&nbsp;import java.lang.Exception;
+&nbsp;import java.lang.Integer;
+&nbsp;import java.lang.Long;
+&nbsp;import java.lang.Object;
+&nbsp;import java.lang.Override;
+&nbsp;import java.lang.String;
+&nbsp;import java.lang.SuppressWarnings;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.concurrent.Callable;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;import kotlin.coroutines.Continuation;
+&nbsp;import kotlinx.coroutines.flow.Flow;
+&nbsp;
+&nbsp;@Generated(&quot;androidx.room.RoomProcessor&quot;)
+&nbsp;@SuppressWarnings({&quot;unchecked&quot;, &quot;deprecation&quot;})
+&nbsp;public final class UsuarioDao_Impl implements UsuarioDao {
+&nbsp;  private final RoomDatabase __db;
+&nbsp;
+&nbsp;  private final EntityInsertionAdapter&lt;UsuarioEntity&gt; __insertionAdapterOfUsuarioEntity;
+&nbsp;
+<b class="nc">&nbsp;  public UsuarioDao_Impl(@NonNull final RoomDatabase __db) {</b>
+<b class="nc">&nbsp;    this.__db = __db;</b>
+<b class="nc">&nbsp;    this.__insertionAdapterOfUsuarioEntity = new EntityInsertionAdapter&lt;UsuarioEntity&gt;(__db) {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      protected String createQuery() {
+<b class="nc">&nbsp;        return &quot;INSERT OR REPLACE INTO `usuarios` (`id`,`nombre`,`correo`,`claveHash`,`rol`,`cargo`) VALUES (nullif(?, 0),?,?,?,?,?)&quot;;</b>
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      protected void bind(@NonNull final SupportSQLiteStatement statement,
+&nbsp;          @NonNull final UsuarioEntity entity) {
+<b class="nc">&nbsp;        statement.bindLong(1, entity.getId());</b>
+<b class="nc">&nbsp;        statement.bindString(2, entity.getNombre());</b>
+<b class="nc">&nbsp;        statement.bindString(3, entity.getCorreo());</b>
+<b class="nc">&nbsp;        statement.bindString(4, entity.getClaveHash());</b>
+<b class="nc">&nbsp;        statement.bindString(5, entity.getRol());</b>
+<b class="nc">&nbsp;        statement.bindString(6, entity.getCargo());</b>
+&nbsp;      }
+&nbsp;    };
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object insertarTodos(final List&lt;UsuarioEntity&gt; usuarios,
+&nbsp;      final Continuation&lt;? super List&lt;Long&gt;&gt; $completion) {
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, true, new Callable&lt;List&lt;Long&gt;&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public List&lt;Long&gt; call() throws Exception {
+<b class="nc">&nbsp;        __db.beginTransaction();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final List&lt;Long&gt; _result = __insertionAdapterOfUsuarioEntity.insertAndReturnIdsList(usuarios);</b>
+<b class="nc">&nbsp;          __db.setTransactionSuccessful();</b>
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+<b class="nc">&nbsp;          __db.endTransaction();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object insertar(final UsuarioEntity usuario,
+&nbsp;      final Continuation&lt;? super Long&gt; $completion) {
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, true, new Callable&lt;Long&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public Long call() throws Exception {
+<b class="nc">&nbsp;        __db.beginTransaction();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final Long _result = __insertionAdapterOfUsuarioEntity.insertAndReturnId(usuario);</b>
+<b class="nc">&nbsp;          __db.setTransactionSuccessful();</b>
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+<b class="nc">&nbsp;          __db.endTransaction();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object buscarPorCorreo(final String correo,
+&nbsp;      final Continuation&lt;? super UsuarioEntity&gt; $completion) {
+<b class="nc">&nbsp;    final String _sql = &quot;SELECT * FROM usuarios WHERE correo = ? LIMIT 1&quot;;</b>
+<b class="nc">&nbsp;    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);</b>
+<b class="nc">&nbsp;    int _argIndex = 1;</b>
+<b class="nc">&nbsp;    _statement.bindString(_argIndex, correo);</b>
+<b class="nc">&nbsp;    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();</b>
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable&lt;UsuarioEntity&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @Nullable
+&nbsp;      public UsuarioEntity call() throws Exception {
+<b class="nc">&nbsp;        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;id&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfNombre = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;nombre&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCorreo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;correo&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfClaveHash = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;claveHash&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfRol = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;rol&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCargo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;cargo&quot;);</b>
+&nbsp;          final UsuarioEntity _result;
+<b class="nc">&nbsp;          if (_cursor.moveToFirst()) {</b>
+&nbsp;            final long _tmpId;
+<b class="nc">&nbsp;            _tmpId = _cursor.getLong(_cursorIndexOfId);</b>
+&nbsp;            final String _tmpNombre;
+<b class="nc">&nbsp;            _tmpNombre = _cursor.getString(_cursorIndexOfNombre);</b>
+&nbsp;            final String _tmpCorreo;
+<b class="nc">&nbsp;            _tmpCorreo = _cursor.getString(_cursorIndexOfCorreo);</b>
+&nbsp;            final String _tmpClaveHash;
+<b class="nc">&nbsp;            _tmpClaveHash = _cursor.getString(_cursorIndexOfClaveHash);</b>
+&nbsp;            final String _tmpRol;
+<b class="nc">&nbsp;            _tmpRol = _cursor.getString(_cursorIndexOfRol);</b>
+&nbsp;            final String _tmpCargo;
+<b class="nc">&nbsp;            _tmpCargo = _cursor.getString(_cursorIndexOfCargo);</b>
+<b class="nc">&nbsp;            _result = new UsuarioEntity(_tmpId,_tmpNombre,_tmpCorreo,_tmpClaveHash,_tmpRol,_tmpCargo);</b>
+&nbsp;          } else {
+<b class="nc">&nbsp;            _result = null;</b>
+&nbsp;          }
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+&nbsp;          _cursor.close();
+<b class="nc">&nbsp;          _statement.release();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Flow&lt;List&lt;UsuarioEntity&gt;&gt; observarOperarios() {
+<b class="nc">&nbsp;    final String _sql = &quot;SELECT * FROM usuarios WHERE rol = &#39;OPERARIO&#39; ORDER BY nombre ASC&quot;;</b>
+<b class="nc">&nbsp;    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);</b>
+<b class="nc">&nbsp;    return CoroutinesRoom.createFlow(__db, false, new String[] {&quot;usuarios&quot;}, new Callable&lt;List&lt;UsuarioEntity&gt;&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public List&lt;UsuarioEntity&gt; call() throws Exception {
+<b class="nc">&nbsp;        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;id&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfNombre = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;nombre&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCorreo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;correo&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfClaveHash = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;claveHash&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfRol = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;rol&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCargo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;cargo&quot;);</b>
+<b class="nc">&nbsp;          final List&lt;UsuarioEntity&gt; _result = new ArrayList&lt;UsuarioEntity&gt;(_cursor.getCount());</b>
+<b class="nc">&nbsp;          while (_cursor.moveToNext()) {</b>
+&nbsp;            final UsuarioEntity _item;
+&nbsp;            final long _tmpId;
+<b class="nc">&nbsp;            _tmpId = _cursor.getLong(_cursorIndexOfId);</b>
+&nbsp;            final String _tmpNombre;
+<b class="nc">&nbsp;            _tmpNombre = _cursor.getString(_cursorIndexOfNombre);</b>
+&nbsp;            final String _tmpCorreo;
+<b class="nc">&nbsp;            _tmpCorreo = _cursor.getString(_cursorIndexOfCorreo);</b>
+&nbsp;            final String _tmpClaveHash;
+<b class="nc">&nbsp;            _tmpClaveHash = _cursor.getString(_cursorIndexOfClaveHash);</b>
+&nbsp;            final String _tmpRol;
+<b class="nc">&nbsp;            _tmpRol = _cursor.getString(_cursorIndexOfRol);</b>
+&nbsp;            final String _tmpCargo;
+<b class="nc">&nbsp;            _tmpCargo = _cursor.getString(_cursorIndexOfCargo);</b>
+<b class="nc">&nbsp;            _item = new UsuarioEntity(_tmpId,_tmpNombre,_tmpCorreo,_tmpClaveHash,_tmpRol,_tmpCargo);</b>
+<b class="nc">&nbsp;            _result.add(_item);</b>
+&nbsp;          }
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+&nbsp;          _cursor.close();
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      protected void finalize() {
+<b class="nc">&nbsp;        _statement.release();</b>
+&nbsp;      }
+&nbsp;    });
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object contar(final Continuation&lt;? super Integer&gt; $completion) {
+<b class="nc">&nbsp;    final String _sql = &quot;SELECT COUNT(*) FROM usuarios&quot;;</b>
+<b class="nc">&nbsp;    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);</b>
+<b class="nc">&nbsp;    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();</b>
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable&lt;Integer&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public Integer call() throws Exception {
+<b class="nc">&nbsp;        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);</b>
+&nbsp;        try {
+&nbsp;          final Integer _result;
+<b class="nc">&nbsp;          if (_cursor.moveToFirst()) {</b>
+&nbsp;            final int _tmp;
+<b class="nc">&nbsp;            _tmp = _cursor.getInt(0);</b>
+<b class="nc">&nbsp;            _result = _tmp;</b>
+&nbsp;          } else {
+<b class="nc">&nbsp;            _result = 0;</b>
+&nbsp;          }
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+&nbsp;          _cursor.close();
+<b class="nc">&nbsp;          _statement.release();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @NonNull
+&nbsp;  public static List&lt;Class&lt;?&gt;&gt; getRequiredConverters() {
+<b class="nc">&nbsp;    return Collections.emptyList();</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

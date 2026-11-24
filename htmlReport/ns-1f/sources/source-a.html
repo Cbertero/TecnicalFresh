@@ -1,0 +1,282 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LoginViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: LoginViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LoginViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (30/30)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">LoginViewModel$comprobarServidor$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">LoginViewModel$iniciarSesion$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/21)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (16/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (56/56)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.repository.ServidorNoDisponibleException
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.preferences.Sesion
+&nbsp;import cl.duoc.tacticaldev.data.preferences.SesionPreferences
+&nbsp;import cl.duoc.tacticaldev.data.repository.UsuarioRepository
+&nbsp;import cl.duoc.tacticaldev.domain.validacion.Validadores
+&nbsp;import cl.duoc.tacticaldev.model.LoginUiState
+&nbsp;import cl.duoc.tacticaldev.model.Rol
+&nbsp;import cl.duoc.tacticaldev.model.aEnum
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;/**
+&nbsp; * Lógica del login: valida cada campo en tiempo real con [Validadores],
+&nbsp; * autentica contra el microservicio y guarda la sesión con su rol.
+&nbsp; */
+<b class="fc">&nbsp;class LoginViewModel(</b>
+<b class="fc">&nbsp;    private val usuarioRepository: UsuarioRepository,</b>
+<b class="fc">&nbsp;    private val sesionPreferences: SesionPreferences</b>
+<b class="fc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _uiState = MutableStateFlow(LoginUiState())</b>
+<b class="fc">&nbsp;    val uiState: StateFlow&lt;LoginUiState&gt; = _uiState.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    init {</b>
+<b class="fc">&nbsp;        comprobarServidor()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /** Consulta al microservicio y actualiza el indicador de la pantalla de login. */
+&nbsp;    fun comprobarServidor() {
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(servidorEnLinea = null) }</b>
+<b class="pc">&nbsp;            val disponible = usuarioRepository.servidorDisponible()</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(servidorEnLinea = disponible) }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onCorreoChange(valor: String) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(correo = valor, errorGeneral = null, errores = it.errores.copy(correo = Validadores.correo(valor)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onClaveChange(valor: String) = _uiState.update {</b>
+<b class="fc">&nbsp;        it.copy(clave = valor, errorGeneral = null, errores = it.errores.copy(clave = Validadores.clave(valor)))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun alternarVisibilidadClave() = _uiState.update { it.copy(claveVisible = !it.claveVisible) }</b>
+&nbsp;
+&nbsp;    /** Valida todos los campos; devuelve true si el formulario es válido. */
+&nbsp;    fun validarFormulario(): Boolean {
+<b class="fc">&nbsp;        val estado = _uiState.value</b>
+<b class="fc">&nbsp;        val errores = estado.errores.copy(</b>
+<b class="fc">&nbsp;            correo = Validadores.correo(estado.correo),</b>
+<b class="fc">&nbsp;            clave = Validadores.clave(estado.clave)</b>
+&nbsp;        )
+<b class="pc">&nbsp;        val valido = errores.correo == null &amp;&amp; errores.clave == null</b>
+<b class="fc">&nbsp;        _uiState.update {</b>
+<b class="fc">&nbsp;            it.copy(errores = errores, intentosFallidos = if (valido) it.intentosFallidos else it.intentosFallidos + 1)</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return valido</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    fun iniciarSesion(onExito: (Rol) -&gt; Unit) {
+<b class="fc">&nbsp;        if (!validarFormulario()) return</b>
+<b class="fc">&nbsp;        val estado = _uiState.value</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            _uiState.update { it.copy(cargando = true, errorGeneral = null) }</b>
+<b class="fc">&nbsp;            val usuario = try {</b>
+<b class="pc">&nbsp;                usuarioRepository.autenticar(estado.correo, estado.clave)</b>
+<b class="fc">&nbsp;            } catch (e: ServidorNoDisponibleException) {</b>
+&nbsp;                // Sin internet no se puede iniciar sesión: el login se valida solo en el microservicio
+<b class="fc">&nbsp;                _uiState.update { it.copy(cargando = false, errorGeneral = e.message, servidorEnLinea = false) }</b>
+<b class="fc">&nbsp;                return@launch</b>
+&nbsp;            }
+<b class="fc">&nbsp;            if (usuario == null) {</b>
+<b class="fc">&nbsp;                _uiState.update {</b>
+<b class="fc">&nbsp;                    it.copy(</b>
+<b class="fc">&nbsp;                        cargando = false,</b>
+<b class="fc">&nbsp;                        errorGeneral = &quot;Correo o clave incorrectos&quot;,</b>
+<b class="fc">&nbsp;                        intentosFallidos = it.intentosFallidos + 1,</b>
+<b class="fc">&nbsp;                        servidorEnLinea = true // el servidor respondió (401)</b>
+<b class="fc">&nbsp;                    )</b>
+&nbsp;                }
+<b class="fc">&nbsp;                return@launch</b>
+&nbsp;            }
+<b class="fc">&nbsp;            val rol = usuario.rol.aEnum(Rol.OPERARIO)</b>
+<b class="pc">&nbsp;            sesionPreferences.guardar(Sesion(usuario.id, usuario.nombre, rol,usuario.cargo))</b>
+<b class="fc">&nbsp;            _uiState.update { LoginUiState(servidorEnLinea = it.servidorEnLinea) }</b>
+<b class="fc">&nbsp;            onExito(rol)</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VisitaErrores</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.model</a>
+</div>
+
+<h1>Coverage Summary for Class: VisitaErrores (cl.duoc.tacticaldev.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VisitaErrores</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.model
+&nbsp;
+&nbsp;/** Estado completo del formulario de visita. */
+&nbsp;data class VisitaFormUiState(
+&nbsp;    val cargando: Boolean = true,
+&nbsp;    val activo: ActivoConPunto? = null,
+&nbsp;    val clima: Clima? = null,            // API externa Open-Meteo
+&nbsp;    val cargandoClima: Boolean = false,
+&nbsp;    val tipoVisita: TipoVisita? = null,
+&nbsp;    val estadoEquipo: EstadoEquipo? = null,
+&nbsp;    val temperatura: String = &quot;&quot;,
+&nbsp;    val observaciones: String = &quot;&quot;,
+&nbsp;    val fotoUri: String? = null,
+&nbsp;    val latitud: Double? = null,
+&nbsp;    val longitud: Double? = null,
+&nbsp;    val distanciaMetros: Double? = null,
+&nbsp;    val ubicacionVerificada: Boolean = false,
+&nbsp;    val obteniendoUbicacion: Boolean = false,
+&nbsp;    val confirmado: Boolean = false,
+&nbsp;    val guardando: Boolean = false,
+&nbsp;    val mensaje: String? = null,
+&nbsp;    val intentosFallidos: Int = 0,
+&nbsp;    val errores: VisitaErrores = VisitaErrores()
+&nbsp;)
+&nbsp;
+&nbsp;/** Errores por campo del formulario de visita (null = válido). */
+&nbsp;data class VisitaErrores(
+<b class="fc">&nbsp;    val tipoVisita: String? = null,</b>
+<b class="fc">&nbsp;    val estadoEquipo: String? = null,</b>
+<b class="fc">&nbsp;    val temperatura: String? = null,</b>
+<b class="fc">&nbsp;    val observaciones: String? = null,</b>
+<b class="fc">&nbsp;    val foto: String? = null,</b>
+<b class="fc">&nbsp;    val ubicacion: String? = null,</b>
+<b class="fc">&nbsp;    val confirmacion: String? = null</b>
+<b class="fc">&nbsp;) {</b>
+&nbsp;    val hayErrores: Boolean
+<b class="fc">&nbsp;        get() = listOf(tipoVisita, estadoEquipo, temperatura, observaciones, foto, ubicacion, confirmacion)</b>
+<b class="fc">&nbsp;            .any { it != null }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

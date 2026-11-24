@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SupervisorViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: SupervisorViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SupervisorViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/32)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SupervisorViewModel$confirmarRechazo$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (6/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SupervisorViewModel$special$$inlined$flatMapLatest$1</td>
+  </tr>
+  <tr>
+    <td class="name">SupervisorViewModel$uiState$lambda$1$$inlined$map$1</td>
+  </tr>
+  <tr>
+    <td class="name">SupervisorViewModel$uiState$lambda$1$$inlined$map$1$2</td>
+  </tr>
+  <tr>
+    <td class="name">SupervisorViewModel$uiState$lambda$1$$inlined$map$1$2$1</td>
+  </tr>
+  <tr>
+    <td class="name">SupervisorViewModel$validar$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (6/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (16/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/49)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.preferences.SesionPreferences
+&nbsp;import cl.duoc.tacticaldev.data.repository.VisitaRepository
+&nbsp;import cl.duoc.tacticaldev.domain.validacion.Validadores
+&nbsp;import cl.duoc.tacticaldev.model.EstadoValidacion
+&nbsp;import cl.duoc.tacticaldev.model.RechazoUiState
+&nbsp;import cl.duoc.tacticaldev.model.SupervisorUiState
+&nbsp;import cl.duoc.tacticaldev.model.VisitaDetalle
+&nbsp;import kotlinx.coroutines.ExperimentalCoroutinesApi
+&nbsp;import kotlinx.coroutines.flow.MutableSharedFlow
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.SharedFlow
+&nbsp;import kotlinx.coroutines.flow.SharingStarted
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asSharedFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.first
+&nbsp;import kotlinx.coroutines.flow.flatMapLatest
+&nbsp;import kotlinx.coroutines.flow.map
+&nbsp;import kotlinx.coroutines.flow.stateIn
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;/**
+&nbsp; * Revisión de visitas por parte del supervisor: validar o rechazar con motivo.
+&nbsp; * El motivo se valida con [Validadores.motivoRechazo].
+&nbsp; */
+&nbsp;@OptIn(ExperimentalCoroutinesApi::class)
+<b class="fc">&nbsp;class SupervisorViewModel(</b>
+<b class="fc">&nbsp;    private val visitaRepository: VisitaRepository,</b>
+<b class="fc">&nbsp;    private val sesionPreferences: SesionPreferences</b>
+<b class="fc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val filtro = MutableStateFlow(EstadoValidacion.PENDIENTE)</b>
+&nbsp;
+<b class="fc">&nbsp;    val uiState: StateFlow&lt;SupervisorUiState&gt; = filtro</b>
+<b class="fc">&nbsp;        .flatMapLatest { estado -&gt;</b>
+<b class="fc">&nbsp;            visitaRepository.observarPorEstado(estado).map { SupervisorUiState(false, estado, it) }</b>
+&nbsp;        }
+<b class="fc">&nbsp;        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SupervisorUiState())</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _rechazo = MutableStateFlow(RechazoUiState())</b>
+<b class="fc">&nbsp;    val rechazo: StateFlow&lt;RechazoUiState&gt; = _rechazo.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _mensajes = MutableSharedFlow&lt;String&gt;(extraBufferCapacity = 1)</b>
+<b class="fc">&nbsp;    val mensajes: SharedFlow&lt;String&gt; = _mensajes.asSharedFlow()</b>
+&nbsp;
+&nbsp;    fun onFiltroChange(estado: EstadoValidacion) {
+<b class="fc">&nbsp;        filtro.value = estado</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun validar(visita: VisitaDetalle) {
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="pc">&nbsp;            val supervisorId = sesionPreferences.sesion.first()?.usuarioId ?: return@launch</b>
+<b class="fc">&nbsp;            try {</b>
+<b class="pc">&nbsp;                visitaRepository.validar(visita.id, supervisorId)</b>
+<b class="pc">&nbsp;                _mensajes.emit(&quot;Visita de ${visita.activoCodigo} validada&quot;)</b>
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="pc">&nbsp;                _mensajes.emit(&quot;No se pudo validar la visita. Revisa tu conexión&quot;)</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun abrirRechazo(visita: VisitaDetalle) {
+<b class="fc">&nbsp;        _rechazo.value = RechazoUiState(visita = visita)</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onMotivoChange(valor: String) = _rechazo.update {</b>
+<b class="fc">&nbsp;        it.copy(motivo = valor, errorMotivo = Validadores.motivoRechazo(valor))</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun cancelarRechazo() {
+<b class="fc">&nbsp;        _rechazo.value = RechazoUiState()</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun confirmarRechazo() {
+<b class="fc">&nbsp;        val estado = _rechazo.value</b>
+<b class="fc">&nbsp;        val visita = estado.visita ?: return</b>
+<b class="fc">&nbsp;        val error = Validadores.motivoRechazo(estado.motivo)</b>
+<b class="fc">&nbsp;        if (error != null) {</b>
+<b class="fc">&nbsp;            _rechazo.update { it.copy(errorMotivo = error) }</b>
+<b class="fc">&nbsp;            return</b>
+&nbsp;        }
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="pc">&nbsp;            val supervisorId = sesionPreferences.sesion.first()?.usuarioId ?: return@launch</b>
+<b class="fc">&nbsp;            try {</b>
+<b class="pc">&nbsp;                visitaRepository.rechazar(visita.id, estado.motivo, supervisorId)</b>
+<b class="fc">&nbsp;                _rechazo.value = RechazoUiState()</b>
+<b class="pc">&nbsp;                _mensajes.emit(&quot;Visita de ${visita.activoCodigo} rechazada&quot;)</b>
+<b class="fc">&nbsp;            } catch (e: Exception) {</b>
+<b class="pc">&nbsp;                _mensajes.emit(&quot;No se pudo rechazar la visita. Revisa tu conexión&quot;)</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

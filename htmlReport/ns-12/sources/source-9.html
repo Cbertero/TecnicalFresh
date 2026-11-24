@@ -1,0 +1,349 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TarjetaVisitaKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.ui.components</a>
+</div>
+
+<h1>Coverage Summary for Class: TarjetaVisitaKt (cl.duoc.tacticaldev.ui.components)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TarjetaVisitaKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TarjetaVisitaKt$ChipEstado$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TarjetaVisitaKt$TarjetaVisita$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/63)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TarjetaVisitaKt$WhenMappings</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/88)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.ui.components
+&nbsp;
+&nbsp;import androidx.compose.foundation.layout.Arrangement
+&nbsp;import androidx.compose.foundation.layout.Column
+&nbsp;import androidx.compose.foundation.layout.Row
+&nbsp;import androidx.compose.foundation.layout.RowScope
+&nbsp;import androidx.compose.foundation.layout.fillMaxWidth
+&nbsp;import androidx.compose.foundation.layout.padding
+&nbsp;import androidx.compose.foundation.layout.size
+&nbsp;import androidx.compose.material.icons.Icons
+&nbsp;import androidx.compose.material.icons.filled.VerifiedUser
+&nbsp;import androidx.compose.material.icons.filled.WrongLocation
+&nbsp;import androidx.compose.material3.Card
+&nbsp;import androidx.compose.material3.Icon
+&nbsp;import androidx.compose.material3.MaterialTheme
+&nbsp;import androidx.compose.material3.Text
+&nbsp;import androidx.compose.runtime.Composable
+&nbsp;import androidx.compose.ui.Alignment
+&nbsp;import androidx.compose.ui.Modifier
+&nbsp;import androidx.compose.ui.text.font.FontWeight
+&nbsp;import androidx.compose.ui.unit.dp
+&nbsp;import cl.duoc.tacticaldev.model.EstadoValidacion
+&nbsp;import cl.duoc.tacticaldev.model.VisitaDetalle
+&nbsp;import cl.duoc.tacticaldev.model.estado
+&nbsp;import cl.duoc.tacticaldev.model.tipo
+&nbsp;import cl.duoc.tacticaldev.model.validacion
+&nbsp;import cl.duoc.tacticaldev.ui.theme.AmbarAlerta
+&nbsp;import cl.duoc.tacticaldev.ui.theme.Espaciado
+&nbsp;import cl.duoc.tacticaldev.ui.theme.VerdeExito
+&nbsp;import cl.duoc.tacticaldev.utils.Formatos
+&nbsp;
+&nbsp;/**
+&nbsp; * Tarjeta con el resumen de una visita. Se reutiliza en el historial del activo,
+&nbsp; * en &quot;Mis visitas&quot; y en la vista del supervisor (con [acciones]).
+&nbsp; */
+&nbsp;@Composable
+&nbsp;fun TarjetaVisita(
+&nbsp;    visita: VisitaDetalle,
+<b class="nc">&nbsp;    modifier: Modifier = Modifier,</b>
+<b class="nc">&nbsp;    mostrarActivo: Boolean = true,</b>
+<b class="nc">&nbsp;    mostrarOperario: Boolean = false,</b>
+<b class="nc">&nbsp;    acciones: (@Composable RowScope.() -&gt; Unit)? = null</b>
+<b class="nc">&nbsp;) {</b>
+<b class="nc">&nbsp;    Card(</b>
+<b class="nc">&nbsp;        modifier = modifier.fillMaxWidth(),</b>
+<b class="nc">&nbsp;        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)</b>
+<b class="nc">&nbsp;    ) {</b>
+<b class="nc">&nbsp;        Column(</b>
+<b class="nc">&nbsp;            modifier = Modifier</b>
+<b class="nc">&nbsp;                .fillMaxWidth()</b>
+<b class="nc">&nbsp;                .padding(Espaciado.l),</b>
+<b class="nc">&nbsp;            verticalArrangement = Arrangement.spacedBy(8.dp)</b>
+&nbsp;        ) {
+&nbsp;            // Fila superior: Foto + Textos + Chip
+<b class="nc">&nbsp;            Row(</b>
+<b class="nc">&nbsp;                modifier = Modifier.fillMaxWidth(),</b>
+<b class="nc">&nbsp;                verticalAlignment = Alignment.Top</b>
+&nbsp;            ) {
+<b class="nc">&nbsp;                FotoEvidencia(uri = visita.fotoUri, modifier = Modifier.size(72.dp))</b>
+&nbsp;
+<b class="nc">&nbsp;                Column(</b>
+<b class="nc">&nbsp;                    modifier = Modifier</b>
+<b class="nc">&nbsp;                        .weight(1f)</b>
+<b class="nc">&nbsp;                        .padding(horizontal = 12.dp),</b>
+<b class="nc">&nbsp;                    verticalArrangement = Arrangement.spacedBy(2.dp)</b>
+&nbsp;                ) {
+<b class="nc">&nbsp;                    val esFreezer = visita.activoTipo == cl.duoc.tacticaldev.model.TipoActivo.VITRINA_FREEZER.name</b>
+<b class="nc">&nbsp;                    val tempCritica = if (esFreezer) visita.temperatura &gt; -12.0 else (visita.temperatura &gt; 7.0 || visita.temperatura &lt; -2.0)</b>
+&nbsp;
+<b class="nc">&nbsp;                    Text(</b>
+<b class="nc">&nbsp;                        text = Formatos.fechaHora(visita.fechaHora),</b>
+<b class="nc">&nbsp;                        style = MaterialTheme.typography.titleMedium</b>
+&nbsp;                    )
+&nbsp;
+<b class="nc">&nbsp;                    if (mostrarActivo) {</b>
+<b class="nc">&nbsp;                        Text(</b>
+<b class="nc">&nbsp;                            text = &quot;${visita.activoCodigo} · ${visita.puntoVentaNombre}&quot;,</b>
+<b class="nc">&nbsp;                            style = MaterialTheme.typography.bodyMedium</b>
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    if (mostrarOperario) {</b>
+<b class="nc">&nbsp;                        Text(</b>
+<b class="nc">&nbsp;                            text = &quot;Operario: ${visita.usuarioNombre}&quot;,</b>
+<b class="nc">&nbsp;                            style = MaterialTheme.typography.bodyMedium</b>
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;
+&nbsp;                    // Tipo de visita, estado y temperatura
+<b class="nc">&nbsp;                    val textoTemp = if (tempCritica) &quot;⚠️ ${visita.temperatura} °C&quot; else &quot;${visita.temperatura} °C&quot;</b>
+<b class="nc">&nbsp;                    Text(</b>
+<b class="nc">&nbsp;                        text = &quot;${visita.tipo.etiqueta} · ${visita.estado.etiqueta} · $textoTemp&quot;,</b>
+<b class="nc">&nbsp;                        style = MaterialTheme.typography.bodySmall,</b>
+<b class="nc">&nbsp;                        color = if (tempCritica) AmbarAlerta else MaterialTheme.colorScheme.onSurfaceVariant,</b>
+<b class="nc">&nbsp;                        fontWeight = if (tempCritica) FontWeight.Bold else FontWeight.Normal</b>
+&nbsp;                    )
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+<b class="nc">&nbsp;                ChipEstado(visita.validacion)</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            // Fila de Ubicación GPS
+<b class="nc">&nbsp;            Row(verticalAlignment = Alignment.CenterVertically) {</b>
+<b class="nc">&nbsp;                Icon(</b>
+<b class="nc">&nbsp;                    imageVector = if (visita.ubicacionVerificada) Icons.Filled.VerifiedUser else Icons.Filled.WrongLocation,</b>
+<b class="nc">&nbsp;                    contentDescription = null,</b>
+<b class="nc">&nbsp;                    tint = if (visita.ubicacionVerificada) VerdeExito else AmbarAlerta,</b>
+<b class="nc">&nbsp;                    modifier = Modifier.size(18.dp)</b>
+&nbsp;                )
+<b class="nc">&nbsp;                Text(</b>
+<b class="nc">&nbsp;                    text = if (visita.ubicacionVerificada) {</b>
+<b class="nc">&nbsp;                        &quot;Ubicación verificada · ${Formatos.distancia(visita.distanciaMetros)}&quot;</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        &quot;Fuera de rango · ${Formatos.distancia(visita.distanciaMetros)} del punto&quot;</b>
+&nbsp;                    },
+<b class="nc">&nbsp;                    style = MaterialTheme.typography.bodySmall,</b>
+<b class="nc">&nbsp;                    modifier = Modifier.padding(start = 6.dp)</b>
+&nbsp;                )
+<b class="nc">&nbsp;            }</b>
+&nbsp;
+&nbsp;            // Observaciones
+<b class="nc">&nbsp;            if (visita.observaciones.isNotBlank()) {</b>
+<b class="nc">&nbsp;                Text(</b>
+<b class="nc">&nbsp;                    text = visita.observaciones,</b>
+<b class="nc">&nbsp;                    style = MaterialTheme.typography.bodyMedium</b>
+&nbsp;                )
+&nbsp;            }
+&nbsp;
+&nbsp;            // Motivo de rechazo (si aplica)
+<b class="nc">&nbsp;            if (visita.validacion == EstadoValidacion.RECHAZADA &amp;&amp; !visita.motivoRechazo.isNullOrBlank()) {</b>
+<b class="nc">&nbsp;                Text(</b>
+<b class="nc">&nbsp;                    text = &quot;Motivo del rechazo: ${visita.motivoRechazo}&quot;,</b>
+<b class="nc">&nbsp;                    color = MaterialTheme.colorScheme.error,</b>
+<b class="nc">&nbsp;                    style = MaterialTheme.typography.bodyMedium</b>
+&nbsp;                )
+&nbsp;            }
+&nbsp;
+&nbsp;            // Botones de acción del supervisor (Validar / Rechazar)
+<b class="nc">&nbsp;            if (acciones != null) {</b>
+<b class="nc">&nbsp;                Row(</b>
+<b class="nc">&nbsp;                    modifier = Modifier.fillMaxWidth(),</b>
+<b class="nc">&nbsp;                    horizontalArrangement = Arrangement.spacedBy(Espaciado.s, Alignment.End),</b>
+&nbsp;                    content = acciones
+&nbsp;                )
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+<b class="nc">&nbsp;}</b>
+&nbsp;
+&nbsp;
+&nbsp;@Composable
+<b class="nc">&nbsp;private fun ChipEstado(estado: EstadoValidacion) {</b>
+<b class="nc">&nbsp;    val (colorFondo, colorTexto) = when (estado) {</b>
+<b class="nc">&nbsp;        EstadoValidacion.PENDIENTE -&gt; MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer</b>
+<b class="nc">&nbsp;        EstadoValidacion.VALIDADA -&gt; VerdeExito.copy(alpha = 0.2f) to VerdeExito</b>
+<b class="nc">&nbsp;        EstadoValidacion.RECHAZADA -&gt; MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer</b>
+&nbsp;    }
+<b class="nc">&nbsp;    androidx.compose.material3.Surface(</b>
+<b class="nc">&nbsp;        color = colorFondo,</b>
+<b class="nc">&nbsp;        shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)</b>
+<b class="nc">&nbsp;    ) {</b>
+<b class="nc">&nbsp;        Text(</b>
+<b class="nc">&nbsp;            text = estado.etiqueta,</b>
+<b class="nc">&nbsp;            color = colorTexto,</b>
+<b class="nc">&nbsp;            style = MaterialTheme.typography.labelSmall,</b>
+<b class="nc">&nbsp;            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)</b>
+&nbsp;        )
+&nbsp;    }
+<b class="nc">&nbsp;}</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

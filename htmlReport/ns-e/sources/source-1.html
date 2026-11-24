@@ -1,0 +1,214 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Validadores</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.domain.validacion</a>
+</div>
+
+<h1>Coverage Summary for Class: Validadores (cl.duoc.tacticaldev.domain.validacion)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Validadores</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (62/62)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.domain.validacion
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.model.EstadoEquipo
+&nbsp;
+&nbsp;/**
+&nbsp; * Reglas de validación centralizadas y desacopladas de la interfaz.
+&nbsp; * Cada función devuelve el mensaje de error o null si el valor es válido.
+&nbsp; * Al ser Kotlin puro se pueden probar con pruebas unitarias (T-22).
+&nbsp; */
+<b class="fc">&nbsp;object Validadores {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val REGEX_CORREO = Regex(&quot;^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$&quot;)</b>
+<b class="fc">&nbsp;    private val REGEX_CODIGO_ACTIVO = Regex(&quot;^TDV-(VF|CS)-\\d{3}$&quot;)</b>
+&nbsp;
+&nbsp;    const val CLAVE_MIN = 6
+&nbsp;    const val TEMPERATURA_MIN = -35.0
+&nbsp;    const val TEMPERATURA_MAX = 50.0
+&nbsp;    const val OBSERVACIONES_MIN = 10
+&nbsp;    const val OBSERVACIONES_MAX = 500
+&nbsp;    const val MOTIVO_MIN = 10
+&nbsp;
+<b class="fc">&nbsp;    fun correo(valor: String): String? = when {</b>
+<b class="fc">&nbsp;        valor.isBlank() -&gt; &quot;Ingresa tu correo&quot;</b>
+<b class="fc">&nbsp;        !REGEX_CORREO.matches(valor.trim()) -&gt; &quot;El formato del correo no es válido&quot;</b>
+<b class="fc">&nbsp;        else -&gt; null</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun clave(valor: String): String? = when {</b>
+<b class="fc">&nbsp;        valor.isBlank() -&gt; &quot;Ingresa tu clave&quot;</b>
+<b class="fc">&nbsp;        valor.length &lt; CLAVE_MIN -&gt; &quot;La clave debe tener al menos $CLAVE_MIN caracteres&quot;</b>
+<b class="fc">&nbsp;        else -&gt; null</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun seleccion(valor: Any?, campo: String): String? =
+<b class="fc">&nbsp;        if (valor == null) &quot;Selecciona $campo&quot; else null</b>
+&nbsp;
+&nbsp;    fun temperatura(valor: String): String? {
+<b class="fc">&nbsp;        if (valor.isBlank()) return &quot;Ingresa la temperatura medida&quot;</b>
+<b class="fc">&nbsp;        val numero = valor.replace(&#39;,&#39;, &#39;.&#39;).toDoubleOrNull() ?: return &quot;Ingresa un número válido&quot;</b>
+<b class="fc">&nbsp;        return if (numero &lt; TEMPERATURA_MIN || numero &gt; TEMPERATURA_MAX) {</b>
+<b class="fc">&nbsp;            &quot;Debe estar entre ${TEMPERATURA_MIN.toInt()} y ${TEMPERATURA_MAX.toInt()} °C&quot;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            null</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /** Si el equipo no está operativo, describir el problema es obligatorio. */
+&nbsp;    fun observaciones(valor: String, estado: EstadoEquipo?): String? {
+<b class="fc">&nbsp;        val texto = valor.trim()</b>
+<b class="fc">&nbsp;        return when {</b>
+<b class="fc">&nbsp;            texto.length &gt; OBSERVACIONES_MAX -&gt; &quot;Máximo $OBSERVACIONES_MAX caracteres&quot;</b>
+<b class="fc">&nbsp;            estado != null &amp;&amp; estado != EstadoEquipo.OPERATIVO &amp;&amp; texto.length &lt; OBSERVACIONES_MIN -&gt;</b>
+<b class="fc">&nbsp;                &quot;Describe el problema (mínimo $OBSERVACIONES_MIN caracteres)&quot;</b>
+<b class="fc">&nbsp;            else -&gt; null</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun foto(uri: String?): String? =
+<b class="fc">&nbsp;        if (uri.isNullOrBlank()) &quot;La foto de evidencia es obligatoria&quot; else null</b>
+&nbsp;
+&nbsp;    fun ubicacion(latitud: Double?, longitud: Double?): String? =
+<b class="fc">&nbsp;        if (latitud == null || longitud == null) &quot;Debes registrar la ubicación de la visita&quot; else null</b>
+&nbsp;
+&nbsp;    fun confirmacion(aceptada: Boolean): String? =
+<b class="fc">&nbsp;        if (!aceptada) &quot;Debes confirmar que la información es verídica&quot; else null</b>
+&nbsp;
+<b class="fc">&nbsp;    fun motivoRechazo(valor: String): String? = when {</b>
+<b class="fc">&nbsp;        valor.isBlank() -&gt; &quot;Ingresa el motivo del rechazo&quot;</b>
+<b class="fc">&nbsp;        valor.trim().length &lt; MOTIVO_MIN -&gt; &quot;El motivo debe tener al menos $MOTIVO_MIN caracteres&quot;</b>
+<b class="fc">&nbsp;        else -&gt; null</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    fun textoRequerido(valor: String, campo: String, min: Int = 3, max: Int = 60): String? {
+<b class="fc">&nbsp;        val texto = valor.trim()</b>
+<b class="fc">&nbsp;        return when {</b>
+<b class="fc">&nbsp;            texto.isEmpty() -&gt; &quot;Ingresa $campo&quot;</b>
+<b class="fc">&nbsp;            texto.length &lt; min -&gt; &quot;Mínimo $min caracteres&quot;</b>
+<b class="fc">&nbsp;            texto.length &gt; max -&gt; &quot;Máximo $max caracteres&quot;</b>
+<b class="fc">&nbsp;            else -&gt; null</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    fun latitud(valor: String): String? = coordenada(valor, -90.0, 90.0, &quot;latitud&quot;)</b>
+&nbsp;
+<b class="fc">&nbsp;    fun longitud(valor: String): String? = coordenada(valor, -180.0, 180.0, &quot;longitud&quot;)</b>
+&nbsp;
+&nbsp;    private fun coordenada(valor: String, min: Double, max: Double, campo: String): String? {
+<b class="fc">&nbsp;        if (valor.isBlank()) return &quot;Ingresa la $campo&quot;</b>
+<b class="fc">&nbsp;        val numero = valor.replace(&#39;,&#39;, &#39;.&#39;).toDoubleOrNull() ?: return &quot;Ingresa un número válido&quot;</b>
+<b class="fc">&nbsp;        return if (numero &lt; min || numero &gt; max) &quot;La $campo debe estar entre ${min.toInt()} y ${max.toInt()}&quot; else null</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    fun codigoActivo(valor: String): String? = when {</b>
+<b class="fc">&nbsp;        valor.isBlank() -&gt; &quot;Ingresa el código del activo&quot;</b>
+<b class="fc">&nbsp;        !REGEX_CODIGO_ACTIVO.matches(valor.trim().uppercase()) -&gt; &quot;Formato esperado: TDV-VF-001 o TDV-CS-001&quot;</b>
+<b class="fc">&nbsp;        else -&gt; null</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

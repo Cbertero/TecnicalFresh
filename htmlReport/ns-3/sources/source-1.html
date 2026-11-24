@@ -1,0 +1,560 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ActivoDao_Impl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: ActivoDao_Impl (cl.duoc.tacticaldev.data.local.dao)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActivoDao_Impl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/21)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ActivoDao_Impl$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoDao_Impl$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoDao_Impl$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoDao_Impl$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoDao_Impl$5</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/33)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ActivoDao_Impl$6</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/127)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local.dao;
+&nbsp;
+&nbsp;import android.database.Cursor;
+&nbsp;import android.os.CancellationSignal;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.annotation.Nullable;
+&nbsp;import androidx.room.CoroutinesRoom;
+&nbsp;import androidx.room.EntityInsertionAdapter;
+&nbsp;import androidx.room.RoomDatabase;
+&nbsp;import androidx.room.RoomSQLiteQuery;
+&nbsp;import androidx.room.util.CursorUtil;
+&nbsp;import androidx.room.util.DBUtil;
+&nbsp;import androidx.sqlite.db.SupportSQLiteStatement;
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity;
+&nbsp;import cl.duoc.tacticaldev.model.ActivoConPunto;
+&nbsp;import java.lang.Class;
+&nbsp;import java.lang.Exception;
+&nbsp;import java.lang.Long;
+&nbsp;import java.lang.Object;
+&nbsp;import java.lang.Override;
+&nbsp;import java.lang.String;
+&nbsp;import java.lang.SuppressWarnings;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.List;
+&nbsp;import java.util.concurrent.Callable;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;import kotlin.coroutines.Continuation;
+&nbsp;import kotlinx.coroutines.flow.Flow;
+&nbsp;
+&nbsp;@Generated(&quot;androidx.room.RoomProcessor&quot;)
+&nbsp;@SuppressWarnings({&quot;unchecked&quot;, &quot;deprecation&quot;})
+&nbsp;public final class ActivoDao_Impl implements ActivoDao {
+&nbsp;  private final RoomDatabase __db;
+&nbsp;
+&nbsp;  private final EntityInsertionAdapter&lt;ActivoEntity&gt; __insertionAdapterOfActivoEntity;
+&nbsp;
+<b class="nc">&nbsp;  public ActivoDao_Impl(@NonNull final RoomDatabase __db) {</b>
+<b class="nc">&nbsp;    this.__db = __db;</b>
+<b class="nc">&nbsp;    this.__insertionAdapterOfActivoEntity = new EntityInsertionAdapter&lt;ActivoEntity&gt;(__db) {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      protected String createQuery() {
+<b class="nc">&nbsp;        return &quot;INSERT OR REPLACE INTO `activos` (`id`,`codigo`,`tipo`,`marca`,`modelo`,`puntoVentaId`) VALUES (nullif(?, 0),?,?,?,?,?)&quot;;</b>
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      protected void bind(@NonNull final SupportSQLiteStatement statement,
+&nbsp;          @NonNull final ActivoEntity entity) {
+<b class="nc">&nbsp;        statement.bindLong(1, entity.getId());</b>
+<b class="nc">&nbsp;        statement.bindString(2, entity.getCodigo());</b>
+<b class="nc">&nbsp;        statement.bindString(3, entity.getTipo());</b>
+<b class="nc">&nbsp;        statement.bindString(4, entity.getMarca());</b>
+<b class="nc">&nbsp;        statement.bindString(5, entity.getModelo());</b>
+<b class="nc">&nbsp;        statement.bindLong(6, entity.getPuntoVentaId());</b>
+&nbsp;      }
+&nbsp;    };
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object insertar(final ActivoEntity activo, final Continuation&lt;? super Long&gt; $completion) {
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, true, new Callable&lt;Long&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public Long call() throws Exception {
+<b class="nc">&nbsp;        __db.beginTransaction();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final Long _result = __insertionAdapterOfActivoEntity.insertAndReturnId(activo);</b>
+<b class="nc">&nbsp;          __db.setTransactionSuccessful();</b>
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+<b class="nc">&nbsp;          __db.endTransaction();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object insertarTodos(final List&lt;ActivoEntity&gt; activos,
+&nbsp;      final Continuation&lt;? super List&lt;Long&gt;&gt; $completion) {
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, true, new Callable&lt;List&lt;Long&gt;&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public List&lt;Long&gt; call() throws Exception {
+<b class="nc">&nbsp;        __db.beginTransaction();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final List&lt;Long&gt; _result = __insertionAdapterOfActivoEntity.insertAndReturnIdsList(activos);</b>
+<b class="nc">&nbsp;          __db.setTransactionSuccessful();</b>
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+<b class="nc">&nbsp;          __db.endTransaction();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Flow&lt;List&lt;ActivoConPunto&gt;&gt; observarActivosConPunto() {
+<b class="nc">&nbsp;    final String _sql = &quot;\n&quot;</b>
+&nbsp;            + &quot;    SELECT a.id, a.codigo, a.tipo, a.marca, a.modelo, a.puntoVentaId,\n&quot;
+&nbsp;            + &quot;           p.nombre AS puntoVentaNombre, p.direccion, p.comuna, p.latitud, p.longitud,\n&quot;
+&nbsp;            + &quot;           (SELECT MAX(v.fechaHora) FROM visitas v WHERE v.activoId = a.id) AS ultimaVisita\n&quot;
+&nbsp;            + &quot;    FROM activos a\n&quot;
+&nbsp;            + &quot;    INNER JOIN puntos_venta p ON p.id = a.puntoVentaId\n&quot;
+&nbsp;            + &quot; ORDER BY p.nombre, a.codigo&quot;;
+<b class="nc">&nbsp;    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);</b>
+<b class="nc">&nbsp;    return CoroutinesRoom.createFlow(__db, false, new String[] {&quot;visitas&quot;, &quot;activos&quot;,</b>
+<b class="nc">&nbsp;        &quot;puntos_venta&quot;}, new Callable&lt;List&lt;ActivoConPunto&gt;&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @NonNull
+&nbsp;      public List&lt;ActivoConPunto&gt; call() throws Exception {
+<b class="nc">&nbsp;        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final int _cursorIndexOfId = 0;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCodigo = 1;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfTipo = 2;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfMarca = 3;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfModelo = 4;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfPuntoVentaId = 5;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfPuntoVentaNombre = 6;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfDireccion = 7;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfComuna = 8;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfLatitud = 9;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfLongitud = 10;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfUltimaVisita = 11;</b>
+<b class="nc">&nbsp;          final List&lt;ActivoConPunto&gt; _result = new ArrayList&lt;ActivoConPunto&gt;(_cursor.getCount());</b>
+<b class="nc">&nbsp;          while (_cursor.moveToNext()) {</b>
+&nbsp;            final ActivoConPunto _item;
+&nbsp;            final long _tmpId;
+<b class="nc">&nbsp;            _tmpId = _cursor.getLong(_cursorIndexOfId);</b>
+&nbsp;            final String _tmpCodigo;
+<b class="nc">&nbsp;            _tmpCodigo = _cursor.getString(_cursorIndexOfCodigo);</b>
+&nbsp;            final String _tmpTipo;
+<b class="nc">&nbsp;            _tmpTipo = _cursor.getString(_cursorIndexOfTipo);</b>
+&nbsp;            final String _tmpMarca;
+<b class="nc">&nbsp;            _tmpMarca = _cursor.getString(_cursorIndexOfMarca);</b>
+&nbsp;            final String _tmpModelo;
+<b class="nc">&nbsp;            _tmpModelo = _cursor.getString(_cursorIndexOfModelo);</b>
+&nbsp;            final long _tmpPuntoVentaId;
+<b class="nc">&nbsp;            _tmpPuntoVentaId = _cursor.getLong(_cursorIndexOfPuntoVentaId);</b>
+&nbsp;            final String _tmpPuntoVentaNombre;
+<b class="nc">&nbsp;            _tmpPuntoVentaNombre = _cursor.getString(_cursorIndexOfPuntoVentaNombre);</b>
+&nbsp;            final String _tmpDireccion;
+<b class="nc">&nbsp;            _tmpDireccion = _cursor.getString(_cursorIndexOfDireccion);</b>
+&nbsp;            final String _tmpComuna;
+<b class="nc">&nbsp;            _tmpComuna = _cursor.getString(_cursorIndexOfComuna);</b>
+&nbsp;            final double _tmpLatitud;
+<b class="nc">&nbsp;            _tmpLatitud = _cursor.getDouble(_cursorIndexOfLatitud);</b>
+&nbsp;            final double _tmpLongitud;
+<b class="nc">&nbsp;            _tmpLongitud = _cursor.getDouble(_cursorIndexOfLongitud);</b>
+&nbsp;            final Long _tmpUltimaVisita;
+<b class="nc">&nbsp;            if (_cursor.isNull(_cursorIndexOfUltimaVisita)) {</b>
+<b class="nc">&nbsp;              _tmpUltimaVisita = null;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;              _tmpUltimaVisita = _cursor.getLong(_cursorIndexOfUltimaVisita);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            _item = new ActivoConPunto(_tmpId,_tmpCodigo,_tmpTipo,_tmpMarca,_tmpModelo,_tmpPuntoVentaId,_tmpPuntoVentaNombre,_tmpDireccion,_tmpComuna,_tmpLatitud,_tmpLongitud,_tmpUltimaVisita);</b>
+<b class="nc">&nbsp;            _result.add(_item);</b>
+&nbsp;          }
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+&nbsp;          _cursor.close();
+&nbsp;        }
+&nbsp;      }
+&nbsp;
+&nbsp;      @Override
+&nbsp;      protected void finalize() {
+<b class="nc">&nbsp;        _statement.release();</b>
+&nbsp;      }
+&nbsp;    });
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object buscarActivoConPunto(final long id,
+&nbsp;      final Continuation&lt;? super ActivoConPunto&gt; $completion) {
+<b class="nc">&nbsp;    final String _sql = &quot;\n&quot;</b>
+&nbsp;            + &quot;    SELECT a.id, a.codigo, a.tipo, a.marca, a.modelo, a.puntoVentaId,\n&quot;
+&nbsp;            + &quot;           p.nombre AS puntoVentaNombre, p.direccion, p.comuna, p.latitud, p.longitud,\n&quot;
+&nbsp;            + &quot;           (SELECT MAX(v.fechaHora) FROM visitas v WHERE v.activoId = a.id) AS ultimaVisita\n&quot;
+&nbsp;            + &quot;    FROM activos a\n&quot;
+&nbsp;            + &quot;    INNER JOIN puntos_venta p ON p.id = a.puntoVentaId\n&quot;
+&nbsp;            + &quot; WHERE a.id = ?&quot;;
+<b class="nc">&nbsp;    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);</b>
+<b class="nc">&nbsp;    int _argIndex = 1;</b>
+<b class="nc">&nbsp;    _statement.bindLong(_argIndex, id);</b>
+<b class="nc">&nbsp;    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();</b>
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable&lt;ActivoConPunto&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @Nullable
+&nbsp;      public ActivoConPunto call() throws Exception {
+<b class="nc">&nbsp;        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final int _cursorIndexOfId = 0;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCodigo = 1;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfTipo = 2;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfMarca = 3;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfModelo = 4;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfPuntoVentaId = 5;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfPuntoVentaNombre = 6;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfDireccion = 7;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfComuna = 8;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfLatitud = 9;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfLongitud = 10;</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfUltimaVisita = 11;</b>
+&nbsp;          final ActivoConPunto _result;
+<b class="nc">&nbsp;          if (_cursor.moveToFirst()) {</b>
+&nbsp;            final long _tmpId;
+<b class="nc">&nbsp;            _tmpId = _cursor.getLong(_cursorIndexOfId);</b>
+&nbsp;            final String _tmpCodigo;
+<b class="nc">&nbsp;            _tmpCodigo = _cursor.getString(_cursorIndexOfCodigo);</b>
+&nbsp;            final String _tmpTipo;
+<b class="nc">&nbsp;            _tmpTipo = _cursor.getString(_cursorIndexOfTipo);</b>
+&nbsp;            final String _tmpMarca;
+<b class="nc">&nbsp;            _tmpMarca = _cursor.getString(_cursorIndexOfMarca);</b>
+&nbsp;            final String _tmpModelo;
+<b class="nc">&nbsp;            _tmpModelo = _cursor.getString(_cursorIndexOfModelo);</b>
+&nbsp;            final long _tmpPuntoVentaId;
+<b class="nc">&nbsp;            _tmpPuntoVentaId = _cursor.getLong(_cursorIndexOfPuntoVentaId);</b>
+&nbsp;            final String _tmpPuntoVentaNombre;
+<b class="nc">&nbsp;            _tmpPuntoVentaNombre = _cursor.getString(_cursorIndexOfPuntoVentaNombre);</b>
+&nbsp;            final String _tmpDireccion;
+<b class="nc">&nbsp;            _tmpDireccion = _cursor.getString(_cursorIndexOfDireccion);</b>
+&nbsp;            final String _tmpComuna;
+<b class="nc">&nbsp;            _tmpComuna = _cursor.getString(_cursorIndexOfComuna);</b>
+&nbsp;            final double _tmpLatitud;
+<b class="nc">&nbsp;            _tmpLatitud = _cursor.getDouble(_cursorIndexOfLatitud);</b>
+&nbsp;            final double _tmpLongitud;
+<b class="nc">&nbsp;            _tmpLongitud = _cursor.getDouble(_cursorIndexOfLongitud);</b>
+&nbsp;            final Long _tmpUltimaVisita;
+<b class="nc">&nbsp;            if (_cursor.isNull(_cursorIndexOfUltimaVisita)) {</b>
+<b class="nc">&nbsp;              _tmpUltimaVisita = null;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;              _tmpUltimaVisita = _cursor.getLong(_cursorIndexOfUltimaVisita);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            _result = new ActivoConPunto(_tmpId,_tmpCodigo,_tmpTipo,_tmpMarca,_tmpModelo,_tmpPuntoVentaId,_tmpPuntoVentaNombre,_tmpDireccion,_tmpComuna,_tmpLatitud,_tmpLongitud,_tmpUltimaVisita);</b>
+&nbsp;          } else {
+<b class="nc">&nbsp;            _result = null;</b>
+&nbsp;          }
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+&nbsp;          _cursor.close();
+<b class="nc">&nbsp;          _statement.release();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public Object buscarPorCodigo(final String codigo,
+&nbsp;      final Continuation&lt;? super ActivoEntity&gt; $completion) {
+<b class="nc">&nbsp;    final String _sql = &quot;SELECT * FROM activos WHERE codigo = ? LIMIT 1&quot;;</b>
+<b class="nc">&nbsp;    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);</b>
+<b class="nc">&nbsp;    int _argIndex = 1;</b>
+<b class="nc">&nbsp;    _statement.bindString(_argIndex, codigo);</b>
+<b class="nc">&nbsp;    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();</b>
+<b class="nc">&nbsp;    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable&lt;ActivoEntity&gt;() {</b>
+&nbsp;      @Override
+&nbsp;      @Nullable
+&nbsp;      public ActivoEntity call() throws Exception {
+<b class="nc">&nbsp;        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;id&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfCodigo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;codigo&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfTipo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;tipo&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfMarca = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;marca&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfModelo = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;modelo&quot;);</b>
+<b class="nc">&nbsp;          final int _cursorIndexOfPuntoVentaId = CursorUtil.getColumnIndexOrThrow(_cursor, &quot;puntoVentaId&quot;);</b>
+&nbsp;          final ActivoEntity _result;
+<b class="nc">&nbsp;          if (_cursor.moveToFirst()) {</b>
+&nbsp;            final long _tmpId;
+<b class="nc">&nbsp;            _tmpId = _cursor.getLong(_cursorIndexOfId);</b>
+&nbsp;            final String _tmpCodigo;
+<b class="nc">&nbsp;            _tmpCodigo = _cursor.getString(_cursorIndexOfCodigo);</b>
+&nbsp;            final String _tmpTipo;
+<b class="nc">&nbsp;            _tmpTipo = _cursor.getString(_cursorIndexOfTipo);</b>
+&nbsp;            final String _tmpMarca;
+<b class="nc">&nbsp;            _tmpMarca = _cursor.getString(_cursorIndexOfMarca);</b>
+&nbsp;            final String _tmpModelo;
+<b class="nc">&nbsp;            _tmpModelo = _cursor.getString(_cursorIndexOfModelo);</b>
+&nbsp;            final long _tmpPuntoVentaId;
+<b class="nc">&nbsp;            _tmpPuntoVentaId = _cursor.getLong(_cursorIndexOfPuntoVentaId);</b>
+<b class="nc">&nbsp;            _result = new ActivoEntity(_tmpId,_tmpCodigo,_tmpTipo,_tmpMarca,_tmpModelo,_tmpPuntoVentaId);</b>
+&nbsp;          } else {
+<b class="nc">&nbsp;            _result = null;</b>
+&nbsp;          }
+<b class="nc">&nbsp;          return _result;</b>
+&nbsp;        } finally {
+&nbsp;          _cursor.close();
+<b class="nc">&nbsp;          _statement.release();</b>
+&nbsp;        }
+&nbsp;      }
+&nbsp;    }, $completion);
+&nbsp;  }
+&nbsp;
+&nbsp;  @NonNull
+&nbsp;  public static List&lt;Class&lt;?&gt;&gt; getRequiredConverters() {
+<b class="nc">&nbsp;    return Collections.emptyList();</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

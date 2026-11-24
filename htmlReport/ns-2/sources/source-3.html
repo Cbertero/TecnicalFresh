@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DatosFicticios</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local</a>
+</div>
+
+<h1>Coverage Summary for Class: DatosFicticios (cl.duoc.tacticaldev.data.local)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DatosFicticios</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (40/40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.ActivoEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.PuntoVentaEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.UsuarioEntity
+&nbsp;import cl.duoc.tacticaldev.data.local.entity.VisitaEntity
+&nbsp;import cl.duoc.tacticaldev.model.EstadoEquipo
+&nbsp;import cl.duoc.tacticaldev.model.EstadoValidacion
+&nbsp;import cl.duoc.tacticaldev.model.Rol
+&nbsp;import cl.duoc.tacticaldev.model.TipoActivo
+&nbsp;import cl.duoc.tacticaldev.model.TipoVisita
+&nbsp;import cl.duoc.tacticaldev.utils.Seguridad
+&nbsp;
+&nbsp;/**
+&nbsp; * Datos 100% ficticios para el MVP (el caso prohíbe usar datos reales).
+&nbsp; * Todos los usuarios tienen la clave &quot;Clave123&quot;.
+&nbsp; */
+<b class="fc">&nbsp;object DatosFicticios {</b>
+&nbsp;
+&nbsp;    const val CLAVE_DEMO = &quot;Clave123&quot;
+&nbsp;    private const val HORA = 60 * 60 * 1000L
+&nbsp;
+&nbsp;    fun usuarios(): List&lt;UsuarioEntity&gt; {
+<b class="fc">&nbsp;        val hash = Seguridad.sha256(CLAVE_DEMO)</b>
+<b class="fc">&nbsp;        return listOf(</b>
+<b class="fc">&nbsp;            UsuarioEntity(1, &quot;Tomás Rivera&quot;, &quot;tecnico@demo.cl&quot;, hash, Rol.OPERARIO.name, &quot;Técnico de mantenimiento&quot;),</b>
+<b class="fc">&nbsp;            UsuarioEntity(2, &quot;Valentina Soto&quot;, &quot;vendedor@demo.cl&quot;, hash, Rol.OPERARIO.name, &quot;Vendedor&quot;),</b>
+<b class="fc">&nbsp;            UsuarioEntity(3, &quot;Diego Muñoz&quot;, &quot;transportista@demo.cl&quot;, hash, Rol.OPERARIO.name, &quot;Transportista&quot;),</b>
+<b class="fc">&nbsp;            UsuarioEntity(4, &quot;Carla Fuentes&quot;, &quot;supervisor@demo.cl&quot;, hash, Rol.SUPERVISOR.name, &quot;Supervisor de operaciones&quot;)</b>
+&nbsp;        )
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    fun puntosVenta(): List&lt;PuntoVentaEntity&gt; = listOf(</b>
+<b class="fc">&nbsp;        PuntoVentaEntity(1, &quot;Minimarket El Alba&quot;, &quot;Av. Ficticia 1234&quot;, &quot;Cerrillos&quot;, -33.5160, -70.7170),</b>
+<b class="fc">&nbsp;        PuntoVentaEntity(2, &quot;Almacén Los Aromos&quot;, &quot;Pasaje Demo 456&quot;, &quot;Maipú&quot;, -33.5105, -70.7580),</b>
+<b class="fc">&nbsp;        PuntoVentaEntity(3, &quot;Minimarket Las Rosas&quot;, &quot;Calle Ejemplo 789&quot;, &quot;Santiago&quot;, -33.4489, -70.6693),</b>
+<b class="fc">&nbsp;        PuntoVentaEntity(4, &quot;Botillería La Esquina&quot;, &quot;Av. Prueba 321&quot;, &quot;Estación Central&quot;, -33.4569, -70.6983)</b>
+<b class="fc">&nbsp;    )</b>
+&nbsp;
+<b class="fc">&nbsp;    fun activos(): List&lt;ActivoEntity&gt; = listOf(</b>
+<b class="fc">&nbsp;        ActivoEntity(1, &quot;TDV-VF-001&quot;, TipoActivo.VITRINA_FREEZER.name, &quot;FrioMax&quot;, &quot;VF-300&quot;, 1),</b>
+<b class="fc">&nbsp;        ActivoEntity(2, &quot;TDV-CS-001&quot;, TipoActivo.CONSERVADORA.name, &quot;GlaciaPro&quot;, &quot;CS-150&quot;, 1),</b>
+<b class="fc">&nbsp;        ActivoEntity(3, &quot;TDV-VF-002&quot;, TipoActivo.VITRINA_FREEZER.name, &quot;FrioMax&quot;, &quot;VF-450&quot;, 2),</b>
+<b class="fc">&nbsp;        ActivoEntity(4, &quot;TDV-CS-002&quot;, TipoActivo.CONSERVADORA.name, &quot;GlaciaPro&quot;, &quot;CS-200&quot;, 3),</b>
+<b class="fc">&nbsp;        ActivoEntity(5, &quot;TDV-VF-003&quot;, TipoActivo.VITRINA_FREEZER.name, &quot;PolarLine&quot;, &quot;PL-500&quot;, 3),</b>
+<b class="fc">&nbsp;        ActivoEntity(6, &quot;TDV-CS-003&quot;, TipoActivo.CONSERVADORA.name, &quot;PolarLine&quot;, &quot;PL-120&quot;, 4)</b>
+<b class="fc">&nbsp;    )</b>
+&nbsp;
+&nbsp;    /** Algunas visitas de ejemplo para que el historial y el supervisor no partan vacíos. */
+&nbsp;    fun visitas(ahora: Long = System.currentTimeMillis()): List&lt;VisitaEntity&gt; = listOf(
+<b class="fc">&nbsp;        VisitaEntity(</b>
+<b class="fc">&nbsp;            activoId = 1, usuarioId = 1, fechaHora = ahora - 50 * HORA,</b>
+<b class="fc">&nbsp;            tipoVisita = TipoVisita.MANTENCION.name, estadoEquipo = EstadoEquipo.OPERATIVO.name,</b>
+<b class="fc">&nbsp;            temperatura = -18.0, observaciones = &quot;Limpieza de condensador y revisión de sellos.&quot;,</b>
+<b class="fc">&nbsp;            fotoUri = &quot;&quot;, latitud = -33.5161, longitud = -70.7171, distanciaMetros = 14.0,</b>
+<b class="fc">&nbsp;            ubicacionVerificada = true, estadoValidacion = EstadoValidacion.VALIDADA.name, supervisorId = 4</b>
+&nbsp;        ),
+<b class="fc">&nbsp;        VisitaEntity(</b>
+<b class="fc">&nbsp;            activoId = 4, usuarioId = 2, fechaHora = ahora - 26 * HORA,</b>
+<b class="fc">&nbsp;            tipoVisita = TipoVisita.VENTA.name, estadoEquipo = EstadoEquipo.CON_OBSERVACIONES.name,</b>
+<b class="fc">&nbsp;            temperatura = -12.5, observaciones = &quot;La puerta no cierra completamente, se acumula escarcha.&quot;,</b>
+<b class="fc">&nbsp;            fotoUri = &quot;&quot;, latitud = -33.4490, longitud = -70.6695, distanciaMetros = 21.0,</b>
+<b class="fc">&nbsp;            ubicacionVerificada = true</b>
+&nbsp;        ),
+<b class="fc">&nbsp;        VisitaEntity(</b>
+<b class="fc">&nbsp;            activoId = 6, usuarioId = 3, fechaHora = ahora - 3 * HORA,</b>
+<b class="fc">&nbsp;            tipoVisita = TipoVisita.TRANSPORTE.name, estadoEquipo = EstadoEquipo.CON_FALLA.name,</b>
+<b class="fc">&nbsp;            temperatura = 2.0, observaciones = &quot;Equipo sin enfriar al momento de la entrega de producto.&quot;,</b>
+<b class="fc">&nbsp;            fotoUri = &quot;&quot;, latitud = -33.4700, longitud = -70.7100, distanciaMetros = 1850.0,</b>
+<b class="fc">&nbsp;            ubicacionVerificada = false</b>
+&nbsp;        )
+<b class="fc">&nbsp;    )</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

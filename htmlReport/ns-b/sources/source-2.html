@@ -1,0 +1,189 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ResultadoEscaneo</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.scanner</a>
+</div>
+
+<h1>Coverage Summary for Class: ResultadoEscaneo (cl.duoc.tacticaldev.data.scanner)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">ResultadoEscaneo$Cancelado</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ResultadoEscaneo$Error</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ResultadoEscaneo$Exito</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.scanner
+&nbsp;
+&nbsp;import android.content.Context
+&nbsp;import com.google.mlkit.vision.barcode.common.Barcode
+&nbsp;import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+&nbsp;import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+&nbsp;import kotlinx.coroutines.suspendCancellableCoroutine
+&nbsp;import kotlin.coroutines.resume
+&nbsp;
+&nbsp;/** Resultado de un intento de escaneo. */
+&nbsp;sealed interface ResultadoEscaneo {
+<b class="fc">&nbsp;    data class Exito(val codigo: String) : ResultadoEscaneo</b>
+<b class="fc">&nbsp;    data object Cancelado : ResultadoEscaneo</b>
+<b class="fc">&nbsp;    data class Error(val mensaje: String) : ResultadoEscaneo</b>
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Abre el escáner de Google Play services y devuelve el texto del QR.
+&nbsp; * Cada activo tiene pegado un QR con su código (ej. TDV-VF-001).
+&nbsp; */
+&nbsp;object EscanerQr {
+&nbsp;    suspend fun escanear(context: Context): ResultadoEscaneo = suspendCancellableCoroutine { continuacion -&gt;
+&nbsp;        val opciones = GmsBarcodeScannerOptions.Builder()
+&nbsp;            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+&nbsp;            .build()
+&nbsp;        GmsBarcodeScanning.getClient(context, opciones)
+&nbsp;            .startScan()
+&nbsp;            .addOnSuccessListener { codigo -&gt;
+&nbsp;                val texto = codigo.rawValue
+&nbsp;                continuacion.resume(
+&nbsp;                    if (texto.isNullOrBlank()) ResultadoEscaneo.Error(&quot;El código QR está vacío&quot;)
+&nbsp;                    else ResultadoEscaneo.Exito(texto)
+&nbsp;                )
+&nbsp;            }
+&nbsp;            .addOnCanceledListener { continuacion.resume(ResultadoEscaneo.Cancelado) }
+&nbsp;            .addOnFailureListener { error -&gt;
+&nbsp;                continuacion.resume(ResultadoEscaneo.Error(error.localizedMessage ?: &quot;No se pudo abrir el escáner&quot;))
+&nbsp;            }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

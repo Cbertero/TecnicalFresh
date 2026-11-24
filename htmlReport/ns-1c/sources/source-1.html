@@ -1,0 +1,174 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ColorKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.ui.theme</a>
+</div>
+
+<h1>Coverage Summary for Class: ColorKt (cl.duoc.tacticaldev.ui.theme)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ColorKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82,9%
+  </span>
+  <span class="absValue">
+    (29/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82,9%
+  </span>
+  <span class="absValue">
+    (29/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.ui.theme
+&nbsp;
+&nbsp;import androidx.compose.runtime.Composable
+&nbsp;import androidx.compose.runtime.ReadOnlyComposable
+&nbsp;import androidx.compose.runtime.staticCompositionLocalOf
+&nbsp;import androidx.compose.ui.graphics.Color
+&nbsp;
+&nbsp;/** Indica si el tema activo es oscuro (lo provee [TacticalDEVTheme] según el sistema). */
+<b class="fc">&nbsp;val LocalTemaOscuro = staticCompositionLocalOf { true }</b>
+&nbsp;
+&nbsp;// Paleta Arctic Cyan — modo oscuro (Cadena de Frío &amp; Dark Tech)
+<b class="fc">&nbsp;val FondoNocheGlacial = Color(0xFF131D2E)       // Fondo azul marino templado</b>
+<b class="fc">&nbsp;val SuperficieTarjeta = Color(0xFF1D2B42)       // Tarjetas elevadas azul acero</b>
+<b class="fc">&nbsp;val BordeTarjetaSutil = Color(0xFF2E4366)       // Borde tenue de contraste</b>
+<b class="fc">&nbsp;val BordeCianGlacial = Color(0xFF22D3EE)        // Cian brillante para acentos de frío</b>
+&nbsp;
+<b class="fc">&nbsp;val CianFrio = Color(0xFF38BDF8)               // Primario en botones y destacados</b>
+<b class="fc">&nbsp;val CianFrioOscuro = Color(0xFF0369A1)</b>
+<b class="fc">&nbsp;val CianContenedor = Color(0xFF0C4A6E)</b>
+<b class="fc">&nbsp;val TextoBlancoPuro = Color(0xFFF8FAFC)</b>
+<b class="fc">&nbsp;val TextoSecundarioGris = Color(0xFF94A3B8)</b>
+&nbsp;
+&nbsp;// Paleta Arctic Cyan — modo claro
+<b class="fc">&nbsp;val FondoHieloClaro = Color(0xFFF1F7FB)         // Fondo claro con tinte frío</b>
+<b class="fc">&nbsp;val SuperficieClara = Color(0xFFFFFFFF)         // Tarjetas sobre fondo claro</b>
+<b class="fc">&nbsp;val SuperficieVarianteClara = Color(0xFFE2EEF6)</b>
+<b class="fc">&nbsp;val CianContenedorClaro = Color(0xFFE0F2FE)</b>
+<b class="fc">&nbsp;val CianSecundarioClaro = Color(0xFF0E7490)</b>
+<b class="fc">&nbsp;val TextoPizarraOscuro = Color(0xFF0F172A)</b>
+<b class="fc">&nbsp;val TextoSecundarioPizarra = Color(0xFF475569)</b>
+&nbsp;
+&nbsp;// Colores semánticos (variantes para cada modo, con buen contraste sobre su fondo)
+<b class="fc">&nbsp;internal val VerdeExitoOscuro = Color(0xFF10B981)</b>
+<b class="fc">&nbsp;internal val VerdeExitoContenedorOscuro = Color(0xFF064E3B)</b>
+<b class="fc">&nbsp;internal val AmbarAlertaOscuro = Color(0xFFF59E0B)</b>
+<b class="fc">&nbsp;internal val AmbarAlertaContenedorOscuro = Color(0xFF78350F)</b>
+<b class="fc">&nbsp;internal val RojoErrorOscuro = Color(0xFFF43F5E)</b>
+<b class="fc">&nbsp;internal val RojoErrorContenedorOscuro = Color(0xFF881337)</b>
+&nbsp;
+<b class="fc">&nbsp;internal val VerdeExitoClaro = Color(0xFF047857)</b>
+<b class="fc">&nbsp;internal val VerdeExitoContenedorClaro = Color(0xFFD1FAE5)</b>
+<b class="fc">&nbsp;internal val AmbarAlertaClaro = Color(0xFFB45309)</b>
+<b class="fc">&nbsp;internal val AmbarAlertaContenedorClaro = Color(0xFFFEF3C7)</b>
+<b class="fc">&nbsp;internal val RojoErrorClaro = Color(0xFFE11D48)</b>
+<b class="fc">&nbsp;internal val RojoErrorContenedorClaro = Color(0xFFFFE4E6)</b>
+&nbsp;
+&nbsp;val VerdeExito: Color
+<b class="nc">&nbsp;    @Composable @ReadOnlyComposable get() = if (LocalTemaOscuro.current) VerdeExitoOscuro else VerdeExitoClaro</b>
+&nbsp;val VerdeExitoContenedor: Color
+<b class="nc">&nbsp;    @Composable @ReadOnlyComposable get() = if (LocalTemaOscuro.current) VerdeExitoContenedorOscuro else VerdeExitoContenedorClaro</b>
+&nbsp;val AmbarAlerta: Color
+<b class="nc">&nbsp;    @Composable @ReadOnlyComposable get() = if (LocalTemaOscuro.current) AmbarAlertaOscuro else AmbarAlertaClaro</b>
+&nbsp;val AmbarAlertaContenedor: Color
+<b class="nc">&nbsp;    @Composable @ReadOnlyComposable get() = if (LocalTemaOscuro.current) AmbarAlertaContenedorOscuro else AmbarAlertaContenedorClaro</b>
+&nbsp;val RojoError: Color
+<b class="nc">&nbsp;    @Composable @ReadOnlyComposable get() = if (LocalTemaOscuro.current) RojoErrorOscuro else RojoErrorClaro</b>
+&nbsp;val RojoErrorContenedor: Color
+<b class="nc">&nbsp;    @Composable @ReadOnlyComposable get() = if (LocalTemaOscuro.current) RojoErrorContenedorOscuro else RojoErrorContenedorClaro</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

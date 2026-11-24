@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > FotoUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.utils</a>
+</div>
+
+<h1>Coverage Summary for Class: FotoUtils (cl.duoc.tacticaldev.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FotoUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4,8%
+  </span>
+  <span class="absValue">
+    (1/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.utils
+&nbsp;
+&nbsp;import android.content.Context
+&nbsp;import android.graphics.Bitmap
+&nbsp;import android.graphics.BitmapFactory
+&nbsp;import android.net.Uri
+&nbsp;import android.util.Base64
+&nbsp;import androidx.core.content.FileProvider
+&nbsp;import java.io.ByteArrayOutputStream
+&nbsp;import java.io.File
+&nbsp;import java.text.SimpleDateFormat
+&nbsp;import java.util.Date
+&nbsp;import java.util.Locale
+&nbsp;
+&nbsp;/** Manejo de archivos de las fotos de evidencia. */
+<b class="fc">&nbsp;object FotoUtils {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Crea un archivo vacío en files/evidencias y devuelve su URI de FileProvider,
+&nbsp;     * que es lo que recibe ActivityResultContracts.TakePicture.
+&nbsp;     */
+&nbsp;    fun crearUriFoto(context: Context): Uri {
+<b class="nc">&nbsp;        val carpeta = File(context.filesDir, &quot;evidencias&quot;).apply { mkdirs() }</b>
+<b class="nc">&nbsp;        val marca = SimpleDateFormat(&quot;yyyyMMdd_HHmmss&quot;, Locale.US).format(Date())</b>
+<b class="nc">&nbsp;        val archivo = File(carpeta, &quot;visita_$marca.jpg&quot;)</b>
+<b class="nc">&nbsp;        return FileProvider.getUriForFile(context, &quot;${context.packageName}.fileprovider&quot;, archivo)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /** Borra la foto asociada al URI (por ejemplo, cuando el usuario cancela la cámara). */
+&nbsp;    fun eliminar(context: Context, uri: Uri) {
+<b class="nc">&nbsp;        runCatching { context.contentResolver.delete(uri, null, null) }</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Convierte la foto tomada en un texto Base64 comprimido para enviarla al servidor.
+&nbsp;     * Se reduce a 800 px como máximo y calidad JPEG 60 (~50-100 KB).
+&nbsp;     */
+&nbsp;    fun aBase64(context: Context, uriTexto: String): String? {
+<b class="nc">&nbsp;        if (uriTexto.isBlank()) return null</b>
+<b class="nc">&nbsp;        if (uriTexto.startsWith(&quot;data:image&quot;)) return uriTexto // ya viene convertida</b>
+<b class="nc">&nbsp;        return runCatching {</b>
+<b class="nc">&nbsp;            val original = context.contentResolver.openInputStream(Uri.parse(uriTexto))</b>
+<b class="nc">&nbsp;                ?.use { BitmapFactory.decodeStream(it) } ?: return null</b>
+<b class="nc">&nbsp;            val escala = minOf(1f, 800f / maxOf(original.width, original.height))</b>
+<b class="nc">&nbsp;            val reducida = if (escala &lt; 1f) {</b>
+<b class="nc">&nbsp;                Bitmap.createScaledBitmap(</b>
+<b class="nc">&nbsp;                    original, (original.width * escala).toInt(), (original.height * escala).toInt(), true</b>
+&nbsp;                )
+<b class="nc">&nbsp;            } else original</b>
+<b class="nc">&nbsp;            val salida = ByteArrayOutputStream()</b>
+<b class="nc">&nbsp;            reducida.compress(Bitmap.CompressFormat.JPEG, 60, salida)</b>
+<b class="nc">&nbsp;            &quot;data:image/jpeg;base64,&quot; + Base64.encodeToString(salida.toByteArray(), Base64.NO_WRAP)</b>
+<b class="nc">&nbsp;        }.getOrNull()</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>

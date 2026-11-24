@@ -1,0 +1,133 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AppContainer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.di</a>
+</div>
+
+<h1>Coverage Summary for Class: AppContainer (cl.duoc.tacticaldev.di)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AppContainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.di
+&nbsp;
+&nbsp;import android.content.Context
+&nbsp;import cl.duoc.tacticaldev.data.local.AppDatabase
+&nbsp;import cl.duoc.tacticaldev.data.location.UbicacionService
+&nbsp;import cl.duoc.tacticaldev.data.preferences.SesionPreferences
+&nbsp;import cl.duoc.tacticaldev.data.repository.ActivoRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.ClimaRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.TecnicoRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.UsuarioRepository
+&nbsp;import cl.duoc.tacticaldev.data.repository.VisitaRepository
+&nbsp;
+&nbsp;/**
+&nbsp; * Inyección de dependencias manual: un único lugar donde se crean la base de
+&nbsp; * datos y los repositorios que consumen los ViewModels.
+&nbsp; */
+<b class="nc">&nbsp;class AppContainer(context: Context) {</b>
+<b class="nc">&nbsp;    val database: AppDatabase by lazy { AppDatabase.obtener(context) }</b>
+&nbsp;
+<b class="nc">&nbsp;    val usuarioRepository by lazy { UsuarioRepository(database.usuarioDao()) }</b>
+<b class="nc">&nbsp;    val activoRepository by lazy { ActivoRepository(database.activoDao(), database.puntoVentaDao()) }</b>
+<b class="nc">&nbsp;    val visitaRepository by lazy { VisitaRepository(context.applicationContext, database.visitaPendienteDao()) }</b>
+<b class="nc">&nbsp;    val climaRepository by lazy { ClimaRepository() } // API externa Open-Meteo</b>
+<b class="nc">&nbsp;    val tecnicoRepository by lazy { TecnicoRepository(context.applicationContext) }</b>
+&nbsp;
+<b class="nc">&nbsp;    val sesionPreferences by lazy { SesionPreferences(context.applicationContext) }</b>
+&nbsp;
+<b class="nc">&nbsp;    val ubicacionService by lazy { UbicacionService(context.applicationContext) }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-24 00:12</div>
+</div>
+</body>
+</html>
